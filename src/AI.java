@@ -58,23 +58,36 @@ public class AI extends MovableItem {
                 items.processMv(this);
                 return;
             }
+
             if (i == 0) {
                 if (y == 0) {
-                    y = x;
-                    x = 0;
+                    if (this.getDistY() < 0) {
+                        x = 0;
+                        y = 1;
+                    }
+                    else {
+                        x = 0;
+                        y = -1;
+                    }
                 }
                 else if (x == 0) {
-                    x = y;
-                    y = 0;
+                    if (this.getDistX() < 0) {
+                        x = 1;
+                        y = 0;
+                    }
+                    else {
+                        x = -1;
+                        y = 0;
+                    }
                 }
             }
             else {
                 if (Math.abs(x) > Math.abs(y)) {
                     x = 0;
-                    y *= -1;
+                    y = x;
                 }
                 else {
-                    x *= -1;
+                    x = y;
                     y = 0;
                 }
             }
