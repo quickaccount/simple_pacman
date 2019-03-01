@@ -1,11 +1,13 @@
 //Import
 import java.awt.Rectangle;
 
+import constants.ConstantVariables;
+
 public class Coin {
 
     //Instance variables
     private boolean isOn = true;
-    private static final int C_DIM = 1;
+    //private static final int C_DIM = 1;
     private Rectangle box;
 
 
@@ -15,7 +17,7 @@ public class Coin {
     * @param y y position
     */
     public Coin (int x, int y) {
-        this.box = new Rectangle(x, y, C_DIM, C_DIM); //x, y, length, width
+        this.box = new Rectangle(x, y, ConstantVariables.C_DIM, ConstantVariables.C_DIM); //x, y, length, width
     }
 
 

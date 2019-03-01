@@ -1,11 +1,13 @@
 //import javafx.scene.shape.*;
 import java.awt.Rectangle;
 
+import constants.ConstantVariables;
+
 public class Wall {
     
     //Instance variables
-    private static final int WIDTH = 1; //4; //Width of the wall
-    private static final int HEIGHT = 1; //16; //Height of the wall
+    /*private static final int WIDTH = 1; //4; //Width of the wall
+    private static final int HEIGHT = 1; //16; //Height of the wall */
     private Rectangle box; //Hitbox
 
 
@@ -15,7 +17,7 @@ public class Wall {
     * @param y the y position
     */
     public Wall (int x, int y) {
-        this.box = new Rectangle(x, y, WIDTH, HEIGHT);
+        this.box = new Rectangle(x, y, ConstantVariables.WIDTH, ConstantVariables.HEIGHT);
         /*
         Rectangle r = new Rectangle();
         r.setX(50);

@@ -1,11 +1,13 @@
 import java.awt.Rectangle;
 
+import constants.ConstantVariables;
+
 public class MovableItem {
 
     private int xcoord;
     private int ycoord;
-    private final int WIDTH = 1;
-    private final int HEIGHT = 1;
+   /* private final int WIDTH = 1;
+    private final int HEIGHT = 1;*/
     private Rectangle box; //Hitboxes
     private int[] dir = new int[] {0, 0};
     private int[] newCoord = new int[] {0, 0}; //Store coordinates as one item
@@ -32,7 +34,7 @@ public class MovableItem {
     * @param y the initial y-coord
     */
     public MovableItem (int x, int y) {
-        this.box = new Rectangle(x, y, WIDTH, HEIGHT);
+        this.box = new Rectangle(x, y, ConstantVariables.WIDTH, ConstantVariables.HEIGHT);
         this.xcoord = x;
         this.ycoord = y;
     }
