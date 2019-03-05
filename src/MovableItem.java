@@ -6,8 +6,6 @@ public class MovableItem {
 
     private int xcoord;
     private int ycoord;
-   /* private final int WIDTH = 1;
-    private final int HEIGHT = 1;*/
     private Rectangle box; //Hitboxes
     private int[] dir = new int[] {0, 0};
     private int[] newCoord = new int[] {0, 0}; //Store coordinates as one item

@@ -7,7 +7,6 @@ public class Coin {
 
     //Instance variables
     private boolean isOn = true;
-    //private static final int C_DIM = 1;
     private Rectangle box;
 
 

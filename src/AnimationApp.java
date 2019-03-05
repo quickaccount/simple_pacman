@@ -9,14 +9,6 @@ public class AnimationApp {
 
     private ArrayList<Coin> coinList = new ArrayList<Coin>(); //Array of coins
     private ArrayList<Wall> wallList = new ArrayList<Wall>(); //Array of walls
-   /* private static final int WORLD_WIDTH = 656;
-    private static final int WORLD_HEIGHT = 272; //864;
-    private static final int NUM_COL = WORLD_WIDTH / 16;
-    private static final int NUM_ROWS = WORLD_HEIGHT / 16;
-    private static final int INITIAL_X =  (NUM_COL / 2) - 1;
-    private static final int INITIAL_Y = (NUM_ROWS / 2) - 1;
-    private static final int INITIAL_E_X =  (NUM_COL / 2) - 1;
-    private static final int INITIAL_E_Y =  (NUM_ROWS / 2) - 5; */
     private char[][] objList = new char [ConstantVariables.NUM_COL] [ConstantVariables.NUM_ROWS];
     private static boolean gameOnOff;
 

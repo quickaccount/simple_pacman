@@ -6,8 +6,6 @@ import constants.ConstantVariables;
 public class Wall {
     
     //Instance variables
-    /*private static final int WIDTH = 1; //4; //Width of the wall
-    private static final int HEIGHT = 1; //16; //Height of the wall */
     private Rectangle box; //Hitbox
 
 

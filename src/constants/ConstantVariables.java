@@ -25,6 +25,10 @@ public final class ConstantVariables {	// by declaring final, class is made non-
     public static final int WIDTH = 1;
     public static final int HEIGHT = 1;
     
+    // GameDisplay constants
+    public static final int WINDOW_WIDTH = 696;
+	public static final int WINDOW_HEIGHT = 768;
+    
     // private constructor so class is non-instantiable
     private ConstantVariables() {
     	
