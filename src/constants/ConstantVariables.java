@@ -17,6 +17,7 @@ public final class ConstantVariables {	// by declaring final, class is made non-
     public static final int INITIAL_Y = (NUM_ROWS / 2) - 1;
     public static final int INITIAL_E_X =  (NUM_COL / 2) - 1;
     public static final int INITIAL_E_Y =  (NUM_ROWS / 2) - 5;
+    public static final int MOVE_AMNT = 5;
     
     // Coin constants
     public static final int C_DIM = 1;

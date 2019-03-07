@@ -22,6 +22,9 @@ public class GameDisplay extends Application {
 	Image[] upPacman = new Image[3];
 	Image[] downPacman = new Image[3];
 	
+	private int pac_X = ConstantVariables.INITIAL_X;
+	private int pac_Y = ConstantVariables.INITIAL_Y;
+	
 	public static void main(String[] args) {
 		
 		launch(args);
@@ -31,12 +34,7 @@ public class GameDisplay extends Application {
 	public void start(Stage stage) throws Exception {
 		
 		stage.setTitle("Pac Man");
-		
 		Group root = new Group();
-	    Scene scene = new Scene(root, ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT, Color.BLACK);
-	    stage.setScene(scene);
-	    stage.setResizable(false);
-	    stage.sizeToScene();
 	    
 	    Canvas canvas = new Canvas(ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT);
 	    root.getChildren().add(canvas);
@@ -61,11 +59,45 @@ public class GameDisplay extends Application {
 	 
 	            // background image clears canvas
 	            gc.drawImage(maze, 0, 0, ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT);
-	            gc.drawImage( pacman.getFrame(t), ConstantVariables.WINDOW_WIDTH/2, ConstantVariables.WINDOW_HEIGHT/2);
+	            gc.drawImage( pacman.getFrame(t), pac_X, pac_Y);
 	        }
 	    }.start();
 	    
+	    Scene scene = new Scene(root, ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT, Color.BLACK);
+	    stage.setScene(scene);
+	    stage.setResizable(false);
+	    stage.sizeToScene();
 	    stage.show();
+	    
+	    scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
+			@Override
+			public void handle(KeyEvent event) {
+				//String input = "";
+				switch(event.getCode()) {
+				case W:
+					//input = "w";
+					//handleInput(input);
+					pac_Y -= ConstantVariables.MOVE_AMNT;
+					break;
+				case A:
+					//input = "a";
+					//handleInput(input);
+					pac_X -= ConstantVariables.MOVE_AMNT;
+					break;
+				case S:
+					//input = "s";
+					//handleInput(input);
+					pac_Y += ConstantVariables.MOVE_AMNT;
+					break;
+				case D:
+					//input = "d";
+					//handleInput(input);
+					pac_X += ConstantVariables.MOVE_AMNT;
+					break;
+				}
+			}
+		});
 	}
 	
 	public void handleInput(String s) {
