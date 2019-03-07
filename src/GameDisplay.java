@@ -1,13 +1,11 @@
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-
 import constants.ConstantVariables;
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -18,6 +16,11 @@ public class GameDisplay extends Application {
 
 	AnimationApp items = new AnimationApp();
 	Avatar avatar = new Avatar (ConstantVariables.INITIAL_X, ConstantVariables.INITIAL_Y);
+	
+	Image[] rightPacman = new Image[3];
+	Image[] leftPacman = new Image[3];
+	Image[] upPacman = new Image[3];
+	Image[] downPacman = new Image[3];
 	
 	public static void main(String[] args) {
 		
@@ -30,14 +33,37 @@ public class GameDisplay extends Application {
 		stage.setTitle("Pac Man");
 		
 		Group root = new Group();
-	    Scene scene = new Scene(root, ConstantVariables.WINDOW_WIDTH-66, ConstantVariables.WINDOW_HEIGHT-70, Color.BLACK);
+	    Scene scene = new Scene(root, ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT, Color.BLACK);
 	    stage.setScene(scene);
+	    stage.setResizable(false);
+	    stage.sizeToScene();
 	    
-	    ImageView maze = new ImageView("maze.png");   /// 232 x 256
-	    maze.setFitHeight(ConstantVariables.WINDOW_WIDTH);
-	    maze.setFitWidth(ConstantVariables.WINDOW_HEIGHT);
-	    maze.setPreserveRatio(true);
-	    root.getChildren().add(maze);
+	    Canvas canvas = new Canvas(ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT);
+	    root.getChildren().add(canvas);
+	    
+	    GraphicsContext gc = canvas.getGraphicsContext2D();
+	    
+	    Image maze = new Image("maze.png");
+	    
+	    AnimatedImage pacman = new AnimatedImage();
+        for (int i = 0; i < 3; i++)
+            rightPacman[i] = new Image( "pacRight" + i + ".png" );
+        pacman.frames = rightPacman;
+        pacman.duration = 0.100;
+	    
+	    final long startNanoTime = System.nanoTime();
+	    
+	    new AnimationTimer()
+	    {
+	        public void handle(long currentNanoTime)
+	        {
+	        	double t = (currentNanoTime - startNanoTime) / 1000000000.0; 
+	 
+	            // background image clears canvas
+	            gc.drawImage(maze, 0, 0, ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT);
+	            gc.drawImage( pacman.getFrame(t), ConstantVariables.WINDOW_WIDTH/2, ConstantVariables.WINDOW_HEIGHT/2);
+	        }
+	    }.start();
 	    
 	    stage.show();
 	}
