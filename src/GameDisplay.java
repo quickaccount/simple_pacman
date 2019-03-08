@@ -15,6 +15,7 @@ import javafx.scene.input.KeyEvent;
 public class GameDisplay extends Application {
 
 	AnimationApp items = new AnimationApp();
+	AnimatedImage pacman = new AnimatedImage();
 	Avatar avatar = new Avatar (ConstantVariables.INITIAL_X, ConstantVariables.INITIAL_Y);
 	
 	Image[] rightPacman = new Image[3];
@@ -24,6 +25,26 @@ public class GameDisplay extends Application {
 	
 	private int pac_X = ConstantVariables.INITIAL_X;
 	private int pac_Y = ConstantVariables.INITIAL_Y;
+	
+	public GameDisplay() {
+		for (int i = 0; i < 3; i++) {
+            upPacman[i] = new Image( "pacUp" + i + ".png" );
+		}
+		
+		for (int i = 0; i < 3; i++) {
+            downPacman[i] = new Image( "pacDown" + i + ".png" );
+		}
+		
+		for (int i = 0; i < 3; i++) {
+            leftPacman[i] = new Image( "pacLeft" + i + ".png" );
+		}
+		
+		for (int i = 0; i < 3; i++) {
+            rightPacman[i] = new Image( "pacRight" + i + ".png" );
+		}
+        pacman.frames = rightPacman;
+        pacman.duration = 0.100;
+	}
 	
 	public static void main(String[] args) {
 		
@@ -42,12 +63,6 @@ public class GameDisplay extends Application {
 	    GraphicsContext gc = canvas.getGraphicsContext2D();
 	    
 	    Image maze = new Image("maze.png");
-	    
-	    AnimatedImage pacman = new AnimatedImage();
-        for (int i = 0; i < 3; i++)
-            rightPacman[i] = new Image( "pacRight" + i + ".png" );
-        pacman.frames = rightPacman;
-        pacman.duration = 0.100;
 	    
 	    final long startNanoTime = System.nanoTime();
 	    
@@ -83,21 +98,25 @@ public class GameDisplay extends Application {
 					//input = "w";
 					//handleInput(input);
 					pac_Y -= ConstantVariables.MOVE_AMNT;
+					pacman.frames = upPacman;
 					break;
 				case A:
 					//input = "a";
 					//handleInput(input);
 					pac_X -= ConstantVariables.MOVE_AMNT;
+					pacman.frames = leftPacman;
 					break;
 				case S:
 					//input = "s";
 					//handleInput(input);
 					pac_Y += ConstantVariables.MOVE_AMNT;
+					pacman.frames = downPacman;
 					break;
 				case D:
 					//input = "d";
 					//handleInput(input);
 					pac_X += ConstantVariables.MOVE_AMNT;
+					pacman.frames = rightPacman;
 					break;
 				}
 			}
