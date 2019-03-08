@@ -13,18 +13,18 @@ import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
 
 public class GameDisplay extends Application {
-
-	AnimationApp items = new AnimationApp();
-	AnimatedImage pacman = new AnimatedImage();
-	Avatar avatar = new Avatar (ConstantVariables.INITIAL_X, ConstantVariables.INITIAL_Y);
 	
 	Image[] rightPacman = new Image[3];
 	Image[] leftPacman = new Image[3];
 	Image[] upPacman = new Image[3];
 	Image[] downPacman = new Image[3];
 	
-	private int pac_X = ConstantVariables.INITIAL_X;
-	private int pac_Y = ConstantVariables.INITIAL_Y;
+	private int pac_X = ConstantVariables.DISPLAY_INITIAL_X;
+	private int pac_Y = ConstantVariables.DISPLAY_INITIAL_Y;
+	
+	AnimationApp items = new AnimationApp();
+	AnimatedImage pacman = new AnimatedImage();
+	Avatar avatar = new Avatar (ConstantVariables.INITIAL_X, ConstantVariables.INITIAL_Y);
 	
 	public GameDisplay() {
 		for (int i = 0; i < 3; i++) {
@@ -92,29 +92,29 @@ public class GameDisplay extends Application {
 
 			@Override
 			public void handle(KeyEvent event) {
-				//String input = "";
+				String input = "";
 				switch(event.getCode()) {
 				case W:
-					//input = "w";
-					//handleInput(input);
+					input = "w";
+					handleInput(input);
 					pac_Y -= ConstantVariables.MOVE_AMNT;
 					pacman.frames = upPacman;
 					break;
 				case A:
-					//input = "a";
-					//handleInput(input);
+					input = "a";
+					handleInput(input);
 					pac_X -= ConstantVariables.MOVE_AMNT;
 					pacman.frames = leftPacman;
 					break;
 				case S:
-					//input = "s";
-					//handleInput(input);
+					input = "s";
+					handleInput(input);
 					pac_Y += ConstantVariables.MOVE_AMNT;
 					pacman.frames = downPacman;
 					break;
 				case D:
-					//input = "d";
-					//handleInput(input);
+					input = "d";
+					handleInput(input);
 					pac_X += ConstantVariables.MOVE_AMNT;
 					pacman.frames = rightPacman;
 					break;
@@ -124,9 +124,9 @@ public class GameDisplay extends Application {
 	}
 	
 	public void handleInput(String s) {
-		/*System.out.println(s + " was pressed.");
+		System.out.println(s + " was pressed.");
 		avatar.mvAttempt(s);
-        //items.processMv(avatar, 'A');
-        items.printDisplay();*/
+        items.processMv(avatar);
+        items.printDisplay();
 	}
 }
