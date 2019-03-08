@@ -51,6 +51,10 @@ public class GameDisplay extends Application {
 	    
 	    final long startNanoTime = System.nanoTime();
 	    
+	    //game loop
+	    // animation timer is abstract so it cannot be created directly-- >anonymous inner class?
+	    // the class must be extended before an instance can be created
+	    // so for more complex stuff would I make a pacplay class that extends animation timer?
 	    new AnimationTimer()
 	    {
 	        public void handle(long currentNanoTime)

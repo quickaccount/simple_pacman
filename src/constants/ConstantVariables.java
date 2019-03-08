@@ -32,7 +32,7 @@ public final class ConstantVariables {	// by declaring final, class is made non-
     
     // private constructor so class is non-instantiable
     private ConstantVariables() {
-    	
+    
     }
 }
 
