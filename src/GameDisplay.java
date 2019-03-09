@@ -43,7 +43,7 @@ public class GameDisplay extends Application {
             rightPacman[i] = new Image( "pacRight" + i + ".png" );
 		}
         pacman.frames = rightPacman;
-        pacman.duration = 0.100;
+        pacman.duration = 0.150;
 	}
 	
 	public static void main(String[] args) {
