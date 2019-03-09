@@ -146,8 +146,7 @@ public class AnimationApp {
         }
         return false;
     }
-
-
+    
     /**
     * Collision checking of moving objects
     * @param thing the object to test

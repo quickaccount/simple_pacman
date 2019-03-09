@@ -97,27 +97,43 @@ public class GameDisplay extends Application {
 				case W:
 					input = "w";
 					handleInput(input);
-					pac_Y -= ConstantVariables.MOVE_AMNT;
 					pacman.frames = upPacman;
-					break;
+					if(items.wallCheck(avatar)) {
+			            break;
+			        } else {
+			        	pac_Y -= ConstantVariables.MOVE_AMNT;
+			        	break;
+			        }
 				case A:
 					input = "a";
 					handleInput(input);
-					pac_X -= ConstantVariables.MOVE_AMNT;
 					pacman.frames = leftPacman;
-					break;
+					if(items.wallCheck(avatar)) {
+			            break;
+			        } else {
+			        	pac_X -= ConstantVariables.MOVE_AMNT;
+			        	break;
+			        }
 				case S:
 					input = "s";
 					handleInput(input);
-					pac_Y += ConstantVariables.MOVE_AMNT;
 					pacman.frames = downPacman;
-					break;
+					if(items.wallCheck(avatar)) {
+			            break;
+			        } else {
+			        	pac_Y += ConstantVariables.MOVE_AMNT;
+			        	break;
+			        }
 				case D:
 					input = "d";
 					handleInput(input);
-					pac_X += ConstantVariables.MOVE_AMNT;
 					pacman.frames = rightPacman;
-					break;
+					if(items.wallCheck(avatar)) {
+			            break;
+			        } else {
+			        	pac_X += ConstantVariables.MOVE_AMNT;
+			        	break;
+			        }
 				}
 			}
 		});
