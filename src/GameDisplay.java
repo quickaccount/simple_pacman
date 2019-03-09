@@ -20,14 +20,22 @@ public class GameDisplay extends Application {
 	Image[] upPacman = new Image[3];
 	Image[] downPacman = new Image[3];
 	
+	// image arrays for blinky movement
+	Image[] rightBlinky = new Image[2];
+	Image[] leftBlinky = new Image[2];
+	Image[] upBlinky = new Image[2];
+	Image[] downBlinky = new Image[2];
+	
 	// x and y for displaying pacman in the gui
 	private int pac_X = ConstantVariables.DISPLAY_INITIAL_X;
 	private int pac_Y = ConstantVariables.DISPLAY_INITIAL_Y;
 	
-	private int movementTimer = 0;
+	private int blinky_X = 50;	// i just put a random position for now
+	private int blinky_Y = 50;
 	
 	AnimationApp items = new AnimationApp();
 	AnimatedImage pacman = new AnimatedImage();
+	AnimatedImage blinky = new AnimatedImage();
 	Avatar avatar = new Avatar (ConstantVariables.INITIAL_X, ConstantVariables.INITIAL_Y);	// pacman avatar we use to process movements
 	
 	public GameDisplay() {
@@ -49,6 +57,25 @@ public class GameDisplay extends Application {
 		}
         pacman.frames = rightPacman;
         pacman.duration = 0.150;
+        
+        // initializing blinky movement image arrays
+        for(int i = 0; i < 2; i++) {
+        	upBlinky[i] = new Image("blinkyUp" + i + ".png");
+        }
+        
+        for(int i = 0; i < 2; i++) {
+        	downBlinky[i] = new Image("blinkyDown" + i + ".png");
+        }
+        
+        for(int i = 0; i < 2; i++) {
+        	leftBlinky[i] = new Image("blinkyLeft" + i + ".png");
+        }
+        
+        for(int i = 0; i < 2; i++) {
+        	rightBlinky[i] = new Image("blinkyRight" + i + ".png");
+        }
+        blinky.frames = rightBlinky;
+        blinky.duration = 0.150;
 	}
 	
 	public static void main(String[] args) {
@@ -80,6 +107,7 @@ public class GameDisplay extends Application {
 	            // background image clears canvas
 	            gc.drawImage(maze, 0, 0, ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT);
 	            gc.drawImage( pacman.getFrame(elapsedSeconds), pac_X, pac_Y);
+	            gc.drawImage( blinky.getFrame(elapsedSeconds), blinky_X, blinky_Y);
 	        }
 	    }.start();
 	    
