@@ -118,7 +118,7 @@ public class GameDisplay extends Application {
 					pac_X += ConstantVariables.MOVE_AMNT;
 					pacman.frames = rightPacman;
 					break;
-				} // ok
+				}
 			}
 		});
 	}
