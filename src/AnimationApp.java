@@ -159,12 +159,12 @@ public class AnimationApp {
 
         //coin collision checking
         char avatarEnemy = 'A';
-        char displayCoin = ' ';
+        char displayCoin = ConstantVariables.EMPTY_CHAR;
         ArrayList<Coin> cL = this.getCoinList();
 
         if (thing instanceof AI) {
             avatarEnemy = 'E';
-            displayCoin = '.';
+            displayCoin = ConstantVariables.COIN_CHAR;
         }
 
         // Is thing moving off coin or empty?
@@ -174,7 +174,7 @@ public class AnimationApp {
         }
         else {
             System.out.println(avatarEnemy + " is moving off an empty space");
-            this.setObjList(thing.getXCoord(), thing.getYCoord(), ' ');
+            this.setObjList(thing.getXCoord(), thing.getYCoord(), ConstantVariables.EMPTY_CHAR);
         }
 
         // Is thing moving onto a Coin?

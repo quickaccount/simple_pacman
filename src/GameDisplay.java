@@ -14,21 +14,33 @@ import javafx.scene.input.KeyEvent;
 
 public class GameDisplay extends Application {
 
-    Image[] rightPacman = new Image[3];
-    Image[] leftPacman = new Image[3];
-    Image[] upPacman = new Image[3];
-    Image[] downPacman = new Image[3];
+  // image arrays for pacman movement
+  Image[] rightPacman = new Image[3];
+  Image[] leftPacman = new Image[3];
+  Image[] upPacman = new Image[3];
+  Image[] downPacman = new Image[3];
 
-    private int pac_X = ConstantVariables.DISPLAY_INITIAL_X;
-    private int pac_Y = ConstantVariables.DISPLAY_INITIAL_Y;
+  // image arrays for blinky movement
+  Image[] rightBlinky = new Image[2];
+  Image[] leftBlinky = new Image[2];
+  Image[] upBlinky = new Image[2];
+  Image[] downBlinky = new Image[2];
 
-    AnimationApp items = new AnimationApp();
-    AnimatedImage pacman = new AnimatedImage();
-    Avatar avatar = new Avatar (ConstantVariables.INITIAL_X, ConstantVariables.INITIAL_Y);
-    AI enemy = new AI (ConstantVariables.INITIAL_E_X, ConstantVariables.INITIAL_E_Y);
+  // x and y for displaying pacman in the gui
+  private int pac_X = ConstantVariables.DISPLAY_INITIAL_X;
+  private int pac_Y = ConstantVariables.DISPLAY_INITIAL_Y;
 
-    public GameDisplay() {
-        for (int i = 0; i < 3; i++) {
+  private int blinky_X = 50;	// i just put a random position for now
+  private int blinky_Y = 50;
+
+  AnimationApp items = new AnimationApp();
+  AnimatedImage pacman = new AnimatedImage();
+  AnimatedImage blinky = new AnimatedImage();
+  Avatar avatar = new Avatar (ConstantVariables.INITIAL_X, ConstantVariables.INITIAL_Y);	// pacman avatar we use to process movements
+
+  public GameDisplay() {
+    //initializing pacman movement image arrays
+    for (int i = 0; i < 3; i++) {
             upPacman[i] = new Image( "pacUp" + i + ".png" );
         }
 
@@ -45,6 +57,25 @@ public class GameDisplay extends Application {
     }
         pacman.frames = rightPacman;
         pacman.duration = 0.150;
+
+        // initializing blinky movement image arrays
+        for(int i = 0; i < 2; i++) {
+          upBlinky[i] = new Image("blinkyUp" + i + ".png");
+        }
+
+        for(int i = 0; i < 2; i++) {
+          downBlinky[i] = new Image("blinkyDown" + i + ".png");
+        }
+
+        for(int i = 0; i < 2; i++) {
+          leftBlinky[i] = new Image("blinkyLeft" + i + ".png");
+        }
+
+        for(int i = 0; i < 2; i++) {
+          rightBlinky[i] = new Image("blinkyRight" + i + ".png");
+        }
+        blinky.frames = rightBlinky;
+        blinky.duration = 0.150;
   }
 
   public static void main(String[] args) {
@@ -62,24 +93,21 @@ public class GameDisplay extends Application {
       root.getChildren().add(canvas);
 
       GraphicsContext gc = canvas.getGraphicsContext2D();
-
       Image maze = new Image("maze.png");
 
-      final long startNanoTime = System.nanoTime();
+      final long startNanoTime = System.nanoTime();	// start time in nano seconds
 
-      //game loop
-      // animation timer is abstract so it cannot be created directly-- >anonymous inner class?
-      // the class must be extended before an instance can be created
-      // so for more complex stuff would I make a pacplay class that extends animation timer?
       new AnimationTimer()
       {
+        // handle is invoked every time a frame is rendered (by javafx default, 60 times/second)
           public void handle(long currentNanoTime)
           {
-            double t = (currentNanoTime - startNanoTime) / 1000000000.0;
+            double elapsedSeconds = (currentNanoTime - startNanoTime) / 1000000000.0; // convert the elapsed time in nanoseconds to seconds
 
               // background image clears canvas
               gc.drawImage(maze, 0, 0, ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT);
-              gc.drawImage( pacman.getFrame(t), pac_X, pac_Y);
+              gc.drawImage( pacman.getFrame(elapsedSeconds), pac_X, pac_Y);
+              gc.drawImage( blinky.getFrame(elapsedSeconds), blinky_X, blinky_Y);
           }
       }.start();
 
@@ -97,54 +125,59 @@ public class GameDisplay extends Application {
         switch(event.getCode()) {
         case W:
           input = "w";
-          handleInput(input);
           pacman.frames = upPacman;
-          if(items.wallCheck(avatar)) {
-                  break;
-              } else {
-                pac_Y -= ConstantVariables.MOVE_AMNT;
-                break;
-              }
+          movePac(input);
+          break;
         case A:
           input = "a";
-          handleInput(input);
           pacman.frames = leftPacman;
-          if(items.wallCheck(avatar)) {
-                  break;
-              } else {
-                pac_X -= ConstantVariables.MOVE_AMNT;
-                break;
-              }
+          movePac(input);
+          break;
         case S:
           input = "s";
-          handleInput(input);
           pacman.frames = downPacman;
-          if(items.wallCheck(avatar)) {
-                  break;
-              } else {
-                pac_Y += ConstantVariables.MOVE_AMNT;
-                break;
-              }
+          movePac(input);
+          break;
         case D:
           input = "d";
-          handleInput(input);
           pacman.frames = rightPacman;
-          if(items.wallCheck(avatar)) {
-                  break;
-              } else {
-                pac_X += ConstantVariables.MOVE_AMNT;
-                break;
-              }
+          movePac(input);
+          break;
         }
       }
     });
   }
 
-  public void handleInput(String s) {
-    System.out.println(s + " was pressed.");
-    avatar.mvAttempt(s);
-    items.processMv(avatar);
-    enemy.genMv(avatar, items);
-    items.printDisplay();
+  /**
+   * Processes move for GUI pacman.
+   * @param input The user input for movement.
+   */
+  public void movePac(String input) {
+    handleInput(input);
+    if(items.wallCheck(avatar)) {
+            //if touching a wall, don't move
+        } else {
+
+          if(input.equals("w")) {
+            pac_Y -= ConstantVariables.MOVE_AMNT;
+          } else if(input.equals("a")) {
+            pac_X -= ConstantVariables.MOVE_AMNT;
+          } else if(input.equals("s")) {
+            pac_Y += ConstantVariables.MOVE_AMNT;
+          } else if(input.equals("d")) {
+            pac_X += ConstantVariables.MOVE_AMNT;
+          }
+        }
+  }
+
+  /**
+   * Moves the pacman avatar/processes the move.
+   * @param input The user input for movement.
+   */
+  public void handleInput(String input) {
+    System.out.println(input + " was pressed.");
+    avatar.mvAttempt(input);
+        items.processMv(avatar);
+        items.printDisplay();
   }
 }
