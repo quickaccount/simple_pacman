@@ -10,6 +10,7 @@ public class AnimationApp {
     private ArrayList<Coin> coinList = new ArrayList<Coin>(); //Array of coins
     private ArrayList<Wall> wallList = new ArrayList<Wall>(); //Array of walls
     private char[][] objList = new char [ConstantVariables.NUM_COL] [ConstantVariables.NUM_ROWS];
+    private Item[][] itemList = new Item [ConstantVariables.NUM_COL] [ConstantVariables.NUM_ROWS];
     private static boolean gameOnOff;
 
 
@@ -56,19 +57,22 @@ public class AnimationApp {
 
             if (c == ConstantVariables.COIN_CHAR) {
 
-              //add getCoinList()?
-                  this.coinList.add(new Coin(x, y)); //multiply by rectangle dimensions later
-                  this.objList[x][y] = ConstantVariables.COIN_CHAR;
+                Coin cCoin = new Coin(x * ConstantVariables.WIDTH, y * ConstantVariables.HEIGHT);
+                this.coinList.add(cCoin);
+                this.objList[x][y] = ConstantVariables.COIN_CHAR;
+                this.itemList[x][y] = cCoin;
 
             } else if (c == ConstantVariables.WALL_CHAR) {
 
-              //add getWallList()
-              this.wallList.add(new Wall(x, y)); //multiply y, x by Wall rectangle dimensions
-              this.objList[x][y] = ConstantVariables.WALL_CHAR;
+                Wall w = new Wall(x * ConstantVariables.WIDTH , y * ConstantVariables.HEIGHT);
+                this.wallList.add(w);
+                this.itemList[x][y] = w;
+                this.objList[x][y] = ConstantVariables.WALL_CHAR;
 
-              } else {
+            } else {
+
                 this.objList[x][y] = ConstantVariables.EMPTY_CHAR;
-              }
+            }
 
           }
             y++;
@@ -99,6 +103,23 @@ public class AnimationApp {
 
         for (int y=0; y < ConstantVariables.NUM_ROWS; y++) {
             for (int x=0; x < ConstantVariables.NUM_COL; x++) {
+                /*
+                if (this.itemList[x][y] instanceof Coin) {
+                    rowString += ConstantVariables.COIN_CHAR;
+                }
+                else if (this.itemList[x][y] instanceof Wall) {
+                    rowString += ConstantVariables.WALL_CHAR;
+                }
+                else if (this.itemList[x][y] instanceof Avatar) {
+                    rowString += ConstantVariables.AV_CHAR;
+                }
+                else if (this.itemList[x][y] instanceof AI) {
+                    rowString += ConstantVariables.AI_CHAR;
+                }
+                else {
+                    rowString += ConstantVariables.EMPTY_CHAR;
+                }
+                */
                 rowString += this.objList[x][y];
             }
             System.out.println(rowString);
@@ -116,6 +137,11 @@ public class AnimationApp {
     }
 
 
+    public Item[][] getItemList() {
+        return this.itemList;
+    }
+
+
     /**
     * Allows for changing objects within the object list (ei - coin to no coin)
     * @param x the [x] index
@@ -124,6 +150,44 @@ public class AnimationApp {
     */
     public void setObjList(int x, int y, char item) {
         this.objList[x][y] = item;
+    }
+
+
+    // returns false for no collisions and true for a collision case
+    public boolean collisionCheck(MovableItem thing, Item otherThing) {
+
+
+        // edge values for the Rectangle of thing
+        int xla = (int)(thing.getBox().getX()); // leftmost x value of thing Rectangle
+        int xra = (int)(thing.getBox().getX() + thing.getBox().getWidth()); // rightmost x value of thing Rectangle
+        int yua = (int)(thing.getBox().getY()); // uppermost y value of thing Rectangle
+        int yda = (int)(thing.getBox().getY() + thing.getBox().getHeight()); // lowermost y value of thing Rectangle
+
+        // edge values for the Rectangle of otherThing
+        int xlb = (int)(otherThing.getBox().getX()); // leftmost x value of thing Rectangle
+        int xrb = (int)(otherThing.getBox().getX() + otherThing.getBox().getWidth()); // rightmost x value of thing Rectangle
+        int yub = (int)(otherThing.getBox().getY()); // uppermosr y value of thing Rectangle
+        int ydb = (int)(otherThing.getBox().getY() + otherThing.getBox().getHeight()); // lowermost y value of thing Rectangle
+
+
+        // Collision Logic
+
+        // no collision case
+        if ( (xla > xrb) && (xra < xlb) && (yua > ydb) && (yda < ydb) ) {
+            return false;
+        }
+
+        // potential collision check x-axis
+        else if ( (xra > xlb && xra < xrb) || (xla > xlb && xla < xrb) ) {
+            // collision check y-axis
+            if ( (yda > yub && yda < ydb) || (yua > yub && yua < ydb) ) {
+                return true;
+            }
+            else // no collision y-axis
+                return false;
+        }
+        else // no collision x-axis
+            return false;
     }
 
 
@@ -158,18 +222,27 @@ public class AnimationApp {
         }
 
         //coin collision checking
-        char avatarEnemy = 'A';
-        char displayCoin = ConstantVariables.EMPTY_CHAR;
         ArrayList<Coin> cL = this.getCoinList();
+        char avatarEnemy = ConstantVariables.AI_CHAR;
+        char displayCoin = ConstantVariables.COIN_CHAR;
+        Item item = this.getItemList()[thing.getXCoord() / 16][thing.getYCoord() /16];
 
         if (thing instanceof AI) {
-            avatarEnemy = 'E';
-            displayCoin = ConstantVariables.COIN_CHAR;
+            avatarEnemy = ConstantVariables.AV_CHAR;
         }
 
-        // Is thing moving off coin or empty?
+        // Is thing moving off coin or empty? display the position that the avatar moved off of
         if (thing.getOnCoin() == true) {
             System.out.println(avatarEnemy + " is moving off a coin");
+            if (item instanceof Coin) {
+                if ( ((Coin)item).getCoinIsOn() == true) {
+                    displayCoin = ConstantVariables.COIN_CHAR;
+                }
+
+                else {
+                    displayCoin = ConstantVariables.EMPTY_CHAR;
+                }
+            }
             this.setObjList(thing.getXCoord(), thing.getYCoord(), displayCoin);
         }
         else {
@@ -177,28 +250,16 @@ public class AnimationApp {
             this.setObjList(thing.getXCoord(), thing.getYCoord(), ConstantVariables.EMPTY_CHAR);
         }
 
-        // Is thing moving onto a Coin?
-        for (Coin c: cL) {
-            int xCoin = (int)c.getBox().getX();
-            int yCoin = (int)c.getBox().getY();
-
-            if ((thing.getNewXCoord() == xCoin) && (thing.getNewYCoord() == yCoin)) {
-                System.out.println(avatarEnemy + " is moving onto a coin");
-
-                if (thing instanceof Avatar) {
-                    // coin on off conditions and increment avatar score + 1
-                    c.setCoinOff((Avatar)thing);
-                    System.out.println("Score: " + ((Avatar)thing).getScore());
-                }
-
-                thing.setOnCoin(true);
-                break;
+        // check if MovableItem moving onto a coin turn coin off if appropriate, then move moveable item
+        /*
+        if (this.getItemList()[thing.getNewXCoord()][thing.getNewYCoord()] instanceof Coin) {
+            if (thing instanceof Avatar) {
+                this.getItemList()[thing.getNewXCoord()][thing.getNewYCoord()].setCoinOff(thing);
             }
-            else
-                thing.setOnCoin(false);
         }
+        */
 
-        // update Coordinates
+        // update thing Coordinates
         thing.setXYCoord(thing.getNewXCoord(), thing.getNewYCoord());
         // set new avatar location in printable object list
         this.setObjList(thing.getXCoord(), thing.getYCoord(), avatarEnemy);
@@ -211,39 +272,5 @@ public class AnimationApp {
     */
     public void setGameOnOff (boolean onOff) {
         this.gameOnOff = onOff;
-    }
-
-
-    // please note that this is a temporary main function
-    public static void main(String[] args) {
-        AnimationApp items = new AnimationApp();
-        Avatar avatar = new Avatar (ConstantVariables.INITIAL_X, ConstantVariables.INITIAL_Y);
-        AI enemy = new AI (ConstantVariables.INITIAL_E_X, ConstantVariables.INITIAL_E_Y);
-        items.printDisplay();
-        items.setGameOnOff(true);
-        while (items.gameOnOff == true) {
-            Scanner userInput = new Scanner(System.in);
-            System.out.println("Enter wasd");
-            String it = userInput.next();
-            if ((it.equals("w")) || (it.equals("a")) || (it.equals("s")) || (it.equals("d"))) {
-                System.out.println(it);
-                avatar.mvAttempt(it);
-                items.processMv(avatar);
-                enemy.genMv(avatar, items);
-                items.printDisplay();
-            }
-        }
-        // endgame print board
-        System.out.println();
-        System.out.println();
-        System.out.println("Game Over!!!!!");
-        System.out.println("Score: " + avatar.getScore());
-        for (int i=0; i < ConstantVariables.NUM_ROWS; i++) {
-            String finished = "";
-            for (int k=0; k < ConstantVariables.NUM_COL; k++) {
-                finished += "#";
-            }
-            System.out.println(finished);
-        }
     }
 }

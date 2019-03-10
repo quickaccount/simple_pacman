@@ -2,11 +2,8 @@ import java.awt.Rectangle;
 
 import constants.ConstantVariables;
 
-public class MovableItem {
+public class MovableItem extends Item {
 
-    private int xcoord;
-    private int ycoord;
-    private Rectangle box; //Hitboxes
     private int[] dir = new int[] {0, 0};
     private int[] newCoord = new int[] {0, 0}; //Store coordinates as one item
     private boolean onCoin;
@@ -20,9 +17,9 @@ public class MovableItem {
     * @param h height of object box
     */
     public  MovableItem (int x, int y, int w, int h) {
-        this.box = new Rectangle(x, y, w, h); //Set collision box
-        this.xcoord = x;
-        this.ycoord = y;
+        super(x, y, w, h); //Set collision box
+        super.setXCoord(x);
+        super.setYCoord(y);
     }
 
 
@@ -32,9 +29,9 @@ public class MovableItem {
     * @param y the initial y-coord
     */
     public MovableItem (int x, int y) {
-        this.box = new Rectangle(x, y, ConstantVariables.WIDTH, ConstantVariables.HEIGHT);
-        this.xcoord = x;
-        this.ycoord = y;
+        super(x, y, ConstantVariables.WIDTH, ConstantVariables.HEIGHT);
+        super.setXCoord(x);
+        super.setYCoord(y);
     }
 
 
@@ -63,9 +60,9 @@ public class MovableItem {
     */
     public void setXYCoord(int xNew, int yNew) {
         //requires weak encapsulation
-        this.getBox().add(xNew, yNew);
-        this.xcoord = xNew;
-        this.ycoord = yNew;
+        super.getBox().add(xNew, yNew);
+        super.setXCoord(xNew);
+        super.setYCoord(yNew);
     }
 
 
@@ -73,8 +70,9 @@ public class MovableItem {
     * Returns the rectangular box around an object
     * @return a Rectangle around the object
     */
+    @Override
     public Rectangle getBox() {
-        return this.box;
+        return super.getBox();
     }
 
 
@@ -82,8 +80,9 @@ public class MovableItem {
     * Change only the x coordinate of the object
     * @param xNew the new x position
     */
+    @Override
     public void setXCoord(int xNew){
-        this.xcoord = xNew;
+        super.setXCoord(xNew);
     }
 
 
@@ -91,8 +90,9 @@ public class MovableItem {
     * Change only the y coordinate of the movable object
     * @param yNew the new y position
     */
+    @Override
     public void setYCoord(int yNew){
-        this.ycoord = yNew;
+        super.setYCoord(yNew);
     }
 
 
@@ -100,8 +100,9 @@ public class MovableItem {
     * Returns the object's current x coordinate
     * @return an integer value for the x coordinate
     */
+    @Override
     public int getXCoord() {
-        return this.xcoord;
+        return super.getXCoord();
     }
 
 
@@ -109,8 +110,9 @@ public class MovableItem {
     * Returns the object's current y coordinate
     * @return an integer value for the y coordinate
     */
+    @Override
     public int getYCoord() {
-        return this.ycoord;
+        return super.getYCoord();
     }
 
 
@@ -149,7 +151,7 @@ public class MovableItem {
     */
     public int[] getObjectLoc() {
         // int[] ObjLoc = new int [] {(int)this.getBox().getX(), (int)this.getBox().getY()};
-        int[] ObjLoc = {this.xcoord, this.ycoord};
+        int[] ObjLoc = {this.getXCoord(), this.getYCoord()};
         return ObjLoc;
     }
 
