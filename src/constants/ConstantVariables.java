@@ -22,8 +22,8 @@ public final class ConstantVariables {	// by declaring final, class is made non-
     public static final int NUM_ROWS = 32;	// was WORLD_HEIGHT / 16
     public static final int INITIAL_X = (NUM_COL / 2);  // was (NUM_COL / 2)-1
     public static final int INITIAL_Y = (NUM_ROWS / 2) - 1;
-    public static final int INITIAL_E_X =  (NUM_COL / 2) - 1;
-    public static final int INITIAL_E_Y =  (NUM_ROWS / 2) - 5;
+    public static final int INITIAL_E_X = 2; // temp was (NUM_COL / 2) - 1;
+    public static final int INITIAL_E_Y = 2;  // temporary was (NUM_ROWS / 2) - 5;
     public static final char WALL_CHAR = 'X';
     public static final char COIN_CHAR = '.';
     public static final char EMPTY_CHAR = ' ';

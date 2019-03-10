@@ -14,75 +14,76 @@ import javafx.scene.input.KeyEvent;
 
 public class GameDisplay extends Application {
 
-  // image arrays for pacman movement
-  Image[] rightPacman = new Image[3];
-  Image[] leftPacman = new Image[3];
-  Image[] upPacman = new Image[3];
-  Image[] downPacman = new Image[3];
+    // image arrays for pacman movement
+    Image[] rightPacman = new Image[3];
+    Image[] leftPacman = new Image[3];
+    Image[] upPacman = new Image[3];
+    Image[] downPacman = new Image[3];
 
-  // image arrays for blinky movement
-  Image[] rightBlinky = new Image[2];
-  Image[] leftBlinky = new Image[2];
-  Image[] upBlinky = new Image[2];
-  Image[] downBlinky = new Image[2];
+    // image arrays for blinky movement
+    Image[] rightBlinky = new Image[2];
+    Image[] leftBlinky = new Image[2];
+    Image[] upBlinky = new Image[2];
+    Image[] downBlinky = new Image[2];
 
-  // x and y for displaying pacman in the gui
-  private int pac_X = ConstantVariables.DISPLAY_INITIAL_X;
-  private int pac_Y = ConstantVariables.DISPLAY_INITIAL_Y;
+    // x and y for displaying pacman in the gui
+    private int pac_X = ConstantVariables.DISPLAY_INITIAL_X;
+    private int pac_Y = ConstantVariables.DISPLAY_INITIAL_Y;
 
-  private int blinky_X = 50;	// i just put a random position for now
-  private int blinky_Y = 50;
+    private int blinky_X = 17;	// i just put a random position for now
+    private int blinky_Y = 17;
 
-  AnimationApp items = new AnimationApp();
-  AnimatedImage pacman = new AnimatedImage();
-  AnimatedImage blinky = new AnimatedImage();
-  Avatar avatar = new Avatar (ConstantVariables.INITIAL_X, ConstantVariables.INITIAL_Y);	// pacman avatar we use to process movements
+    AnimationApp items = new AnimationApp();
+    AnimatedImage pacman = new AnimatedImage();
+    AnimatedImage blinky = new AnimatedImage();
+    Avatar avatar = new Avatar (ConstantVariables.INITIAL_X, ConstantVariables.INITIAL_Y);	// pacman avatar we use to process movements
+    AI enemy = new AI (ConstantVariables.INITIAL_E_X, ConstantVariables.INITIAL_E_Y);
 
-  public GameDisplay() {
-    //initializing pacman movement image arrays
-    for (int i = 0; i < 3; i++) {
+    public GameDisplay() {
+        //initializing pacman movement image arrays
+        for (int i = 0; i < 3; i++) {
             upPacman[i] = new Image( "pacUp" + i + ".png" );
         }
 
-    for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 3; i++) {
             downPacman[i] = new Image( "pacDown" + i + ".png" );
-    }
+        }
 
-    for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 3; i++) {
             leftPacman[i] = new Image( "pacLeft" + i + ".png" );
     }
 
-    for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 3; i++) {
             rightPacman[i] = new Image( "pacRight" + i + ".png" );
-    }
+        }
         pacman.frames = rightPacman;
         pacman.duration = 0.150;
 
         // initializing blinky movement image arrays
         for(int i = 0; i < 2; i++) {
-          upBlinky[i] = new Image("blinkyUp" + i + ".png");
+            upBlinky[i] = new Image("blinkyUp" + i + ".png");
         }
 
         for(int i = 0; i < 2; i++) {
-          downBlinky[i] = new Image("blinkyDown" + i + ".png");
+            downBlinky[i] = new Image("blinkyDown" + i + ".png");
         }
 
         for(int i = 0; i < 2; i++) {
-          leftBlinky[i] = new Image("blinkyLeft" + i + ".png");
+            leftBlinky[i] = new Image("blinkyLeft" + i + ".png");
         }
 
         for(int i = 0; i < 2; i++) {
-          rightBlinky[i] = new Image("blinkyRight" + i + ".png");
+            rightBlinky[i] = new Image("blinkyRight" + i + ".png");
         }
         blinky.frames = rightBlinky;
         blinky.duration = 0.150;
-  }
+    }
 
-  public static void main(String[] args) {
+    public static void main(String[] args) {
 
-    launch(args);
+        launch(args);
 
-  }
+    }
 
   public void start(Stage stage) throws Exception {
 
@@ -170,14 +171,24 @@ public class GameDisplay extends Application {
         }
   }
 
+
+    // temporary function to update AI location after genMv
+    public void tempMoveAI() {
+        blinky_X = enemy.getXCoord()*16;
+        blinky_Y = enemy.getYCoord()*16;
+    }
+
+
   /**
    * Moves the pacman avatar/processes the move.
    * @param input The user input for movement.
    */
   public void handleInput(String input) {
-    System.out.println(input + " was pressed.");
-    avatar.mvAttempt(input);
-        items.processMv(avatar);
-        items.printDisplay();
+      System.out.println(input + " was pressed.");
+      avatar.mvAttempt(input);
+      items.processMv(avatar);
+      enemy.genMv(avatar, items);
+      tempMoveAI();  
+      items.printDisplay();
   }
 }
