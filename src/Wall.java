@@ -1,12 +1,9 @@
 //import javafx.scene.shape.*;
 import java.awt.Rectangle;
 
-public class Wall {
-    
-    //Instance variables
-    private static final int WIDTH = 1; //4; //Width of the wall
-    private static final int HEIGHT = 1; //16; //Height of the wall
-    private Rectangle box; //Hitbox
+import constants.ConstantVariables;
+
+public class Wall extends Item {
 
 
     /**
@@ -15,7 +12,8 @@ public class Wall {
     * @param y the y position
     */
     public Wall (int x, int y) {
-        this.box = new Rectangle(x, y, WIDTH, HEIGHT);
+        super(x, y, ConstantVariables.WIDTH, ConstantVariables.HEIGHT); 
+        //this.box = new Rectangle(x, y, ConstantVariables.WIDTH, ConstantVariables.HEIGHT);
         /*
         Rectangle r = new Rectangle();
         r.setX(50);
@@ -33,7 +31,8 @@ public class Wall {
     * Returns the hitbox of the wall
     * @return a Rectangle object for the current wall
     */
+    @Override
     public Rectangle getBox() {
-        return this.box;
+        return super.getBox();
     }
 }

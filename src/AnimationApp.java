@@ -2,20 +2,14 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import constants.ConstantVariables;
+
 
 public class AnimationApp {
 
     private ArrayList<Coin> coinList = new ArrayList<Coin>(); //Array of coins
     private ArrayList<Wall> wallList = new ArrayList<Wall>(); //Array of walls
-    private static final int WORLD_WIDTH = 656;
-    private static final int WORLD_HEIGHT = 272; //864;
-    private static final int NUM_COL = WORLD_WIDTH / 16;
-    private static final int NUM_ROWS = WORLD_HEIGHT / 16;
-    private static final int INITIAL_X =  (NUM_COL / 2) - 1;
-    private static final int INITIAL_Y = (NUM_ROWS / 2) - 1;
-    private static final int INITIAL_E_X =  (NUM_COL / 2) - 1;
-    private static final int INITIAL_E_Y =  (NUM_ROWS / 2) - 5;
-    private char[][] objList = new char [NUM_COL] [NUM_ROWS];
+    private char[][] objList = new char [ConstantVariables.NUM_COL] [ConstantVariables.NUM_ROWS];
     private static boolean gameOnOff;
 
 
@@ -42,51 +36,60 @@ public class AnimationApp {
      */
     public AnimationApp() {
 
-        // The name of the file containing the display template.
-        String fileName = "default_display.txt";
-        // Line Reference
-        String line = null;
+      // The name of the file containing the display template.
+      String fileName = "maze.txt";
+      // Line Reference
+      String line = null;
 
-        try {
-            // FileReader reads text files in the default encoding.
-            FileReader template = new FileReader(fileName);
+      try {
 
-            BufferedReader bTemplate = new BufferedReader(template);
-            int y = 0;
-            while((line = bTemplate.readLine()) != null) {
-                    for(int x=0; x<NUM_COL; x++) {
-                        char c = line.charAt(x);
-                        if (c == '.') {
-                            //add getCoinList()?
-                            this.coinList.add(new Coin(x, y)); //multiply by rectangle dimensions later
-                            this.objList[x][y] = '.';
-                        }
+        // FileReader reads text files in the default encoding.
+        FileReader template = new FileReader(fileName);
+        BufferedReader bTemplate = new BufferedReader(template);
+        int y = 0;
 
-                        else if (c == 'X') {
-                            //add getWallList()
-                            this.wallList.add(new Wall(x, y)); //multiply y, x by Wall rectangle dimensions
-                            this.objList[x][y] = 'X';
-                        }
-                        else
-                            this.objList[x][y] = ' ';
-                    }
-                    y++;
-            }
-            // Close default_display.txt
-            bTemplate.close();
+        while((line = bTemplate.readLine()) != null) {
+
+          for(int x = 0; x < ConstantVariables.NUM_COL; x++) {
+
+            char c = line.charAt(x);
+
+            if (c == ConstantVariables.COIN_CHAR) {
+
+              //add getCoinList()?
+                  this.coinList.add(new Coin(x, y)); //multiply by rectangle dimensions later
+                  this.objList[x][y] = ConstantVariables.COIN_CHAR;
+
+            } else if (c == ConstantVariables.WALL_CHAR) {
+
+              //add getWallList()
+              this.wallList.add(new Wall(x, y)); //multiply y, x by Wall rectangle dimensions
+              this.objList[x][y] = ConstantVariables.WALL_CHAR;
+
+              } else {
+                this.objList[x][y] = ConstantVariables.EMPTY_CHAR;
+              }
+
+          }
+            y++;
         }
-            // Error checking
-            catch(FileNotFoundException ex) {
-                System.out.println("Cannot open file '" + fileName + "'");
-            }
-            catch(IOException ex) {
-                System.out.println("Error reading file '" + fileName + "'");
-            }
+          // Close default_display.txt
+          bTemplate.close();
+      }
 
-        //set default Avatar location
-        this.objList[INITIAL_X][INITIAL_Y] = 'A';
-        //set default Enemy location
-        this.objList[INITIAL_E_X][INITIAL_E_Y] = 'E';
+      // Error checking
+      catch(FileNotFoundException ex) {
+        System.out.println("Cannot open file '" + fileName + "'");
+      }
+
+      catch(IOException ex) {
+        System.out.println("Error reading file '" + fileName + "'");
+      }
+
+      //set default Avatar location
+      //this.objList[ConstantVariables.INITIAL_X][ConstantVariables.INITIAL_Y] = 'A';
+      //set default Enemy location
+      //this.objList[ConstantVariables.INITIAL_E_X][ConstantVariables.INITIAL_E_Y] = 'E';
     }
 
 
@@ -94,8 +97,8 @@ public class AnimationApp {
     public void printDisplay() {
         String rowString = "";
 
-        for (int y=0; y < NUM_ROWS; y++) {
-            for (int x=0; x < NUM_COL; x++) {
+        for (int y=0; y < ConstantVariables.NUM_ROWS; y++) {
+            for (int x=0; x < ConstantVariables.NUM_COL; x++) {
                 rowString += this.objList[x][y];
             }
             System.out.println(rowString);
@@ -129,7 +132,7 @@ public class AnimationApp {
      * @param thing the object to test
      **/
     public boolean wallCheck(MovableItem thing) {
-        if ((thing.getNewXCoord() < 0) || (thing.getNewXCoord() > NUM_COL - 1) || (thing.getNewYCoord() < 0) || (thing.getNewYCoord() > NUM_ROWS - 1)) {
+        if ((thing.getNewXCoord() < 0) || (thing.getNewXCoord() > ConstantVariables.NUM_COL - 1) || (thing.getNewYCoord() < 0) || (thing.getNewYCoord() > ConstantVariables.NUM_ROWS - 1)) {
             System.out.println("Attempted to leave boundary");
             return true;
         }
@@ -144,7 +147,6 @@ public class AnimationApp {
         return false;
     }
 
-
     /**
     * Collision checking of moving objects
     * @param thing the object to test
@@ -157,12 +159,12 @@ public class AnimationApp {
 
         //coin collision checking
         char avatarEnemy = 'A';
-        char displayCoin = ' ';
+        char displayCoin = ConstantVariables.EMPTY_CHAR;
         ArrayList<Coin> cL = this.getCoinList();
 
         if (thing instanceof AI) {
             avatarEnemy = 'E';
-            displayCoin = '.';
+            displayCoin = ConstantVariables.COIN_CHAR;
         }
 
         // Is thing moving off coin or empty?
@@ -172,7 +174,7 @@ public class AnimationApp {
         }
         else {
             System.out.println(avatarEnemy + " is moving off an empty space");
-            this.setObjList(thing.getXCoord(), thing.getYCoord(), ' ');
+            this.setObjList(thing.getXCoord(), thing.getYCoord(), ConstantVariables.EMPTY_CHAR);
         }
 
         // Is thing moving onto a Coin?
@@ -215,8 +217,8 @@ public class AnimationApp {
     // please note that this is a temporary main function
     public static void main(String[] args) {
         AnimationApp items = new AnimationApp();
-        Avatar avatar = new Avatar (INITIAL_X, INITIAL_Y);
-        AI enemy = new AI (INITIAL_E_X, INITIAL_E_Y);
+        Avatar avatar = new Avatar (ConstantVariables.INITIAL_X, ConstantVariables.INITIAL_Y);
+        AI enemy = new AI (ConstantVariables.INITIAL_E_X, ConstantVariables.INITIAL_E_Y);
         items.printDisplay();
         items.setGameOnOff(true);
         while (items.gameOnOff == true) {
@@ -236,9 +238,9 @@ public class AnimationApp {
         System.out.println();
         System.out.println("Game Over!!!!!");
         System.out.println("Score: " + avatar.getScore());
-        for (int i=0; i < NUM_ROWS; i++) {
+        for (int i=0; i < ConstantVariables.NUM_ROWS; i++) {
             String finished = "";
-            for (int k=0; k < NUM_COL; k++) {
+            for (int k=0; k < ConstantVariables.NUM_COL; k++) {
                 finished += "#";
             }
             System.out.println(finished);
