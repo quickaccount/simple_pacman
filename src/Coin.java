@@ -3,11 +3,10 @@ import java.awt.Rectangle;
 
 import constants.ConstantVariables;
 
-public class Coin {
+public class Coin extends Item {
 
     //Instance variables
     private boolean isOn = true;
-    private Rectangle box;
 
 
     /**
@@ -16,7 +15,9 @@ public class Coin {
     * @param y y position
     */
     public Coin (int x, int y) {
-        this.box = new Rectangle(x, y, ConstantVariables.C_DIM, ConstantVariables.C_DIM); //x, y, length, width
+        super(x+6, y+6, ConstantVariables.C_DIM, ConstantVariables.C_DIM);
+
+        //this.box = new Rectangle(x + 6, y + 6, ConstantVariables.C_DIM, ConstantVariables.C_DIM); //x, y, length, width
     }
 
 
@@ -24,8 +25,9 @@ public class Coin {
     * Used to get the position and hitbox of the coin
     * @return Rectangle object that is referred to as 'box'
     */
+    @Override
     public Rectangle getBox() {
-        return this.box;
+        return super.getBox();
     }
 
 

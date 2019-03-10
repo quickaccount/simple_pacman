@@ -3,10 +3,7 @@ import java.awt.Rectangle;
 
 import constants.ConstantVariables;
 
-public class Wall {
-    
-    //Instance variables
-    private Rectangle box; //Hitbox
+public class Wall extends Item {
 
 
     /**
@@ -15,7 +12,8 @@ public class Wall {
     * @param y the y position
     */
     public Wall (int x, int y) {
-        this.box = new Rectangle(x, y, ConstantVariables.WIDTH, ConstantVariables.HEIGHT);
+        super(x, y, ConstantVariables.WIDTH, ConstantVariables.HEIGHT); 
+        //this.box = new Rectangle(x, y, ConstantVariables.WIDTH, ConstantVariables.HEIGHT);
         /*
         Rectangle r = new Rectangle();
         r.setX(50);
@@ -33,7 +31,8 @@ public class Wall {
     * Returns the hitbox of the wall
     * @return a Rectangle object for the current wall
     */
+    @Override
     public Rectangle getBox() {
-        return this.box;
+        return super.getBox();
     }
 }

@@ -36,60 +36,60 @@ public class AnimationApp {
      */
     public AnimationApp() {
 
-    	// The name of the file containing the display template.
-    	String fileName = "maze.txt";
-    	// Line Reference
-    	String line = null;
-    					
-    	try {
-    				
-    		// FileReader reads text files in the default encoding.
-    		FileReader template = new FileReader(fileName);
-    		BufferedReader bTemplate = new BufferedReader(template);
-    		int y = 0;
-    				
-    		while((line = bTemplate.readLine()) != null) {
-    					
-    			for(int x = 0; x < ConstantVariables.NUM_COL; x++) {
-    						
-    				char c = line.charAt(x);
-    						
-    				if (c == ConstantVariables.COIN_CHAR) {
-    							
-    					//add getCoinList()?
-    			        this.coinList.add(new Coin(x, y)); //multiply by rectangle dimensions later
-    			        this.objList[x][y] = ConstantVariables.COIN_CHAR;
-    			            	
-    				} else if (c == ConstantVariables.WALL_CHAR) {
-    							
-    					//add getWallList()
-    					this.wallList.add(new Wall(x, y)); //multiply y, x by Wall rectangle dimensions
-    					this.objList[x][y] = ConstantVariables.WALL_CHAR;
-    			                
-    			    } else {
-    			    	this.objList[x][y] = ConstantVariables.EMPTY_CHAR;
-    			    }
-    						
-    			}
-    				y++;
-    		}
-    			// Close default_display.txt
-    			bTemplate.close();
-    	}
-    			            
-    	// Error checking
-    	catch(FileNotFoundException ex) {
-    		System.out.println("Cannot open file '" + fileName + "'");
-    	}
-    			
-    	catch(IOException ex) {
-    		System.out.println("Error reading file '" + fileName + "'");
-    	}
+      // The name of the file containing the display template.
+      String fileName = "maze.txt";
+      // Line Reference
+      String line = null;
 
-    	//set default Avatar location
-    	//this.objList[ConstantVariables.INITIAL_X][ConstantVariables.INITIAL_Y] = 'A';
-    	//set default Enemy location
-    	//this.objList[ConstantVariables.INITIAL_E_X][ConstantVariables.INITIAL_E_Y] = 'E';
+      try {
+
+        // FileReader reads text files in the default encoding.
+        FileReader template = new FileReader(fileName);
+        BufferedReader bTemplate = new BufferedReader(template);
+        int y = 0;
+
+        while((line = bTemplate.readLine()) != null) {
+
+          for(int x = 0; x < ConstantVariables.NUM_COL; x++) {
+
+            char c = line.charAt(x);
+
+            if (c == ConstantVariables.COIN_CHAR) {
+
+              //add getCoinList()?
+                  this.coinList.add(new Coin(x, y)); //multiply by rectangle dimensions later
+                  this.objList[x][y] = ConstantVariables.COIN_CHAR;
+
+            } else if (c == ConstantVariables.WALL_CHAR) {
+
+              //add getWallList()
+              this.wallList.add(new Wall(x, y)); //multiply y, x by Wall rectangle dimensions
+              this.objList[x][y] = ConstantVariables.WALL_CHAR;
+
+              } else {
+                this.objList[x][y] = ConstantVariables.EMPTY_CHAR;
+              }
+
+          }
+            y++;
+        }
+          // Close default_display.txt
+          bTemplate.close();
+      }
+
+      // Error checking
+      catch(FileNotFoundException ex) {
+        System.out.println("Cannot open file '" + fileName + "'");
+      }
+
+      catch(IOException ex) {
+        System.out.println("Error reading file '" + fileName + "'");
+      }
+
+      //set default Avatar location
+      //this.objList[ConstantVariables.INITIAL_X][ConstantVariables.INITIAL_Y] = 'A';
+      //set default Enemy location
+      //this.objList[ConstantVariables.INITIAL_E_X][ConstantVariables.INITIAL_E_Y] = 'E';
     }
 
 
@@ -146,7 +146,7 @@ public class AnimationApp {
         }
         return false;
     }
-    
+
     /**
     * Collision checking of moving objects
     * @param thing the object to test
