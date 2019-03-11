@@ -36,7 +36,12 @@ public class MovableItem {
         this.xcoord = x;
         this.ycoord = y;
     }
- 
+    
+    /**
+     * Returns T or F depending on if the two MovableItems are occupying the same square of space.
+     * @param item the MovableItem we want to check our intersection with
+     * @return	either 'true' or 'false', depending on whether the two MovableItems are intersecting or not.
+     */
     public boolean intersects(MovableItem item)
     {
     	return (item.getXCoord()==this.getXCoord() && item.getYCoord()==this.getYCoord());
@@ -161,7 +166,8 @@ public class MovableItem {
 
     /**
     * Get the object's current direction
-    * @return
+    * @param xy the index of the dir array to be accessed.
+    * @return the direction of the object as an integer.
     */
     public int getDir(int xy) {
         return this.dir[xy];
@@ -169,7 +175,7 @@ public class MovableItem {
 
 
     /**
-    * Set the direction of the object
+    * Set the direction of the object.
     * @param x the x direction: 1, 0, -1
     * @param y the y direction: 1, 0, -1
     */

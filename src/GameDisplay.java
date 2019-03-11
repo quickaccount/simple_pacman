@@ -37,7 +37,7 @@ public class GameDisplay extends Application {
     AnimatedImage pacman = new AnimatedImage();
     AnimatedImage blinky = new AnimatedImage();
     Avatar avatar = new Avatar (ConstantVariables.INITIAL_X, ConstantVariables.INITIAL_Y);	// pacman avatar we use to process movements
-    AI enemy = new AI (ConstantVariables.INITIAL_E_X, ConstantVariables.INITIAL_E_Y);
+    AI enemy = new AI (ConstantVariables.INITIAL_E_X, ConstantVariables.INITIAL_E_Y);	// an instance of a "ghost" used to process movements
 
     public GameDisplay() {
         //initializing pacman movement image arrays
@@ -56,8 +56,8 @@ public class GameDisplay extends Application {
         for (int i = 0; i < 3; i++) {
             rightPacman[i] = new Image( "pacRight" + i + ".png" );
         }
-        pacman.frames = rightPacman;
-        pacman.duration = 0.150;
+        pacman.frames = rightPacman;	// default to displaying images for pacman's rightwards movement
+        pacman.duration = 0.150;	// set duration of one entire movement animation
 
         // initializing blinky movement image arrays
         for(int i = 0; i < 2; i++) {
@@ -99,6 +99,7 @@ public class GameDisplay extends Application {
 
         final long startNanoTime = System.nanoTime();	// start time in nano seconds
 
+        // updates visual display approx 60 times/seconds
         new AnimationTimer()
         {
             // handle is invoked every time a frame is rendered (by javafx default, 60 times/second)
@@ -106,37 +107,37 @@ public class GameDisplay extends Application {
             {
                 double elapsedSeconds = (currentNanoTime - startNanoTime) / 1000000000.0; // convert the elapsed time in nanoseconds to seconds
 
-                // background image clears canvas
+                // background image essentially "clears" canvas
                 gc.drawImage(maze, 0, 0, ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT);
 
                 // display coins
-                for (int y=0; y < ConstantVariables.NUM_ROWS; y++) {
-                    for (int x=0; x < ConstantVariables.NUM_COL; x++) {
-                        if (items.getItemList()[x][y] instanceof Coin) {
-                            if ( ((Coin)items.getItemList()[x][y]).getCoinIsOn() ) {
+                for (int y=0; y < ConstantVariables.NUM_ROWS; y++) {	// go through every row
+                    for (int x=0; x < ConstantVariables.NUM_COL; x++) {		// and column
+                        if (items.getItemList()[x][y] instanceof Coin) {	// of the itemList and if the item is of type Coin
+                            if ( ((Coin)items.getItemList()[x][y]).getCoinIsOn() ) {	// and it is "on" (hasn't been collected yet)
+                            	// draw the coin 
                                 gc.drawImage(coin, x * ConstantVariables.WIDTH + ConstantVariables.COIN_OFFSET, y * ConstantVariables.HEIGHT - ConstantVariables.COIN_OFFSET);
                             }
                         }
                     }
                 }
-                gc.drawImage( pacman.getFrame(elapsedSeconds), pac_X, pac_Y);
-                gc.drawImage( blinky.getFrame(elapsedSeconds), blinky_X, blinky_Y);
+                gc.drawImage( pacman.getFrame(elapsedSeconds), pac_X, pac_Y);	// add pacman
+                gc.drawImage( blinky.getFrame(elapsedSeconds), blinky_X, blinky_Y);	// add blinky
                 
-                if(avatar.intersects(enemy)) {
+                if(avatar.intersects(enemy)) {	// if pacman and the ghost intersect
                 	gc.setFill(Color.BLACK);
-                	gc.fillRect(0, 0, ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT);
+                	gc.fillRect(0, 0, ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT);		// black out the screen
                 	gc.setFill(Color.RED);
-                	gc.fillText("GAME OVER!!", ConstantVariables.WINDOW_WIDTH/2 -40, ConstantVariables.WINDOW_HEIGHT/2);
-                	stop();
-                	//System.out.println("Game over!!!!");
+                	gc.fillText("GAME OVER!!", ConstantVariables.WINDOW_WIDTH/2 -40, ConstantVariables.WINDOW_HEIGHT/2);	// display red "game over" string
+                	stop();	// stop the application
                 }
             }
         }.start();
 
       Scene scene = new Scene(root, ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT, Color.BLACK);
       stage.setScene(scene);
-      stage.setResizable(false);
-      stage.sizeToScene();
+      stage.setResizable(false);	// sets it so that the game window is not resizable
+      stage.sizeToScene();	// gets rid of exra padding around maze image
       stage.show();
 
       scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -145,15 +146,15 @@ public class GameDisplay extends Application {
       public void handle(KeyEvent event) {
         String input = "";
         switch(event.getCode()) {
-        case W:
+        case W:	// if user presses w
           input = "w";
-          pacman.frames = upPacman;
-          movePac(input);
+          pacman.frames = upPacman;	// display upward movement animation
+          movePac(input);	// process upward movement for GUI display
           break;
-        case A:
+        case A:	// if user presses a
           input = "a";
-          pacman.frames = leftPacman;
-          movePac(input);
+          pacman.frames = leftPacman;	// display leftward movement animation
+          movePac(input);	// process leftward movement for GUI display
           break;
         case S:
           input = "s";
@@ -175,7 +176,7 @@ public class GameDisplay extends Application {
    * @param input The user input for movement.
    */
   public void movePac(String input) {
-    handleInput(input);
+    handleInput(input);	// do movement checks (collisions,etc)
     if(items.wallCheck(avatar)) {
             //if touching a wall, don't move
         } else {

@@ -1,9 +1,10 @@
 package constants;
 
 /**
- Collected constants of simple_pacman app.
-
-All members of this class are immutable.
+* Collected constants of simple_pacman app.
+*
+* This class is non extendable and non-instantiable.
+* All members of this class are immutable.
 */
 
 public final class ConstantVariables {	// by declaring final, class is made non-extendable

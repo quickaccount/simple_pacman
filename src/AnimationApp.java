@@ -5,6 +5,10 @@ import java.util.Scanner;
 import constants.ConstantVariables;
 
 
+/**
+ * This class is most of the logic behind the app. It loads in a text file and creates lists of objects
+ * so that we can check collisions.
+ */
 public class AnimationApp {
 
     private ArrayList<Coin> coinList = new ArrayList<Coin>(); //Array of coins
