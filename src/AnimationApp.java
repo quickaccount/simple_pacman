@@ -185,25 +185,25 @@ public class AnimationApp {
 
         //coin collision checking
         ArrayList<Coin> cL = this.getCoinList();
-        char avatarEnemy = ConstantVariables.AI_CHAR;
+        char avatarEnemy = ConstantVariables.AV_CHAR;
         char displayCoin = ConstantVariables.COIN_CHAR;
         Item item = this.getItemList()[thing.getXCoord() / 16][thing.getYCoord() /16];
 
         if (thing instanceof AI) {
-            avatarEnemy = ConstantVariables.AV_CHAR;
+            avatarEnemy = ConstantVariables.AI_CHAR;
         }
 
         // Is thing moving off coin or empty? display the position that the avatar moved off of
         if (thing.getOnCoin() == true) {
             System.out.println(avatarEnemy + " is moving off a coin");
             if (item instanceof Coin) {
-                if ( ((Coin)item).getCoinIsOn() == true) {
+                if ( ((Coin)item).getCoinIsOn() ) {
                     displayCoin = ConstantVariables.COIN_CHAR;
                 }
-
                 else {
                     displayCoin = ConstantVariables.EMPTY_CHAR;
                 }
+                thing.setOnCoin(false);
             }
             this.setObjList(thing.getXCoord(), thing.getYCoord(), displayCoin);
         }
@@ -213,13 +213,14 @@ public class AnimationApp {
         }
 
         // check if MovableItem moving onto a coin turn coin off if appropriate, then move moveable item
-        /*
         if (this.getItemList()[thing.getNewXCoord()][thing.getNewYCoord()] instanceof Coin) {
-            if (thing instanceof Avatar) {
-                this.getItemList()[thing.getNewXCoord()][thing.getNewYCoord()].setCoinOff(thing);
+            Coin coinNewLoc = (Coin)this.getItemList()[thing.getNewXCoord()][thing.getNewYCoord()];
+            if ((thing instanceof Avatar) && coinNewLoc.getCoinIsOn()) {
+                coinNewLoc.setCoinOff((Avatar)thing);
+                System.out.println("Score: " + ((Avatar)thing).getScore());
             }
+            thing.setOnCoin(true);
         }
-        */
 
         // update thing Coordinates
         thing.setXYCoord(thing.getNewXCoord(), thing.getNewYCoord());
