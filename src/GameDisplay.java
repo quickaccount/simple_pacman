@@ -121,6 +121,11 @@ public class GameDisplay extends Application {
                 }
                 gc.drawImage( pacman.getFrame(elapsedSeconds), pac_X, pac_Y);
                 gc.drawImage( blinky.getFrame(elapsedSeconds), blinky_X, blinky_Y);
+                
+                if(avatar.intersects(enemy)) {
+                	stop();
+                	//System.out.println("Game over!!!!");
+                }
             }
         }.start();
 

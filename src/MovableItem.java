@@ -36,7 +36,12 @@ public class MovableItem {
         this.xcoord = x;
         this.ycoord = y;
     }
-
+ 
+    public boolean intersects(MovableItem item)
+    {
+    	return (item.getXCoord()==this.getXCoord() && item.getYCoord()==this.getYCoord());
+        //return item.getBox().equals(this.getBox());
+    }
 
     /**
      * Sets the onCoin variable. Depends on if the player is on a coin
