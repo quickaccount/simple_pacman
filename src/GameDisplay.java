@@ -85,32 +85,44 @@ public class GameDisplay extends Application {
 
     }
 
-  public void start(Stage stage) throws Exception {
+    public void start(Stage stage) throws Exception {
 
-    stage.setTitle("Pac Man");
-    Group root = new Group();
+        stage.setTitle("Pac Man");
+        Group root = new Group();
 
-      Canvas canvas = new Canvas(ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT);
-      root.getChildren().add(canvas);
+        Canvas canvas = new Canvas(ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT);
+        root.getChildren().add(canvas);
 
-      GraphicsContext gc = canvas.getGraphicsContext2D();
-      Image maze = new Image("maze.png");
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        Image maze = new Image("maze.png");
+        Image coin = new Image("coin.png");
 
-      final long startNanoTime = System.nanoTime();	// start time in nano seconds
+        final long startNanoTime = System.nanoTime();	// start time in nano seconds
 
-      new AnimationTimer()
-      {
-        // handle is invoked every time a frame is rendered (by javafx default, 60 times/second)
-          public void handle(long currentNanoTime)
-          {
-            double elapsedSeconds = (currentNanoTime - startNanoTime) / 1000000000.0; // convert the elapsed time in nanoseconds to seconds
+        new AnimationTimer()
+        {
+            // handle is invoked every time a frame is rendered (by javafx default, 60 times/second)
+            public void handle(long currentNanoTime)
+            {
+                double elapsedSeconds = (currentNanoTime - startNanoTime) / 1000000000.0; // convert the elapsed time in nanoseconds to seconds
 
-              // background image clears canvas
-              gc.drawImage(maze, 0, 0, ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT);
-              gc.drawImage( pacman.getFrame(elapsedSeconds), pac_X, pac_Y);
-              gc.drawImage( blinky.getFrame(elapsedSeconds), blinky_X, blinky_Y);
-          }
-      }.start();
+                // background image clears canvas
+                gc.drawImage(maze, 0, 0, ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT);
+
+                // display coins
+                for (int y=0; y < ConstantVariables.NUM_ROWS; y++) {
+                    for (int x=0; x < ConstantVariables.NUM_COL; x++) {
+                        if (items.getItemList()[x][y] instanceof Coin) {
+                            if ( ((Coin)items.getItemList()[x][y]).getCoinIsOn() ) {
+                                gc.drawImage(coin, x * ConstantVariables.WIDTH + ConstantVariables.COIN_OFFSET, y * ConstantVariables.HEIGHT - ConstantVariables.COIN_OFFSET);
+                            }
+                        }
+                    }
+                }
+                gc.drawImage( pacman.getFrame(elapsedSeconds), pac_X, pac_Y);
+                gc.drawImage( blinky.getFrame(elapsedSeconds), blinky_X, blinky_Y);
+            }
+        }.start();
 
       Scene scene = new Scene(root, ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT, Color.BLACK);
       stage.setScene(scene);
@@ -188,7 +200,7 @@ public class GameDisplay extends Application {
       avatar.mvAttempt(input);
       items.processMv(avatar);
       enemy.genMv(avatar, items);
-      tempMoveAI();  
+      tempMoveAI();
       items.printDisplay();
   }
 }

@@ -27,10 +27,13 @@ public final class ConstantVariables {	// by declaring final, class is made non-
     public static final char WALL_CHAR = 'X';
     public static final char COIN_CHAR = '.';
     public static final char EMPTY_CHAR = ' ';
+    public static final char AV_CHAR = 'A';
+    public static final char AI_CHAR = 'E';
     public static final int MOVE_AMNT = 16; // was 24
 
     // Coin constants
-    public static final int C_DIM = 1;
+    public static final int C_DIM = 4;
+    public static final int COIN_OFFSET = 6;
 
     // MovableItem constants (also happen to be the constants for Wall)
     public static final int WIDTH = 16;
