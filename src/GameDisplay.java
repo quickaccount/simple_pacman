@@ -123,6 +123,10 @@ public class GameDisplay extends Application {
                 gc.drawImage( blinky.getFrame(elapsedSeconds), blinky_X, blinky_Y);
                 
                 if(avatar.intersects(enemy)) {
+                	gc.setFill(Color.BLACK);
+                	gc.fillRect(0, 0, ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT);
+                	gc.setFill(Color.RED);
+                	gc.fillText("GAME OVER!!", ConstantVariables.WINDOW_WIDTH/2 -40, ConstantVariables.WINDOW_HEIGHT/2);
                 	stop();
                 	//System.out.println("Game over!!!!");
                 }
