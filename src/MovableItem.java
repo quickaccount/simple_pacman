@@ -131,12 +131,13 @@ public class MovableItem extends Item {
     * Returns the object's current location
     * @return an array with the current x and y coords
     */
+    /*
     public int[] getObjectLoc() {
         // int[] ObjLoc = new int [] {(int)this.getBox().getX(), (int)this.getBox().getY()};
         int[] ObjLoc = {this.getXCoord(), this.getYCoord()};
         return ObjLoc;
     }
-
+    */
 
     /**
     * Get the object's current direction

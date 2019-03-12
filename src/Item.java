@@ -13,8 +13,8 @@ public class Item {
     * @param y the initial y-coord
     */
     public Item(int x, int y) {
-        this.xcoord = x;
-        this.ycoord = y;
+        this.setXCoord(x);
+        this.setYCoord(y);
     }
 
 
