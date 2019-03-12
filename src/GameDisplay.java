@@ -87,7 +87,6 @@ public class GameDisplay extends Application {
     public static void main(String[] args) {
 
         launch(args);
-
     }
 
     public void start(Stage stage) throws Exception {
@@ -208,7 +207,7 @@ public class GameDisplay extends Application {
    * Processes move for GUI pacman.
    * @param input The user input for movement.
    */
-  public void movePac(String input) {
+  private void movePac(String input) {
       handleInput(input);
 
       pac_Y = avatar.getYCoord() * ConstantVariables.MOVE_AMNT;
@@ -218,7 +217,7 @@ public class GameDisplay extends Application {
 
     // temporary auto move function
     // movement based off of current player direction
-    public void timedMove(String key) {
+    private void timedMove(String key) {
             mvRefreshCount = 0;
             avatar.mvAttempt(key);
             items.processMv(avatar);
@@ -230,7 +229,7 @@ public class GameDisplay extends Application {
 
 
     // temporary function to update AI location after genMv
-    public void tempMoveAI() {
+    private void tempMoveAI() {
         blinky_X = enemy.getXCoord()*16;
         blinky_Y = enemy.getYCoord()*16;
     }
@@ -240,7 +239,7 @@ public class GameDisplay extends Application {
    * Moves the pacman avatar/processes the move.
    * @param input The user input for movement.
    */
-  public void handleInput(String input) {
+  private void handleInput(String input) {
       System.out.println(input + " was pressed.");
       avatar.mvAttempt(input);
 
