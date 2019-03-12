@@ -97,23 +97,6 @@ public class AnimationApp {
 
         for (int y=0; y < ConstantVariables.NUM_ROWS; y++) {
             for (int x=0; x < ConstantVariables.NUM_COL; x++) {
-                /*
-                if (this.itemList[x][y] instanceof Coin) {
-                    rowString += ConstantVariables.COIN_CHAR;
-                }
-                else if (this.itemList[x][y] instanceof Wall) {
-                    rowString += ConstantVariables.WALL_CHAR;
-                }
-                else if (this.itemList[x][y] instanceof Avatar) {
-                    rowString += ConstantVariables.AV_CHAR;
-                }
-                else if (this.itemList[x][y] instanceof AI) {
-                    rowString += ConstantVariables.AI_CHAR;
-                }
-                else {
-                    rowString += ConstantVariables.EMPTY_CHAR;
-                }
-                */
                 rowString += this.objList[x][y];
             }
             System.out.println(rowString);
@@ -207,6 +190,15 @@ public class AnimationApp {
         }
 
       // check if MovableItem moving onto a coin turn coin off if appropriate, then move moveable item
+        if (this.getItemList()[thing.getNewXCoord()][thing.getNewYCoord()] instanceof Coin) {
+            Coin coinNewLoc = (Coin)this.getItemList()[thing.getNewXCoord()][thing.getNewYCoord()];
+            if ((thing instanceof Avatar) && coinNewLoc.getCoinIsOn()) {
+                coinNewLoc.setCoinOff((Avatar)thing);
+                System.out.println("Score: " + ((Avatar)thing).getScore());
+            }
+            thing.setOnCoin(true);
+        }
+
 
         // update thing Coordinates
         thing.setXYCoord(thing.getNewXCoord(), thing.getNewYCoord());
