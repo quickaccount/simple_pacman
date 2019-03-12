@@ -5,10 +5,11 @@ import constants.ConstantVariables;
 
 
 /**
+ * The ItemProcess class is an updated version of out text-based AnimationApp, but it was renamed to better reflect its functionality
  * This class is most of the logic behind the app. It loads in a text file and creates lists of objects
  * so that we can check collisions.
  */
-public class ItemProcess {
+public class ItemProcess { 
 
     private ArrayList<Coin> coinList = new ArrayList<Coin>(); //Array of coins
     private ArrayList<Wall> wallList = new ArrayList<Wall>(); //Array of walls
