@@ -4,6 +4,10 @@ import java.util.Scanner;
 import constants.ConstantVariables;
 
 
+/**
+ * This class is most of the logic behind the app. It loads in a text file and creates lists of objects
+ * so that we can check collisions.
+ */
 public class AnimationApp {
 
     private ArrayList<Coin> coinList = new ArrayList<Coin>(); //Array of coins
@@ -185,7 +189,7 @@ public class AnimationApp {
             this.setObjList(thing.getXCoord(), thing.getYCoord(), ConstantVariables.EMPTY_CHAR);
         }
 
-        // check if MovableItem moving onto a coin turn coin off if appropriate, then move moveable item
+      // check if MovableItem moving onto a coin turn coin off if appropriate, then move moveable item
         if (this.getItemList()[thing.getNewXCoord()][thing.getNewYCoord()] instanceof Coin) {
             Coin coinNewLoc = (Coin)this.getItemList()[thing.getNewXCoord()][thing.getNewYCoord()];
             if ((thing instanceof Avatar) && coinNewLoc.getCoinIsOn()) {
@@ -194,6 +198,7 @@ public class AnimationApp {
             }
             thing.setOnCoin(true);
         }
+
 
         // update thing Coordinates
         thing.setXYCoord(thing.getNewXCoord(), thing.getNewYCoord());

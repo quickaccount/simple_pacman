@@ -1,19 +1,21 @@
 package constants;
 
 /**
- Collected constants of simple_pacman app.
-
-All members of this class are immutable.
+* Collected constants of simple_pacman app.
+*
+* This class is non extendable and non-instantiable.
+* All members of this class are immutable.
 */
 
 public final class ConstantVariables {	// by declaring final, class is made non-extendable
 
     // GameDisplay constants
     public static final int WINDOW_WIDTH = 464;  // was 696: tiles will be 24 x 24? to go with maze.txt dimensions
-    public static final int WINDOW_HEIGHT = 512; // was 768
+    public static final int WINDOW_HEIGHT = 562;	//512  // was 768
     public static final int TILE_SIZE = 24;
     public static final int DISPLAY_INITIAL_X = (WINDOW_WIDTH / 2) - 8;
-    public static final int DISPLAY_INITIAL_Y = (WINDOW_HEIGHT / 2) - 16; //WINDOW_HEIGHT / 2 - 30;
+    public static final int DISPLAY_INITIAL_Y = (WINDOW_HEIGHT / 2) - 40; //WINDOW_HEIGHT / 2 - 16; or -30
+    public static final int SCOREBOARD_HEIGHT = 50;
 
   // AnimationApp constants
     public static final int WORLD_WIDTH = 464; // was 656

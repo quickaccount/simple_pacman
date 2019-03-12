@@ -1,16 +1,17 @@
 import constants.ConstantVariables;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.VBox;
 
 public class GameDisplay extends Application {
 
@@ -33,13 +34,15 @@ public class GameDisplay extends Application {
     private int blinky_X = 17;	// i just put a random position for now
     private int blinky_Y = 17;
 
+    private int currScore = 0;
+
     private int mvRefreshCount;
 
     AnimationApp items = new AnimationApp();
     AnimatedImage pacman = new AnimatedImage();
     AnimatedImage blinky = new AnimatedImage();
     Avatar avatar = new Avatar (ConstantVariables.INITIAL_X, ConstantVariables.INITIAL_Y);	// pacman avatar we use to process movements
-    AI enemy = new AI (ConstantVariables.INITIAL_E_X, ConstantVariables.INITIAL_E_Y);
+    AI enemy = new AI (ConstantVariables.INITIAL_E_X, ConstantVariables.INITIAL_E_Y);	// an instance of a "ghost" used to process movements
 
     public GameDisplay() {
         //initializing pacman movement image arrays
@@ -58,8 +61,8 @@ public class GameDisplay extends Application {
         for (int i = 0; i < 3; i++) {
             rightPacman[i] = new Image( "pacRight" + i + ".png" );
         }
-        pacman.frames = rightPacman;
-        pacman.duration = 0.150;
+        pacman.frames = rightPacman;	// default to displaying images for pacman's rightwards movement
+        pacman.duration = 0.150;	// set duration of one entire movement animation
 
         // initializing blinky movement image arrays
         for(int i = 0; i < 2; i++) {
@@ -90,9 +93,15 @@ public class GameDisplay extends Application {
     public void start(Stage stage) throws Exception {
 
         stage.setTitle("Pac Man");
-        Group root = new Group();
+        //Group root = new Group();
+        VBox root = new VBox();
 
-        Canvas canvas = new Canvas(ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT);
+        Canvas scoreboard = new Canvas(ConstantVariables.WORLD_WIDTH, ConstantVariables.SCOREBOARD_HEIGHT);
+        root.getChildren().add(scoreboard);
+
+        GraphicsContext score = scoreboard.getGraphicsContext2D();
+
+        Canvas canvas = new Canvas(ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT);
         root.getChildren().add(canvas);
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
@@ -101,6 +110,7 @@ public class GameDisplay extends Application {
 
         final long startNanoTime = System.nanoTime();	// start time in nano seconds
 
+        // updates visual display approx 60 times/seconds
         new AnimationTimer()
         {
             // handle is invoked every time a frame is rendered (by javafx default, 60 times/second)
@@ -108,21 +118,41 @@ public class GameDisplay extends Application {
             {
                 double elapsedSeconds = (currentNanoTime - startNanoTime) / 1000000000.0; // convert the elapsed time in nanoseconds to seconds
 
-                // background image clears canvas
-                gc.drawImage(maze, 0, 0, ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT);
+                // background image essentially "clears" canvas
+                gc.drawImage(maze, 0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT);
 
                 // display coins
-                for (int y=0; y < ConstantVariables.NUM_ROWS; y++) {
-                    for (int x=0; x < ConstantVariables.NUM_COL; x++) {
-                        if (items.getItemList()[x][y] instanceof Coin) {
-                            if ( ((Coin)items.getItemList()[x][y]).getCoinIsOn() ) {
+                for (int y=0; y < ConstantVariables.NUM_ROWS; y++) {	// go through every row
+                    for (int x=0; x < ConstantVariables.NUM_COL; x++) {		// and column
+                        if (items.getItemList()[x][y] instanceof Coin) {	// of the itemList and if the item is of type Coin
+                            if ( ((Coin)items.getItemList()[x][y]).getCoinIsOn() ) {	// and it is "on" (hasn't been collected yet)
+                              // draw the coin
                                 gc.drawImage(coin, x * ConstantVariables.WIDTH + ConstantVariables.COIN_OFFSET, y * ConstantVariables.HEIGHT - ConstantVariables.COIN_OFFSET);
                             }
                         }
                     }
                 }
-                gc.drawImage( pacman.getFrame(elapsedSeconds), pac_X, pac_Y);
-                gc.drawImage( blinky.getFrame(elapsedSeconds), blinky_X, blinky_Y);
+
+                gc.drawImage( pacman.getFrame(elapsedSeconds), pac_X, pac_Y);	// add pacman
+                gc.drawImage( blinky.getFrame(elapsedSeconds), blinky_X, blinky_Y);	// add blinky
+
+                score.setFont(Font.font ("Verdana", 20));
+                score.setFill(Color.BLACK);
+                score.fillRect(0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.SCOREBOARD_HEIGHT);
+                score.setFill(Color.WHITE);
+                String scoreString = "SCORE: " + currScore;
+                score.fillText(scoreString, 10, 30);
+
+                // have to add currScore++; once merged with the branch that collects coins
+
+                if(avatar.intersects(enemy)) {	// if pacman and the ghost intersect
+                  gc.setFont(Font.font ("Verdana", 20));
+                  gc.setFill(Color.BLACK);
+                  gc.fillRect(0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT);		// black out the screen
+                  gc.setFill(Color.RED);
+                  gc.fillText("GAME OVER!!", ConstantVariables.WINDOW_WIDTH/2 -65, ConstantVariables.WORLD_HEIGHT/2 - 20);	// display red "game over" string
+                  stop();	// stop the application
+                }
                 mvRefreshCount ++; // adds one to the refresh count since last move
                 if (mvRefreshCount > 6) { //slows timer for a single move
                     timedMove("continue in current direction");
@@ -132,11 +162,11 @@ public class GameDisplay extends Application {
 
       Scene scene = new Scene(root, ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT, Color.BLACK);
       stage.setScene(scene);
-      stage.setResizable(false);
-      stage.sizeToScene();
+      stage.setResizable(false);	// sets it so that the game window is not resizable
+      stage.sizeToScene();	// gets rid of exra padding around maze image
       stage.show();
 
-      scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+      scene.setOnKeyPressed(new EventHandler<KeyEvent>() { //scene.setOnKeyReleased fixes holding key,
 
       @Override
       public void handle(KeyEvent event) {
@@ -211,5 +241,6 @@ public class GameDisplay extends Application {
   public void handleInput(String input) {
       System.out.println(input + " was pressed.");
       avatar.mvAttempt(input);
+
   }
 }

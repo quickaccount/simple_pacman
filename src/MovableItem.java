@@ -33,7 +33,17 @@ public class MovableItem extends Item {
         super.setXCoord(x);
         super.setYCoord(y);
     }
-
+    
+    /**
+     * Returns T or F depending on if the two MovableItems are occupying the same square of space.
+     * @param item the MovableItem we want to check our intersection with
+     * @return	either 'true' or 'false', depending on whether the two MovableItems are intersecting or not.
+     */
+    public boolean intersects(MovableItem item)
+    {
+    	return (item.getXCoord()==this.getXCoord() && item.getYCoord()==this.getYCoord());
+        //return item.getBox().equals(this.getBox());
+    }
 
     /**
      * Sets the onCoin variable. Depends on if the player is on a coin
@@ -158,7 +168,8 @@ public class MovableItem extends Item {
 
     /**
     * Get the object's current direction
-    * @return
+    * @param xy the index of the dir array to be accessed.
+    * @return the direction of the object as an integer.
     */
     public int getDir(int xy) {
         return this.dir[xy];
@@ -166,7 +177,7 @@ public class MovableItem extends Item {
 
 
     /**
-    * Set the direction of the object
+    * Set the direction of the object.
     * @param x the x direction: 1, 0, -1
     * @param y the y direction: 1, 0, -1
     */
