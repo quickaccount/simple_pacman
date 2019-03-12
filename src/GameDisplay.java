@@ -33,7 +33,7 @@ public class GameDisplay extends Application {
 
     private int blinky_X = 17;	// i just put a random position for now
     private int blinky_Y = 17;
-    
+
     private int currScore = 0;
 
     private int mvRefreshCount;
@@ -98,9 +98,9 @@ public class GameDisplay extends Application {
 
         Canvas scoreboard = new Canvas(ConstantVariables.WORLD_WIDTH, ConstantVariables.SCOREBOARD_HEIGHT);
         root.getChildren().add(scoreboard);
-        
+
         GraphicsContext score = scoreboard.getGraphicsContext2D();
-        
+
         Canvas canvas = new Canvas(ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT);
         root.getChildren().add(canvas);
 
@@ -126,33 +126,33 @@ public class GameDisplay extends Application {
                     for (int x=0; x < ConstantVariables.NUM_COL; x++) {		// and column
                         if (items.getItemList()[x][y] instanceof Coin) {	// of the itemList and if the item is of type Coin
                             if ( ((Coin)items.getItemList()[x][y]).getCoinIsOn() ) {	// and it is "on" (hasn't been collected yet)
-                            	// draw the coin 
+                              // draw the coin
                                 gc.drawImage(coin, x * ConstantVariables.WIDTH + ConstantVariables.COIN_OFFSET, y * ConstantVariables.HEIGHT - ConstantVariables.COIN_OFFSET);
                             }
                         }
                     }
                 }
-                
+
                 gc.drawImage( pacman.getFrame(elapsedSeconds), pac_X, pac_Y);	// add pacman
                 gc.drawImage( blinky.getFrame(elapsedSeconds), blinky_X, blinky_Y);	// add blinky
-                
+
                 score.setFont(Font.font ("Verdana", 20));
                 score.setFill(Color.BLACK);
                 score.fillRect(0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.SCOREBOARD_HEIGHT);
                 score.setFill(Color.WHITE);
                 String scoreString = "SCORE: " + currScore;
                 score.fillText(scoreString, 10, 30);
-                
-                // have to add currScore++; once merged with the branch that collects coins
-                
-                if(avatar.intersects(enemy)) {	// if pacman and the ghost intersect
-                	gc.setFont(Font.font ("Verdana", 20));
-                	gc.setFill(Color.BLACK);
-                	gc.fillRect(0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT);		// black out the screen
-                	gc.setFill(Color.RED);
-                	gc.fillText("GAME OVER!!", ConstantVariables.WINDOW_WIDTH/2 -65, ConstantVariables.WORLD_HEIGHT/2 - 20);	// display red "game over" string
-                	stop();	// stop the application
 
+                // have to add currScore++; once merged with the branch that collects coins
+
+                if(avatar.intersects(enemy)) {	// if pacman and the ghost intersect
+                  gc.setFont(Font.font ("Verdana", 20));
+                  gc.setFill(Color.BLACK);
+                  gc.fillRect(0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT);		// black out the screen
+                  gc.setFill(Color.RED);
+                  gc.fillText("GAME OVER!!", ConstantVariables.WINDOW_WIDTH/2 -65, ConstantVariables.WORLD_HEIGHT/2 - 20);	// display red "game over" string
+                  stop();	// stop the application
+                }
                 mvRefreshCount ++; // adds one to the refresh count since last move
                 if (mvRefreshCount > 6) { //slows timer for a single move
                     timedMove("continue in current direction");
@@ -166,7 +166,7 @@ public class GameDisplay extends Application {
       stage.sizeToScene();	// gets rid of exra padding around maze image
       stage.show();
 
-      scene.setOnKeyPressed(new EventHandler<KeyEvent>() { //scene.setOnKeyReleased fixes holding key, 
+      scene.setOnKeyPressed(new EventHandler<KeyEvent>() { //scene.setOnKeyReleased fixes holding key,
 
       @Override
       public void handle(KeyEvent event) {
