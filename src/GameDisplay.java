@@ -34,8 +34,6 @@ public class GameDisplay extends Application {
     private int blinky_X = 17;	// i just put a random position for now
     private int blinky_Y = 17;
 
-    private int currScore = 0;
-
     private int mvRefreshCount;
 
     AnimationApp items = new AnimationApp();
@@ -109,6 +107,8 @@ public class GameDisplay extends Application {
 
         Image coin = new Image("coin.png");
 
+
+        // Maybe we should separate the method below into its own class?
         final long startNanoTime = System.nanoTime();	// start time in nano seconds
 
         // updates visual display approx 60 times/seconds
@@ -208,6 +208,7 @@ public class GameDisplay extends Application {
    * @param input The user input for movement.
    */
   private void movePac(String input) {
+
       handleInput(input);
 
       pac_Y = avatar.getYCoord() * ConstantVariables.MOVE_AMNT;
@@ -218,19 +219,21 @@ public class GameDisplay extends Application {
     // temporary auto move function
     // movement based off of current player direction
     private void timedMove(String key) {
-            mvRefreshCount = 0;
-            avatar.mvAttempt(key);
-            items.processMv(avatar);
-            movePac(key);
-            enemy.genMv(avatar, items);
-            tempMoveAI();
+
+        mvRefreshCount = 0;
+        avatar.mvAttempt(key);
+        items.processMv(avatar);
+        movePac(key);
+        enemy.genMv(avatar, items);
+        tempMoveAI();
     }
 
 
     // temporary function to update AI location after genMv
     private void tempMoveAI() {
-        blinky_X = enemy.getXCoord()*16;
-        blinky_Y = enemy.getYCoord()*16;
+
+        blinky_X = enemy.getXCoord() * ConstantVariables.MOVE_AMNT;
+        blinky_Y = enemy.getYCoord() * ConstantVariables.MOVE_AMNT;
     }
 
 
