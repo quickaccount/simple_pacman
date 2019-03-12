@@ -1,7 +1,6 @@
 import constants.ConstantVariables;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -161,7 +160,7 @@ public class GameDisplay extends Application {
       stage.sizeToScene();	// gets rid of exra padding around maze image
       stage.show();
 
-      scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+      scene.setOnKeyPressed(new EventHandler<KeyEvent>() { //scene.setOnKeyReleased fixes holding key, 
 
       @Override
       public void handle(KeyEvent event) {
