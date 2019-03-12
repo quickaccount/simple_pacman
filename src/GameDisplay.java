@@ -7,10 +7,12 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.VBox;
 
 public class GameDisplay extends Application {
 
@@ -32,6 +34,8 @@ public class GameDisplay extends Application {
 
     private int blinky_X = 17;	// i just put a random position for now
     private int blinky_Y = 17;
+    
+    private int currScore = 0;
 
     AnimationApp items = new AnimationApp();
     AnimatedImage pacman = new AnimatedImage();
@@ -88,9 +92,15 @@ public class GameDisplay extends Application {
     public void start(Stage stage) throws Exception {
 
         stage.setTitle("Pac Man");
-        Group root = new Group();
+        //Group root = new Group();
+        VBox root = new VBox();
 
-        Canvas canvas = new Canvas(ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT);
+        Canvas scoreboard = new Canvas(ConstantVariables.WORLD_WIDTH, ConstantVariables.SCOREBOARD_HEIGHT);
+        root.getChildren().add(scoreboard);
+        
+        GraphicsContext score = scoreboard.getGraphicsContext2D();
+        
+        Canvas canvas = new Canvas(ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT);
         root.getChildren().add(canvas);
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
@@ -108,7 +118,7 @@ public class GameDisplay extends Application {
                 double elapsedSeconds = (currentNanoTime - startNanoTime) / 1000000000.0; // convert the elapsed time in nanoseconds to seconds
 
                 // background image essentially "clears" canvas
-                gc.drawImage(maze, 0, 0, ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT);
+                gc.drawImage(maze, 0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT);
 
                 // display coins
                 for (int y=0; y < ConstantVariables.NUM_ROWS; y++) {	// go through every row
@@ -121,14 +131,25 @@ public class GameDisplay extends Application {
                         }
                     }
                 }
+                
                 gc.drawImage( pacman.getFrame(elapsedSeconds), pac_X, pac_Y);	// add pacman
                 gc.drawImage( blinky.getFrame(elapsedSeconds), blinky_X, blinky_Y);	// add blinky
                 
+                score.setFont(Font.font ("Verdana", 20));
+                score.setFill(Color.BLACK);
+                score.fillRect(0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.SCOREBOARD_HEIGHT);
+                score.setFill(Color.WHITE);
+                String scoreString = "SCORE: " + currScore;
+                score.fillText(scoreString, 10, 30);
+                
+                // have to add currScore++; once merged with the branch that collects coins
+                
                 if(avatar.intersects(enemy)) {	// if pacman and the ghost intersect
+                	gc.setFont(Font.font ("Verdana", 20));
                 	gc.setFill(Color.BLACK);
-                	gc.fillRect(0, 0, ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT);		// black out the screen
+                	gc.fillRect(0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT);		// black out the screen
                 	gc.setFill(Color.RED);
-                	gc.fillText("GAME OVER!!", ConstantVariables.WINDOW_WIDTH/2 -40, ConstantVariables.WINDOW_HEIGHT/2);	// display red "game over" string
+                	gc.fillText("GAME OVER!!", ConstantVariables.WINDOW_WIDTH/2 -65, ConstantVariables.WORLD_HEIGHT/2 - 20);	// display red "game over" string
                 	stop();	// stop the application
                 }
             }
