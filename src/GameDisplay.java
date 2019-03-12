@@ -134,9 +134,10 @@ public class GameDisplay extends Application {
                     }
                 }
 
-                gc.drawImage( pacman.getFrame(elapsedSeconds), pac_X, pac_Y);	// add pacman
-                gc.drawImage( blinky.getFrame(elapsedSeconds), blinky_X, blinky_Y);	// add blinky
+                gc.drawImage( pacman.getFrame(elapsedSeconds), pac_X, pac_Y);	// add pacman to display
+                gc.drawImage( blinky.getFrame(elapsedSeconds), blinky_X, blinky_Y);	// add blinky to display
 
+                // display ScoreBoard
                 score.setFont(Font.font ("Verdana", 20));
                 score.setFill(Color.BLACK);
                 score.fillRect(0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.SCOREBOARD_HEIGHT);
@@ -144,6 +145,7 @@ public class GameDisplay extends Application {
                 String scoreString = "SCORE: " + avatar.getScore();
                 score.fillText(scoreString, 10, 30);
 
+                // display End Game and stop application
                 if(avatar.intersects(enemy)) {	// if pacman and the ghost intersect
                   gc.setFont(Font.font ("Verdana", 20));
                   gc.setFill(Color.BLACK);
@@ -152,6 +154,7 @@ public class GameDisplay extends Application {
                   gc.fillText("GAME OVER!!", ConstantVariables.WINDOW_WIDTH/2 -65, ConstantVariables.WORLD_HEIGHT/2 - 20);	// display red "game over" string
                   stop();	// stop the application
                 }
+
                 mvRefreshCount ++; // adds one to the refresh count since last move
                 if (mvRefreshCount > 6) { //slows timer for a single move
                     timedMove("continue in current direction");
@@ -216,13 +219,13 @@ public class GameDisplay extends Application {
     // temporary auto move function
     // movement based off of current player direction
     public void timedMove(String key) {
-        mvRefreshCount = 0;
-        avatar.mvAttempt(key);
-        items.processMv(avatar);
-        movePac(key);
-        enemy.genMv(avatar, items);
-        tempMoveAI();
-        items.printDisplay();
+            mvRefreshCount = 0;
+            avatar.mvAttempt(key);
+            items.processMv(avatar);
+            movePac(key);
+            enemy.genMv(avatar, items);
+            tempMoveAI();
+            items.printDisplay();
     }
 
 
