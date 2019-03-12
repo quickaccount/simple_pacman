@@ -33,6 +33,8 @@ public class GameDisplay extends Application {
     private int blinky_X = 17;	// i just put a random position for now
     private int blinky_Y = 17;
 
+    private int mvRefreshCount;
+
     AnimationApp items = new AnimationApp();
     AnimatedImage pacman = new AnimatedImage();
     AnimatedImage blinky = new AnimatedImage();
@@ -108,18 +110,24 @@ public class GameDisplay extends Application {
 
                 // background image clears canvas
                 gc.drawImage(maze, 0, 0, ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT);
-                gc.drawImage( pacman.getFrame(elapsedSeconds), pac_X, pac_Y);
-                gc.drawImage( blinky.getFrame(elapsedSeconds), blinky_X, blinky_Y);
 
                 // display coins
                 for (int y=0; y < ConstantVariables.NUM_ROWS; y++) {
                     for (int x=0; x < ConstantVariables.NUM_COL; x++) {
                         if (items.getItemList()[x][y] instanceof Coin) {
-                            gc.drawImage(coin, x * ConstantVariables.WIDTH + ConstantVariables.COIN_OFFSET, y * ConstantVariables.HEIGHT - ConstantVariables.COIN_OFFSET);
+                            if ( ((Coin)items.getItemList()[x][y]).getCoinIsOn() ) {
+                                gc.drawImage(coin, x * ConstantVariables.WIDTH + ConstantVariables.COIN_OFFSET, y * ConstantVariables.HEIGHT - ConstantVariables.COIN_OFFSET);
+                            }
                         }
                     }
                 }
-            } 
+                gc.drawImage( pacman.getFrame(elapsedSeconds), pac_X, pac_Y);
+                gc.drawImage( blinky.getFrame(elapsedSeconds), blinky_X, blinky_Y);
+                mvRefreshCount ++; // adds one to the refresh count since last move
+                if (mvRefreshCount > 6) { //slows timer for a single move
+                    timedMove("continue in current direction");
+                }
+            }
         }.start();
 
       Scene scene = new Scene(root, ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT, Color.BLACK);
@@ -133,53 +141,60 @@ public class GameDisplay extends Application {
       @Override
       public void handle(KeyEvent event) {
         String input = "";
-        switch(event.getCode()) {
-        case W:
-          input = "w";
-          pacman.frames = upPacman;
-          movePac(input);
-          break;
-        case A:
-          input = "a";
-          pacman.frames = leftPacman;
-          movePac(input);
-          break;
-        case S:
-          input = "s";
-          pacman.frames = downPacman;
-          movePac(input);
-          break;
-        case D:
-          input = "d";
-          pacman.frames = rightPacman;
-          movePac(input);
-          break;
-        }
+            switch(event.getCode()) {
+            case W:
+                input = "w";
+                pacman.frames = upPacman;
+                timedMove(input);
+                //movePac(input);
+                break;
+            case A:
+                input = "a";
+                pacman.frames = leftPacman;
+                timedMove(input);
+                //movePac(input);
+                break;
+            case S:
+                input = "s";
+                pacman.frames = downPacman;
+                timedMove(input);
+                //movePac(input);
+                break;
+            case D:
+                input = "d";
+                pacman.frames = rightPacman;
+                timedMove(input);
+                //movePac(input);
+                break;
+            }
       }
     });
   }
+
 
   /**
    * Processes move for GUI pacman.
    * @param input The user input for movement.
    */
   public void movePac(String input) {
-    handleInput(input);
-    if(items.wallCheck(avatar)) {
-            //if touching a wall, don't move
-        } else {
+      handleInput(input);
 
-          if(input.equals("w")) {
-            pac_Y -= ConstantVariables.MOVE_AMNT;
-          } else if(input.equals("a")) {
-            pac_X -= ConstantVariables.MOVE_AMNT;
-          } else if(input.equals("s")) {
-            pac_Y += ConstantVariables.MOVE_AMNT;
-          } else if(input.equals("d")) {
-            pac_X += ConstantVariables.MOVE_AMNT;
-          }
-        }
+      pac_Y = avatar.getYCoord() * ConstantVariables.MOVE_AMNT;
+      pac_X = avatar.getXCoord() * ConstantVariables.MOVE_AMNT;
   }
+
+
+    // temporary auto move function
+    // movement based off of current player direction
+    public void timedMove(String key) {
+        mvRefreshCount = 0;
+        avatar.mvAttempt(key);
+        items.processMv(avatar);
+        movePac(key);
+        enemy.genMv(avatar, items);
+        tempMoveAI();
+        items.printDisplay();
+    }
 
 
     // temporary function to update AI location after genMv
@@ -196,9 +211,5 @@ public class GameDisplay extends Application {
   public void handleInput(String input) {
       System.out.println(input + " was pressed.");
       avatar.mvAttempt(input);
-      items.processMv(avatar);
-      enemy.genMv(avatar, items);
-      tempMoveAI();
-      items.printDisplay();
   }
 }

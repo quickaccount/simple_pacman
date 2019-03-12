@@ -1,7 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
-
 import constants.ConstantVariables;
 
 
@@ -43,7 +42,6 @@ public class AnimationApp {
       String line = null;
 
       try {
-
         // FileReader reads text files in the default encoding.
         FileReader template = new FileReader(fileName);
         BufferedReader bTemplate = new BufferedReader(template);
@@ -57,14 +55,14 @@ public class AnimationApp {
 
             if (c == ConstantVariables.COIN_CHAR) {
 
-                Coin cCoin = new Coin(x * ConstantVariables.WIDTH, y * ConstantVariables.HEIGHT);
+                Coin cCoin = new Coin(x, y);
                 this.coinList.add(cCoin);
                 this.objList[x][y] = ConstantVariables.COIN_CHAR;
                 this.itemList[x][y] = cCoin;
 
             } else if (c == ConstantVariables.WALL_CHAR) {
 
-                Wall w = new Wall(x * ConstantVariables.WIDTH , y * ConstantVariables.HEIGHT);
+                Wall w = new Wall(x, y);
                 this.wallList.add(w);
                 this.itemList[x][y] = w;
                 this.objList[x][y] = ConstantVariables.WALL_CHAR;
@@ -73,27 +71,19 @@ public class AnimationApp {
 
                 this.objList[x][y] = ConstantVariables.EMPTY_CHAR;
             }
-
           }
             y++;
         }
           // Close default_display.txt
           bTemplate.close();
       }
-
       // Error checking
       catch(FileNotFoundException ex) {
         System.out.println("Cannot open file '" + fileName + "'");
       }
-
       catch(IOException ex) {
         System.out.println("Error reading file '" + fileName + "'");
       }
-
-      //set default Avatar location
-      //this.objList[ConstantVariables.INITIAL_X][ConstantVariables.INITIAL_Y] = 'A';
-      //set default Enemy location
-      //this.objList[ConstantVariables.INITIAL_E_X][ConstantVariables.INITIAL_E_Y] = 'E';
     }
 
 
@@ -103,23 +93,6 @@ public class AnimationApp {
 
         for (int y=0; y < ConstantVariables.NUM_ROWS; y++) {
             for (int x=0; x < ConstantVariables.NUM_COL; x++) {
-                /*
-                if (this.itemList[x][y] instanceof Coin) {
-                    rowString += ConstantVariables.COIN_CHAR;
-                }
-                else if (this.itemList[x][y] instanceof Wall) {
-                    rowString += ConstantVariables.WALL_CHAR;
-                }
-                else if (this.itemList[x][y] instanceof Avatar) {
-                    rowString += ConstantVariables.AV_CHAR;
-                }
-                else if (this.itemList[x][y] instanceof AI) {
-                    rowString += ConstantVariables.AI_CHAR;
-                }
-                else {
-                    rowString += ConstantVariables.EMPTY_CHAR;
-                }
-                */
                 rowString += this.objList[x][y];
             }
             System.out.println(rowString);
@@ -150,44 +123,6 @@ public class AnimationApp {
     */
     public void setObjList(int x, int y, char item) {
         this.objList[x][y] = item;
-    }
-
-
-    // returns false for no collisions and true for a collision case
-    public boolean collisionCheck(MovableItem thing, Item otherThing) {
-
-
-        // edge values for the Rectangle of thing
-        int xla = (int)(thing.getBox().getX()); // leftmost x value of thing Rectangle
-        int xra = (int)(thing.getBox().getX() + thing.getBox().getWidth()); // rightmost x value of thing Rectangle
-        int yua = (int)(thing.getBox().getY()); // uppermost y value of thing Rectangle
-        int yda = (int)(thing.getBox().getY() + thing.getBox().getHeight()); // lowermost y value of thing Rectangle
-
-        // edge values for the Rectangle of otherThing
-        int xlb = (int)(otherThing.getBox().getX()); // leftmost x value of thing Rectangle
-        int xrb = (int)(otherThing.getBox().getX() + otherThing.getBox().getWidth()); // rightmost x value of thing Rectangle
-        int yub = (int)(otherThing.getBox().getY()); // uppermosr y value of thing Rectangle
-        int ydb = (int)(otherThing.getBox().getY() + otherThing.getBox().getHeight()); // lowermost y value of thing Rectangle
-
-
-        // Collision Logic
-
-        // no collision case
-        if ( (xla > xrb) && (xra < xlb) && (yua > ydb) && (yda < ydb) ) {
-            return false;
-        }
-
-        // potential collision check x-axis
-        else if ( (xra > xlb && xra < xrb) || (xla > xlb && xla < xrb) ) {
-            // collision check y-axis
-            if ( (yda > yub && yda < ydb) || (yua > yub && yua < ydb) ) {
-                return true;
-            }
-            else // no collision y-axis
-                return false;
-        }
-        else // no collision x-axis
-            return false;
     }
 
 
@@ -223,25 +158,25 @@ public class AnimationApp {
 
         //coin collision checking
         ArrayList<Coin> cL = this.getCoinList();
-        char avatarEnemy = ConstantVariables.AI_CHAR;
+        char avatarEnemy = ConstantVariables.AV_CHAR;
         char displayCoin = ConstantVariables.COIN_CHAR;
         Item item = this.getItemList()[thing.getXCoord() / 16][thing.getYCoord() /16];
 
         if (thing instanceof AI) {
-            avatarEnemy = ConstantVariables.AV_CHAR;
+            avatarEnemy = ConstantVariables.AI_CHAR;
         }
 
         // Is thing moving off coin or empty? display the position that the avatar moved off of
-        if (thing.getOnCoin() == true) {
+        if (thing.getOnCoin()) {
             System.out.println(avatarEnemy + " is moving off a coin");
             if (item instanceof Coin) {
-                if ( ((Coin)item).getCoinIsOn() == true) {
+                if ( ((Coin)item).getCoinIsOn() ) {
                     displayCoin = ConstantVariables.COIN_CHAR;
                 }
-
                 else {
                     displayCoin = ConstantVariables.EMPTY_CHAR;
                 }
+                thing.setOnCoin(false);
             }
             this.setObjList(thing.getXCoord(), thing.getYCoord(), displayCoin);
         }
@@ -251,13 +186,14 @@ public class AnimationApp {
         }
 
         // check if MovableItem moving onto a coin turn coin off if appropriate, then move moveable item
-        /*
         if (this.getItemList()[thing.getNewXCoord()][thing.getNewYCoord()] instanceof Coin) {
-            if (thing instanceof Avatar) {
-                this.getItemList()[thing.getNewXCoord()][thing.getNewYCoord()].setCoinOff(thing);
+            Coin coinNewLoc = (Coin)this.getItemList()[thing.getNewXCoord()][thing.getNewYCoord()];
+            if ((thing instanceof Avatar) && coinNewLoc.getCoinIsOn()) {
+                coinNewLoc.setCoinOff((Avatar)thing);
+                System.out.println("Score: " + ((Avatar)thing).getScore());
             }
+            thing.setOnCoin(true);
         }
-        */
 
         // update thing Coordinates
         thing.setXYCoord(thing.getNewXCoord(), thing.getNewYCoord());

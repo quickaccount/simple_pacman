@@ -45,7 +45,6 @@ public class Avatar extends MovableItem {
         } else if (takeFirst == 'd') {
             this.setDir(1, 0); //Move right
         } else {
-            this.setDir(0, 0); //No movement
         }
 
         this.setNewCoord(this.getDir(0) + this.getXCoord(), this.getDir(1) + this.getYCoord()); //Apply movement
