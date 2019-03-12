@@ -15,7 +15,7 @@ public class Coin extends Item {
     * @param y y position
     */
     public Coin (int x, int y) {
-        super(x+6, y+6, ConstantVariables.C_DIM, ConstantVariables.C_DIM);
+        super(x + ConstantVariables.COIN_OFFSET, y + ConstantVariables.COIN_OFFSET, ConstantVariables.C_DIM, ConstantVariables.C_DIM);
 
         //this.box = new Rectangle(x + 6, y + 6, ConstantVariables.C_DIM, ConstantVariables.C_DIM); //x, y, length, width
     }
@@ -45,7 +45,7 @@ public class Coin extends Item {
     * Used to check if the coin is active
     * @return true of the coin still exists, otherwise false
     */
-    public boolean getCoinIsOn () {
+    public boolean getCoinIsOn() {
         return this.isOn;
     }
 

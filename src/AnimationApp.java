@@ -1,7 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
-
 import constants.ConstantVariables;
 
 
@@ -47,7 +46,6 @@ public class AnimationApp {
       String line = null;
 
       try {
-
         // FileReader reads text files in the default encoding.
         FileReader template = new FileReader(fileName);
         BufferedReader bTemplate = new BufferedReader(template);
@@ -77,27 +75,19 @@ public class AnimationApp {
 
                 this.objList[x][y] = ConstantVariables.EMPTY_CHAR;
             }
-
           }
             y++;
         }
           // Close default_display.txt
           bTemplate.close();
       }
-
       // Error checking
       catch(FileNotFoundException ex) {
         System.out.println("Cannot open file '" + fileName + "'");
       }
-
       catch(IOException ex) {
         System.out.println("Error reading file '" + fileName + "'");
       }
-
-      //set default Avatar location
-      //this.objList[ConstantVariables.INITIAL_X][ConstantVariables.INITIAL_Y] = 'A';
-      //set default Enemy location
-      //this.objList[ConstantVariables.INITIAL_E_X][ConstantVariables.INITIAL_E_Y] = 'E';
     }
 
 
@@ -189,25 +179,25 @@ public class AnimationApp {
 
         //coin collision checking
         ArrayList<Coin> cL = this.getCoinList();
-        char avatarEnemy = ConstantVariables.AI_CHAR;
+        char avatarEnemy = ConstantVariables.AV_CHAR;
         char displayCoin = ConstantVariables.COIN_CHAR;
         Item item = this.getItemList()[thing.getXCoord() / 16][thing.getYCoord() /16];
 
         if (thing instanceof AI) {
-            avatarEnemy = ConstantVariables.AV_CHAR;
+            avatarEnemy = ConstantVariables.AI_CHAR;
         }
 
         // Is thing moving off coin or empty? display the position that the avatar moved off of
-        if (thing.getOnCoin() == true) {
+        if (thing.getOnCoin()) {
             System.out.println(avatarEnemy + " is moving off a coin");
             if (item instanceof Coin) {
-                if ( ((Coin)item).getCoinIsOn() == true) {
+                if ( ((Coin)item).getCoinIsOn() ) {
                     displayCoin = ConstantVariables.COIN_CHAR;
                 }
-
                 else {
                     displayCoin = ConstantVariables.EMPTY_CHAR;
                 }
+                thing.setOnCoin(false);
             }
             this.setObjList(thing.getXCoord(), thing.getYCoord(), displayCoin);
         }
@@ -216,14 +206,7 @@ public class AnimationApp {
             this.setObjList(thing.getXCoord(), thing.getYCoord(), ConstantVariables.EMPTY_CHAR);
         }
 
-        // check if MovableItem moving onto a coin turn coin off if appropriate, then move moveable item
-        /*
-        if (this.getItemList()[thing.getNewXCoord()][thing.getNewYCoord()] instanceof Coin) {
-            if (thing instanceof Avatar) {
-                this.getItemList()[thing.getNewXCoord()][thing.getNewYCoord()].setCoinOff(thing);
-            }
-        }
-        */
+      // check if MovableItem moving onto a coin turn coin off if appropriate, then move moveable item
 
         // update thing Coordinates
         thing.setXYCoord(thing.getNewXCoord(), thing.getNewYCoord());

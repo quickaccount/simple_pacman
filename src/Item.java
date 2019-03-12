@@ -78,15 +78,4 @@ public class Item {
     public int getYCoord() {
         return this.ycoord;
     }
-
-
-    /**
-    * Returns the object's current location
-    * @return an array with the current x and y coords
-    */
-    public int[] getObjectLoc() {
-        // int[] ObjLoc = new int [] {(int)this.getBox().getX(), (int)this.getBox().getY()};
-        int[] ObjLoc = {this.xcoord, this.ycoord};
-        return ObjLoc;
-    }
 }

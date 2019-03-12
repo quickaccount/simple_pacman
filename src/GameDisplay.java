@@ -36,6 +36,8 @@ public class GameDisplay extends Application {
     
     private int currScore = 0;
 
+    private int mvRefreshCount;
+
     AnimationApp items = new AnimationApp();
     AnimatedImage pacman = new AnimatedImage();
     AnimatedImage blinky = new AnimatedImage();
@@ -150,6 +152,10 @@ public class GameDisplay extends Application {
                 	gc.setFill(Color.RED);
                 	gc.fillText("GAME OVER!!", ConstantVariables.WINDOW_WIDTH/2 -65, ConstantVariables.WORLD_HEIGHT/2 - 20);	// display red "game over" string
                 	stop();	// stop the application
+
+                mvRefreshCount ++; // adds one to the refresh count since last move
+                if (mvRefreshCount > 6) { //slows timer for a single move
+                    timedMove("continue in current direction");
                 }
             }
         }.start();
@@ -165,53 +171,60 @@ public class GameDisplay extends Application {
       @Override
       public void handle(KeyEvent event) {
         String input = "";
-        switch(event.getCode()) {
-        case W:	// if user presses w
-          input = "w";
-          pacman.frames = upPacman;	// display upward movement animation
-          movePac(input);	// process upward movement for GUI display
-          break;
-        case A:	// if user presses a
-          input = "a";
-          pacman.frames = leftPacman;	// display leftward movement animation
-          movePac(input);	// process leftward movement for GUI display
-          break;
-        case S:
-          input = "s";
-          pacman.frames = downPacman;
-          movePac(input);
-          break;
-        case D:
-          input = "d";
-          pacman.frames = rightPacman;
-          movePac(input);
-          break;
-        }
+            switch(event.getCode()) {
+            case W:
+                input = "w";
+                pacman.frames = upPacman;
+                timedMove(input);
+                //movePac(input);
+                break;
+            case A:
+                input = "a";
+                pacman.frames = leftPacman;
+                timedMove(input);
+                //movePac(input);
+                break;
+            case S:
+                input = "s";
+                pacman.frames = downPacman;
+                timedMove(input);
+                //movePac(input);
+                break;
+            case D:
+                input = "d";
+                pacman.frames = rightPacman;
+                timedMove(input);
+                //movePac(input);
+                break;
+            }
       }
     });
   }
+
 
   /**
    * Processes move for GUI pacman.
    * @param input The user input for movement.
    */
   public void movePac(String input) {
-    handleInput(input);	// do movement checks (collisions,etc)
-    if(items.wallCheck(avatar)) {
-            //if touching a wall, don't move
-        } else {
+      handleInput(input);
 
-          if(input.equals("w")) {
-            pac_Y -= ConstantVariables.MOVE_AMNT;
-          } else if(input.equals("a")) {
-            pac_X -= ConstantVariables.MOVE_AMNT;
-          } else if(input.equals("s")) {
-            pac_Y += ConstantVariables.MOVE_AMNT;
-          } else if(input.equals("d")) {
-            pac_X += ConstantVariables.MOVE_AMNT;
-          }
-        }
+      pac_Y = avatar.getYCoord() * ConstantVariables.MOVE_AMNT;
+      pac_X = avatar.getXCoord() * ConstantVariables.MOVE_AMNT;
   }
+
+
+    // temporary auto move function
+    // movement based off of current player direction
+    public void timedMove(String key) {
+        mvRefreshCount = 0;
+        avatar.mvAttempt(key);
+        items.processMv(avatar);
+        movePac(key);
+        enemy.genMv(avatar, items);
+        tempMoveAI();
+        items.printDisplay();
+    }
 
 
     // temporary function to update AI location after genMv
@@ -228,9 +241,6 @@ public class GameDisplay extends Application {
   public void handleInput(String input) {
       System.out.println(input + " was pressed.");
       avatar.mvAttempt(input);
-      items.processMv(avatar);
-      enemy.genMv(avatar, items);
-      tempMoveAI();
-      items.printDisplay();
+
   }
 }
