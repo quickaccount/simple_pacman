@@ -1,8 +1,6 @@
-import java.awt.Rectangle;
-
 import constants.ConstantVariables;
 
-public class Item {
+public abstract class Item {
 
     private int xcoord;
     private int ycoord;
@@ -12,7 +10,7 @@ public class Item {
     * @param x the initial x-coord
     * @param y the initial y-coord
     */
-    public Item(int x, int y) {
+    protected Item(int x, int y) {
         this.setXCoord(x);
         this.setYCoord(y);
     }
@@ -22,7 +20,7 @@ public class Item {
     * Change only the x coordinate of the object
     * @param xNew the new x position
     */
-    public void setXCoord(int xNew){
+    protected void setXCoord(int xNew){
         this.xcoord = xNew;
     }
 
@@ -31,7 +29,7 @@ public class Item {
     * Change only the y coordinate of the movable object
     * @param yNew the new y position
     */
-    public void setYCoord(int yNew){
+    protected void setYCoord(int yNew){
         this.ycoord = yNew;
     }
 
