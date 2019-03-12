@@ -12,7 +12,9 @@ public class AnimationApp {
 
     private ArrayList<Coin> coinList = new ArrayList<Coin>(); //Array of coins
     private ArrayList<Wall> wallList = new ArrayList<Wall>(); //Array of walls
+    private char[][] objList = new char [ConstantVariables.NUM_COL] [ConstantVariables.NUM_ROWS];
     private Item[][] itemList = new Item [ConstantVariables.NUM_COL] [ConstantVariables.NUM_ROWS];
+    private static boolean gameOnOff;
 
 
     /**
@@ -59,6 +61,7 @@ public class AnimationApp {
 
                 Coin cCoin = new Coin(x, y);
                 this.coinList.add(cCoin);
+                this.objList[x][y] = ConstantVariables.COIN_CHAR;
                 this.itemList[x][y] = cCoin;
 
             } else if (c == ConstantVariables.WALL_CHAR) {
@@ -66,6 +69,11 @@ public class AnimationApp {
                 Wall w = new Wall(x, y);
                 this.wallList.add(w);
                 this.itemList[x][y] = w;
+                this.objList[x][y] = ConstantVariables.WALL_CHAR;
+
+            } else {
+
+                this.objList[x][y] = ConstantVariables.EMPTY_CHAR;
             }
           }
             y++;
@@ -83,44 +91,42 @@ public class AnimationApp {
     }
 
 
+    // text-based print method
+    public void printDisplay() {
+        String rowString = "";
+
+        for (int y=0; y < ConstantVariables.NUM_ROWS; y++) {
+            for (int x=0; x < ConstantVariables.NUM_COL; x++) {
+                rowString += this.objList[x][y];
+            }
+            System.out.println(rowString);
+            rowString = "";
+        }
+    }
+
+
+    /**
+    * Returns a printable list with char representations of objects
+    * @return list of char represented objects
+    */
+    public char[][] getObjList() {
+        return this.objList;
+    }
+
+
     public Item[][] getItemList() {
         return this.itemList;
     }
 
 
-
     /**
-    * Collision checking of moving objects
-    * @param thing the object to test
+    * Allows for changing objects within the object list (ei - coin to no coin)
+    * @param x the [x] index
+    * @param y the [y] index
+    * @param item new item to be placed at that specific index
     */
-    public void processMv(MovableItem thing) {
-        if (this.wallCheck(thing) == true) {
-            System.out.println("hit wall");
-            return;
-        }
-
-        //coin collision checking
-        ArrayList<Coin> cL = this.getCoinList();
-        Item item = this.getItemList()[thing.getXCoord() / 16][thing.getYCoord() /16];
-
-        // Is thing moving off coin or empty? display the position that the avatar moved off of
-        if (thing.getOnCoin()) {
-            thing.setOnCoin(false);
-        }
-
-      // check if MovableItem moving onto a coin turn coin off if appropriate, then move moveable item
-        if (this.getItemList()[thing.getNewXCoord()][thing.getNewYCoord()] instanceof Coin) {
-            Coin coinNewLoc = (Coin)this.getItemList()[thing.getNewXCoord()][thing.getNewYCoord()];
-            if ((thing instanceof Avatar) && coinNewLoc.getCoinIsOn()) {
-                coinNewLoc.setCoinOff((Avatar)thing);
-            }
-            thing.setOnCoin(true);
-        }
-
-
-        // update thing Coordinates
-        thing.setXYCoord(thing.getNewXCoord(), thing.getNewYCoord());
-        // set new avatar location in printable object list
+    public void setObjList(int x, int y, char item) {
+        this.objList[x][y] = item;
     }
 
 
@@ -142,5 +148,70 @@ public class AnimationApp {
             }
         }
         return false;
+    }
+
+    /**
+    * Collision checking of moving objects
+    * @param thing the object to test
+    */
+    public void processMv(MovableItem thing) {
+        if (this.wallCheck(thing) == true) {
+            System.out.println("hit wall");
+            return;
+        }
+
+        //coin collision checking
+        ArrayList<Coin> cL = this.getCoinList();
+        char avatarEnemy = ConstantVariables.AV_CHAR;
+        char displayCoin = ConstantVariables.COIN_CHAR;
+        Item item = this.getItemList()[thing.getXCoord() / 16][thing.getYCoord() /16];
+
+        if (thing instanceof AI) {
+            avatarEnemy = ConstantVariables.AI_CHAR;
+        }
+
+        // Is thing moving off coin or empty? display the position that the avatar moved off of
+        if (thing.getOnCoin()) {
+            System.out.println(avatarEnemy + " is moving off a coin");
+            if (item instanceof Coin) {
+                if ( ((Coin)item).getCoinIsOn() ) {
+                    displayCoin = ConstantVariables.COIN_CHAR;
+                }
+                else {
+                    displayCoin = ConstantVariables.EMPTY_CHAR;
+                }
+                thing.setOnCoin(false);
+            }
+            this.setObjList(thing.getXCoord(), thing.getYCoord(), displayCoin);
+        }
+        else {
+            System.out.println(avatarEnemy + " is moving off an empty space");
+            this.setObjList(thing.getXCoord(), thing.getYCoord(), ConstantVariables.EMPTY_CHAR);
+        }
+
+      // check if MovableItem moving onto a coin turn coin off if appropriate, then move moveable item
+        if (this.getItemList()[thing.getNewXCoord()][thing.getNewYCoord()] instanceof Coin) {
+            Coin coinNewLoc = (Coin)this.getItemList()[thing.getNewXCoord()][thing.getNewYCoord()];
+            if ((thing instanceof Avatar) && coinNewLoc.getCoinIsOn()) {
+                coinNewLoc.setCoinOff((Avatar)thing);
+                System.out.println("Score: " + ((Avatar)thing).getScore());
+            }
+            thing.setOnCoin(true);
+        }
+
+
+        // update thing Coordinates
+        thing.setXYCoord(thing.getNewXCoord(), thing.getNewYCoord());
+        // set new avatar location in printable object list
+        this.setObjList(thing.getXCoord(), thing.getYCoord(), avatarEnemy);
+    }
+
+
+    /**
+    * Enables ending and starting of the game
+    * @param onOff either true or false
+    */
+    public void setGameOnOff (boolean onOff) {
+        this.gameOnOff = onOff;
     }
 }

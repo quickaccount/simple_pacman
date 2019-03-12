@@ -224,7 +224,6 @@ public class GameDisplay extends Application {
             movePac(key);
             enemy.genMv(avatar, items);
             tempMoveAI();
-            items.printDisplay();
     }
 
 
