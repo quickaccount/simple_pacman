@@ -1,8 +1,6 @@
-import java.awt.Rectangle;
-
 import constants.ConstantVariables;
 
-public class MovableItem extends Item {
+public abstract class MovableItem extends Item {
 
     private int[] dir = new int[] {0, 0};
     private int[] newCoord = new int[] {0, 0}; //Store coordinates as one item
@@ -14,7 +12,7 @@ public class MovableItem extends Item {
     * @param x the initial x-coord
     * @param y the initial y-coord
     */
-    public MovableItem (int x, int y) {
+    protected MovableItem (int x, int y) {
         super(x, y);
     }
 
@@ -33,7 +31,7 @@ public class MovableItem extends Item {
      * Sets the onCoin variable. Depends on if the player is on a coin
      * @param onOrOff a boolean that is true if the player is currently on a coin, and false otherwise
      */
-    public void setOnCoin (boolean onOrOff) {
+    protected void setOnCoin (boolean onOrOff) {
         this.onCoin = onOrOff;
     }
 
@@ -52,7 +50,7 @@ public class MovableItem extends Item {
     * @param xNew the new x position
     * @param yNew the new y position
     */
-    public void setXYCoord(int xNew, int yNew) {
+    protected void setXYCoord(int xNew, int yNew) {
         super.setXCoord(xNew);
         super.setYCoord(yNew);
     }
@@ -73,7 +71,7 @@ public class MovableItem extends Item {
     * @param yNew the new y position
     */
     @Override
-    public void setYCoord(int yNew){
+    protected void setYCoord(int yNew){
         super.setYCoord(yNew);
     }
 
@@ -121,7 +119,7 @@ public class MovableItem extends Item {
     * @param xNew the new x position
     * @param yNew the new y position
     */
-    public void setNewCoord(int xNew, int yNew) {
+    protected void setNewCoord(int xNew, int yNew) {
         this.newCoord[0] = xNew;
         this.newCoord[1] = yNew;
     }
