@@ -105,7 +105,9 @@ public class GameDisplay extends Application {
         root.getChildren().add(canvas);
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
+
         Image maze = new Image("maze.png");
+
         Image coin = new Image("coin.png");
 
         final long startNanoTime = System.nanoTime();	// start time in nano seconds
@@ -114,8 +116,7 @@ public class GameDisplay extends Application {
         new AnimationTimer()
         {
             // handle is invoked every time a frame is rendered (by javafx default, 60 times/second)
-            public void handle(long currentNanoTime)
-            {
+            public void handle(long currentNanoTime) {
                 double elapsedSeconds = (currentNanoTime - startNanoTime) / 1000000000.0; // convert the elapsed time in nanoseconds to seconds
 
                 // background image essentially "clears" canvas
@@ -140,10 +141,8 @@ public class GameDisplay extends Application {
                 score.setFill(Color.BLACK);
                 score.fillRect(0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.SCOREBOARD_HEIGHT);
                 score.setFill(Color.WHITE);
-                String scoreString = "SCORE: " + currScore;
+                String scoreString = "SCORE: " + avatar.getScore();
                 score.fillText(scoreString, 10, 30);
-
-                // have to add currScore++; once merged with the branch that collects coins
 
                 if(avatar.intersects(enemy)) {	// if pacman and the ghost intersect
                   gc.setFont(Font.font ("Verdana", 20));
