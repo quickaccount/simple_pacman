@@ -8,7 +8,7 @@ import constants.ConstantVariables;
  * This class is most of the logic behind the app. It loads in a text file and creates lists of objects
  * so that we can check collisions.
  */
-public class AnimationApp {
+public class ItemProcess {
 
     private ArrayList<Coin> coinList = new ArrayList<Coin>(); //Array of coins
     private ArrayList<Wall> wallList = new ArrayList<Wall>(); //Array of walls
@@ -36,7 +36,7 @@ public class AnimationApp {
     /**
      * Constructor that creates AnimationApp items and populates wallList, coinList, objList
      */
-    public AnimationApp() {
+    public ItemProcess() {
 
       // The name of the file containing the display template.
       String fileName = "maze.txt";

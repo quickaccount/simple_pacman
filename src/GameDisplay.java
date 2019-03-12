@@ -36,7 +36,7 @@ public class GameDisplay extends Application {
 
     private int mvRefreshCount;
 
-    AnimationApp items = new AnimationApp();
+    ItemProcess items = new ItemProcess();
     AnimatedImage pacman = new AnimatedImage();
     AnimatedImage blinky = new AnimatedImage();
     Avatar avatar = new Avatar (ConstantVariables.INITIAL_X, ConstantVariables.INITIAL_Y);	// pacman avatar we use to process movements

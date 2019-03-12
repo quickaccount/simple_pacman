@@ -50,7 +50,7 @@ public class AI extends MovableItem {
     * @param y the current y-position
     * @param items a list of all tiles and the items that are on these tiles
     */
-    private void checkMv(int x, int y, AnimationApp items) {
+    private void checkMv(int x, int y, ItemProcess items) {
         for (int i=0; i<4; i++) {
             this.setDir(x, y);
             this.setNewCoord(this.getDir(0) + this.getXCoord(), this.getDir(1) + this.getYCoord()); //Apply movement
@@ -100,7 +100,7 @@ public class AI extends MovableItem {
     * @param avatar the player
     * @param items a list of all tiles and the items that inhabit each tile
     */
-    public void genMv(Avatar avatar, AnimationApp items) {
+    public void genMv(Avatar avatar, ItemProcess items) {
         this.setDist(avatar);
 
         // Enemy-Avatar collision check
