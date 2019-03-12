@@ -93,6 +93,23 @@ public class AnimationApp {
 
         for (int y=0; y < ConstantVariables.NUM_ROWS; y++) {
             for (int x=0; x < ConstantVariables.NUM_COL; x++) {
+                /*
+                if (this.itemList[x][y] instanceof Coin) {
+                    rowString += ConstantVariables.COIN_CHAR;
+                }
+                else if (this.itemList[x][y] instanceof Wall) {
+                    rowString += ConstantVariables.WALL_CHAR;
+                }
+                else if (this.itemList[x][y] instanceof Avatar) {
+                    rowString += ConstantVariables.AV_CHAR;
+                }
+                else if (this.itemList[x][y] instanceof AI) {
+                    rowString += ConstantVariables.AI_CHAR;
+                }
+                else {
+                    rowString += ConstantVariables.EMPTY_CHAR;
+                }
+                */
                 rowString += this.objList[x][y];
             }
             System.out.println(rowString);
@@ -123,6 +140,44 @@ public class AnimationApp {
     */
     public void setObjList(int x, int y, char item) {
         this.objList[x][y] = item;
+    }
+
+
+    // returns false for no collisions and true for a collision case
+    public boolean collisionCheck(MovableItem thing, Item otherThing) {
+
+
+        // edge values for the Rectangle of thing
+        int xla = (int)(thing.getBox().getX()); // leftmost x value of thing Rectangle
+        int xra = (int)(thing.getBox().getX() + thing.getBox().getWidth()); // rightmost x value of thing Rectangle
+        int yua = (int)(thing.getBox().getY()); // uppermost y value of thing Rectangle
+        int yda = (int)(thing.getBox().getY() + thing.getBox().getHeight()); // lowermost y value of thing Rectangle
+
+        // edge values for the Rectangle of otherThing
+        int xlb = (int)(otherThing.getBox().getX()); // leftmost x value of thing Rectangle
+        int xrb = (int)(otherThing.getBox().getX() + otherThing.getBox().getWidth()); // rightmost x value of thing Rectangle
+        int yub = (int)(otherThing.getBox().getY()); // uppermosr y value of thing Rectangle
+        int ydb = (int)(otherThing.getBox().getY() + otherThing.getBox().getHeight()); // lowermost y value of thing Rectangle
+
+
+        // Collision Logic
+
+        // no collision case
+        if ( (xla > xrb) && (xra < xlb) && (yua > ydb) && (yda < ydb) ) {
+            return false;
+        }
+
+        // potential collision check x-axis
+        else if ( (xra > xlb && xra < xrb) || (xla > xlb && xla < xrb) ) {
+            // collision check y-axis
+            if ( (yda > yub && yda < ydb) || (yua > yub && yua < ydb) ) {
+                return true;
+            }
+            else // no collision y-axis
+                return false;
+        }
+        else // no collision x-axis
+            return false;
     }
 
 
@@ -193,7 +248,6 @@ public class AnimationApp {
                 System.out.println("Score: " + ((Avatar)thing).getScore());
             }
             thing.setOnCoin(true);
-        }
 
         // update thing Coordinates
         thing.setXYCoord(thing.getNewXCoord(), thing.getNewYCoord());
