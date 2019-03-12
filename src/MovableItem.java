@@ -8,20 +8,6 @@ public class MovableItem extends Item {
     private int[] newCoord = new int[] {0, 0}; //Store coordinates as one item
     private boolean onCoin;
 
-    /**
-    * Movable Objects can be the Avatar or Enemy's
-    * Object Type can be 'A' or 'E', represented by true and false respectively
-    * @param x initial x position
-    * @param y initial y position
-    * @param w width of object box
-    * @param h height of object box
-    */
-    public  MovableItem (int x, int y, int w, int h) {
-        super(x, y, w, h); //Set collision box
-        super.setXCoord(x);
-        super.setYCoord(y);
-    }
-
 
     /**
     * Constructor that creates a moveable object at the specified location
@@ -29,11 +15,10 @@ public class MovableItem extends Item {
     * @param y the initial y-coord
     */
     public MovableItem (int x, int y) {
-        super(x, y, ConstantVariables.WIDTH, ConstantVariables.HEIGHT);
-        super.setXCoord(x);
-        super.setYCoord(y);
+        super(x, y);
     }
-    
+
+
     /**
      * Returns T or F depending on if the two MovableItems are occupying the same square of space.
      * @param item the MovableItem we want to check our intersection with
@@ -41,8 +26,7 @@ public class MovableItem extends Item {
      */
     public boolean intersects(MovableItem item)
     {
-    	return (item.getXCoord()==this.getXCoord() && item.getYCoord()==this.getYCoord());
-        //return item.getBox().equals(this.getBox());
+      return (item.getXCoord()==this.getXCoord() && item.getYCoord()==this.getYCoord());
     }
 
     /**
@@ -69,20 +53,8 @@ public class MovableItem extends Item {
     * @param yNew the new y position
     */
     public void setXYCoord(int xNew, int yNew) {
-        //requires weak encapsulation
-        super.getBox().add(xNew, yNew);
         super.setXCoord(xNew);
         super.setYCoord(yNew);
-    }
-
-
-    /**
-    * Returns the rectangular box around an object
-    * @return a Rectangle around the object
-    */
-    @Override
-    public Rectangle getBox() {
-        return super.getBox();
     }
 
 

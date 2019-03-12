@@ -6,22 +6,6 @@ public class Item {
 
     private int xcoord;
     private int ycoord;
-    private Rectangle box; //Hitboxes
-
-    /**
-    * Movable Objects can be the Avatar or Enemy's
-    * Object Type can be 'A' or 'E', represented by true and false respectively
-    * @param x initial x position
-    * @param y initial y position
-    * @param w width of object box
-    * @param h height of object box
-    */
-    public  Item(int x, int y, int w, int h) {
-        this.box = new Rectangle(x, y, w, h); //Set collision box
-        this.xcoord = x;
-        this.ycoord = y;
-    }
-
 
     /**
     * Constructor that creates a moveable object at the specified location
@@ -29,18 +13,8 @@ public class Item {
     * @param y the initial y-coord
     */
     public Item(int x, int y) {
-        this.box = new Rectangle(x, y, ConstantVariables.WIDTH, ConstantVariables.HEIGHT);
         this.xcoord = x;
         this.ycoord = y;
-    }
-
-
-    /**
-    * Returns the rectangular box around an object
-    * @return a Rectangle around the object
-    */
-    public Rectangle getBox() {
-        return this.box;
     }
 
 

@@ -15,19 +15,7 @@ public class Coin extends Item {
     * @param y y position
     */
     public Coin (int x, int y) {
-        super(x + ConstantVariables.COIN_OFFSET, y + ConstantVariables.COIN_OFFSET, ConstantVariables.C_DIM, ConstantVariables.C_DIM);
-
-        //this.box = new Rectangle(x + 6, y + 6, ConstantVariables.C_DIM, ConstantVariables.C_DIM); //x, y, length, width
-    }
-
-
-    /**
-    * Used to get the position and hitbox of the coin
-    * @return Rectangle object that is referred to as 'box'
-    */
-    @Override
-    public Rectangle getBox() {
-        return super.getBox();
+        super(x + ConstantVariables.COIN_OFFSET, y + ConstantVariables.COIN_OFFSET);
     }
 
 
@@ -48,5 +36,4 @@ public class Coin extends Item {
     public boolean getCoinIsOn() {
         return this.isOn;
     }
-
 }

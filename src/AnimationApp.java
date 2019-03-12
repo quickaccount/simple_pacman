@@ -141,8 +141,8 @@ public class AnimationApp {
         }
         ArrayList<Wall> wL = this.getWallList();
         for (Wall w: wL) {
-            int xWall = (int)w.getBox().getX();
-            int yWall = (int)w.getBox().getY();
+            int xWall = w.getXCoord();
+            int yWall = w.getYCoord();
             if ((thing.getNewXCoord() == xWall) && (thing.getNewYCoord() == yWall)) {
                 return true;
             }
