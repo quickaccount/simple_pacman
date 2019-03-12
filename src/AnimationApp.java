@@ -1,7 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
-
 import constants.ConstantVariables;
 
 
@@ -43,7 +42,6 @@ public class AnimationApp {
       String line = null;
 
       try {
-
         // FileReader reads text files in the default encoding.
         FileReader template = new FileReader(fileName);
         BufferedReader bTemplate = new BufferedReader(template);
@@ -73,27 +71,19 @@ public class AnimationApp {
 
                 this.objList[x][y] = ConstantVariables.EMPTY_CHAR;
             }
-
           }
             y++;
         }
           // Close default_display.txt
           bTemplate.close();
       }
-
       // Error checking
       catch(FileNotFoundException ex) {
         System.out.println("Cannot open file '" + fileName + "'");
       }
-
       catch(IOException ex) {
         System.out.println("Error reading file '" + fileName + "'");
       }
-
-      //set default Avatar location
-      //this.objList[ConstantVariables.INITIAL_X][ConstantVariables.INITIAL_Y] = 'A';
-      //set default Enemy location
-      //this.objList[ConstantVariables.INITIAL_E_X][ConstantVariables.INITIAL_E_Y] = 'E';
     }
 
 
@@ -103,23 +93,6 @@ public class AnimationApp {
 
         for (int y=0; y < ConstantVariables.NUM_ROWS; y++) {
             for (int x=0; x < ConstantVariables.NUM_COL; x++) {
-                /*
-                if (this.itemList[x][y] instanceof Coin) {
-                    rowString += ConstantVariables.COIN_CHAR;
-                }
-                else if (this.itemList[x][y] instanceof Wall) {
-                    rowString += ConstantVariables.WALL_CHAR;
-                }
-                else if (this.itemList[x][y] instanceof Avatar) {
-                    rowString += ConstantVariables.AV_CHAR;
-                }
-                else if (this.itemList[x][y] instanceof AI) {
-                    rowString += ConstantVariables.AI_CHAR;
-                }
-                else {
-                    rowString += ConstantVariables.EMPTY_CHAR;
-                }
-                */
                 rowString += this.objList[x][y];
             }
             System.out.println(rowString);
@@ -194,7 +167,7 @@ public class AnimationApp {
         }
 
         // Is thing moving off coin or empty? display the position that the avatar moved off of
-        if (thing.getOnCoin() == true) {
+        if (thing.getOnCoin()) {
             System.out.println(avatarEnemy + " is moving off a coin");
             if (item instanceof Coin) {
                 if ( ((Coin)item).getCoinIsOn() ) {
