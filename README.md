@@ -1,8 +1,8 @@
 # Simple Pacman
 
 ## System Requirements
-A working *Java 8 environment*, which can be set up at https://www.oracle.com/technetwork/java/javase/downloads/index.html <br/>
-Ensure *JavaFX* is also installed correctly
+>A working *Java 8 environment*, which can be set up at https://www.oracle.com/technetwork/java/javase/downloads/index.html <br/>
+>>Ensure *JavaFX* is also installed correctly
 
 ## Installation and Usage
 + Visit https://github.com/quickaccount/simple_pacman/tree/text-version <br/>
