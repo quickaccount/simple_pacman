@@ -125,7 +125,7 @@ public class GameDisplay extends Application {
                 for (int y=0; y < ConstantVariables.NUM_ROWS; y++) {	// go through every row
                     for (int x=0; x < ConstantVariables.NUM_COL; x++) {		// and column
                         if (items.getItemList()[x][y] instanceof Coin) {	// of the itemList and if the item is of type Coin
-                            if ( ((Coin)items.getItemList()[x][y]).getCoinIsOn() ) {	// and it is "on" (hasn't been collected yet)
+                        	if ( ((Coin)items.getItemList()[x][y]).getCoinIsOn() ) {	// and it is "on" (hasn't been collected yet)
                               // draw the coin
                                 gc.drawImage(coin, x * ConstantVariables.WIDTH + ConstantVariables.COIN_OFFSET, y * ConstantVariables.HEIGHT - ConstantVariables.COIN_OFFSET);
                             }
@@ -177,25 +177,21 @@ public class GameDisplay extends Application {
                 input = "w";
                 pacman.frames = upPacman;
                 timedMove(input);
-                //movePac(input);
                 break;
             case A:
                 input = "a";
                 pacman.frames = leftPacman;
                 timedMove(input);
-                //movePac(input);
                 break;
             case S:
                 input = "s";
                 pacman.frames = downPacman;
                 timedMove(input);
-                //movePac(input);
                 break;
             case D:
                 input = "d";
                 pacman.frames = rightPacman;
                 timedMove(input);
-                //movePac(input);
                 break;
             }
       }
@@ -242,7 +238,7 @@ public class GameDisplay extends Application {
    * @param input The user input for movement.
    */
   private void handleInput(String input) {
-      System.out.println(input + " was pressed.");
+      //System.out.println(input + " was pressed.");
       avatar.mvAttempt(input);
 
   }

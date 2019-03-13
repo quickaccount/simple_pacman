@@ -1,6 +1,4 @@
 //import javafx.scene.shape.*;
-import java.awt.Rectangle;
-
 import constants.ConstantVariables;
 
 public class Wall extends Item {

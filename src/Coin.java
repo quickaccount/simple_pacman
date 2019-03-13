@@ -1,6 +1,4 @@
 //Import
-import java.awt.Rectangle;
-
 import constants.ConstantVariables;
 
 public class Coin extends Item {
