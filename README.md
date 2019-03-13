@@ -13,7 +13,7 @@
 + Run: java GameDisplay <br/>
 + Use WASD keys to move and play the game
 
-## Project Status
+## Version History
 **v1.0** <br/> 
 Text-based completed <br/><br/>
 **v2.0** <br/>
