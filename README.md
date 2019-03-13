@@ -5,7 +5,7 @@
 >*JavaFX* is also installed with this package
 
 ## Installation and Usage
-+ Visit https://github.com/quickaccount/simple_pacman/tree/text-version <br/>
++ Visit [the code repository](https://github.com/quickaccount/simple_pacman) <br/>
 + Download all files in the master-branch as a ZIP <br/>
 + Extract all files in the zipped folder <br/>
 + Open a command prompt, change to proper directory: cd Downloads/simple_pacman-master/src <br/>
