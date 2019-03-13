@@ -8,7 +8,7 @@
 + Visit https://github.com/quickaccount/simple_pacman/tree/text-version <br/>
 + Download all files in the master-branch as a ZIP <br/>
 + Extract all files in the zipped folder <br/>
-+ Open a command prompt, change to proper directory <br/>
++ Open a command prompt, change to proper directory: cd Downloads/simple_pacman-master/src <br/>
 + Compile: javac AnimationApp.java <br/>
 + Run: java AnimationApp <br/>
 + Use WASD keys to move and play the game
