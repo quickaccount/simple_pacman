@@ -23,16 +23,13 @@ public class GameDisplay extends Application {
 
     // image arrays for blinky movement
     Image[] rightBlinky = new Image[2];
-    Image[] leftBlinky = new Image[2];
-    Image[] upBlinky = new Image[2];
-    Image[] downBlinky = new Image[2];
 
     // x and y for displaying pacman in the gui
     private int pac_X = ConstantVariables.DISPLAY_INITIAL_X;
     private int pac_Y = ConstantVariables.DISPLAY_INITIAL_Y;
 
-    private int blinky_X = 17;	// i just put a random position for now
-    private int blinky_Y = 17;
+    private int blinky_X =	ConstantVariables.DISPLAY_INITIAL_E;	// i just put a random position for now
+    private int blinky_Y = ConstantVariables.DISPLAY_INITIAL_E;
 
     private int mvRefreshCount;
 
@@ -63,18 +60,7 @@ public class GameDisplay extends Application {
         pacman.duration = 0.150;	// set duration of one entire movement animation
 
         // initializing blinky movement image arrays
-        for(int i = 0; i < 2; i++) {
-            upBlinky[i] = new Image("blinkyUp" + i + ".png");
-        }
-
-        for(int i = 0; i < 2; i++) {
-            downBlinky[i] = new Image("blinkyDown" + i + ".png");
-        }
-
-        for(int i = 0; i < 2; i++) {
-            leftBlinky[i] = new Image("blinkyLeft" + i + ".png");
-        }
-
+ 
         for(int i = 0; i < 2; i++) {
             rightBlinky[i] = new Image("blinkyRight" + i + ".png");
         }
@@ -90,7 +76,6 @@ public class GameDisplay extends Application {
     public void start(Stage stage) throws Exception {
 
         stage.setTitle("Pac Man");
-        //Group root = new Group();
         VBox root = new VBox();
 
         Canvas scoreboard = new Canvas(ConstantVariables.WORLD_WIDTH, ConstantVariables.SCOREBOARD_HEIGHT);

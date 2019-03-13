@@ -15,6 +15,7 @@ public final class ConstantVariables {	// by declaring final, class is made non-
     public static final int TILE_SIZE = 24;
     public static final int DISPLAY_INITIAL_X = (WINDOW_WIDTH / 2) - 8;
     public static final int DISPLAY_INITIAL_Y = (WINDOW_HEIGHT / 2) - 40; //WINDOW_HEIGHT / 2 - 16; or -30
+    public static final int DISPLAY_INITIAL_E = 17;
     public static final int SCOREBOARD_HEIGHT = 50;
 
   // AnimationApp constants
