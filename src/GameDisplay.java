@@ -140,7 +140,8 @@ public class GameDisplay extends Application {
                 }
 
                 mvRefreshCount ++; // adds one to the refresh count since last move
-                if (mvRefreshCount > 6) { //slows timer for a single move
+                // Calls the timedMove method, which will be replaced by a separate main class with its own timer
+                if (mvRefreshCount > 18) { // change the number to slow the move timer
                     timedMove("continue in current direction");
                 }
             }
