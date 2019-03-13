@@ -1,7 +1,7 @@
 # Simple Pacman
 
 ## System Requirements
->A working *Java 8 environment*, which can be set up [here](https://www.oracle.com/technetwork/java/javase/downloads/index.html) <br/>
+>A working *Java environment*, [which can be set up here](https://www.oracle.com/technetwork/java/javase/downloads/index.html) <br/>
 >*JavaFX* is also installed with this package
 
 ## Installation and Usage
