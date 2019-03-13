@@ -2,7 +2,7 @@
 
 ## System Requirements
 >A working *Java 8 environment*, which can be set up at https://www.oracle.com/technetwork/java/javase/downloads/index.html <br/>
->>Ensure *JavaFX* is also installed correctly
+>*JavaFX* is also installed with this package
 
 ## Installation and Usage
 + Visit https://github.com/quickaccount/simple_pacman/tree/text-version <br/>
@@ -11,7 +11,7 @@
 + Open a command prompt, change to proper directory <br/>
 + Compile: javac AnimationApp.java <br/>
 + Run: java AnimationApp <br/>
-+ Use WASD keys to move
++ Use WASD keys to move and play the game
 
 ## Project Status
 **v1.0** <br/> 
