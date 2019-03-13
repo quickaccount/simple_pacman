@@ -11,7 +11,7 @@
 + Open a command prompt, change to proper directory <br/>
 + Compile: javac AnimationApp.java <br/>
 + Run: java AnimationApp <br/>
-+ Use WASD keys to move
++ Use WASD keys to move and play the game
 
 ## Project Status
 **v1.0** <br/> 
