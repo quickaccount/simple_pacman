@@ -1,7 +1,7 @@
 # Simple Pacman
 
 ## System Requirements
-A working *Java environment*, which can be set up at https://www.oracle.com/technetwork/java/javase/downloads/index.html <br/>
+A working *Java 8 environment*, which can be set up at https://www.oracle.com/technetwork/java/javase/downloads/index.html <br/>
 Ensure *JavaFX* is also installed correctly
 
 ## Installation and Usage
@@ -11,6 +11,7 @@ Ensure *JavaFX* is also installed correctly
 + Open a command prompt, change to proper directory <br/>
 + Compile: javac AnimationApp.java <br/>
 + Run: java AnimationApp <br/>
++ Use WASD keys to move
 
 ## Project Status
 **v1.0** <br/> 
