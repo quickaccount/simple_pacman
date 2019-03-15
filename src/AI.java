@@ -3,7 +3,6 @@ import java.util.ArrayList;
 
 public class AI extends MovableItem {
 
-
     private int [] dist = new int [2];
     private int [][] directions = new int [2][2]; // 2 sets of x, y coordinates ordered from longest to shortest
     private int [] currentDir = new int [2]; // sets the current direction for the enemy
