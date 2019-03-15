@@ -3,11 +3,11 @@ import java.util.ArrayList;
 
 public class AI extends MovableItem {
 
+
     private int [] dist = new int [2];
     private int [][] directions = new int [2][2]; // 2 sets of x, y coordinates ordered from longest to shortest
     private int [] currentDir = new int [2]; // sets the current direction for the enemy
     private ArrayList<int[]> mvDirQue = new ArrayList<int[]>();
-    private int mvCount;
 
     /**
     * Constructor that creates an AI ghost
@@ -24,7 +24,7 @@ public class AI extends MovableItem {
     private void avatarCollision(ItemProcess items) {
         // Enemy-Avatar collision check
         if (((Math.abs(this.getDistX()) <= 1 && this.getDistY() == 0) || (Math.abs(this.getDistY()) <= 1 && this.getDistX() == 0)))  {
-            items.setGameOnOff(false);
+            //items.setGameOnOff(false);
             return;
         }
         else {
@@ -40,6 +40,13 @@ public class AI extends MovableItem {
     private void setDistance(Avatar avatar) {
         this.dist[0] = this.getXCoord() - avatar.getXCoord();
         this.dist[1] = this.getYCoord() - avatar.getYCoord();
+    }
+
+    private int getDistanceX() {
+        return this.dist[0];
+    }
+    private int getDistanceY() {
+        return this.dist[1];
     }
 
     private void setDirections() { //added i-1 and 2->3
@@ -107,6 +114,10 @@ public class AI extends MovableItem {
         return this.directions[1][rank];
     }
 
+    private int[] getDirection(int rank) {
+        return this.directions[rank];
+    }
+
 
 
     private void setCurrentDir(int x, int y) {
@@ -143,45 +154,53 @@ public class AI extends MovableItem {
     }
 
 
-    private void setMvCount(int movesInADir) { // sets amount of moves required for an escape
-        this.mvCount = movesInADir;
-    }
-
-
-    private int getMvCount() {
-        return this.mvCount;
-    }
-
-
     private void wallEscape(ItemProcess items) {
-        int wallCount1 = 0;
-        int wallCount2 = 0;
+        int [] inputList1 = new int [2];
+        int [] inputList2 = new int [2];
+        ArrayList<int[]> wallList1= new ArrayList<int[]>();
+        ArrayList<int[]> wallList2 = new ArrayList<int[]>();
+        int q;
+        this.mvDirQue.clear();
 
-        Item NextWallInDir = items.getItemList()[this.getNewXCoord()][this.getNewYCoord()]; // xcoord in shortest direction
-
-        while (NextWallInDir instanceof Wall && wallCount1 < 10) { // checks for escape in direction opposite of second best move
-            wallCount1 ++;
-            System.out.println("wa;lly wall wall"+wallCount1);
-            NextWallInDir = items.getItemList()[this.getNewXCoord() + this.getXDirection(0) - this.getXDirection(1) * wallCount1 ][ this.getNewYCoord() + this.getYDirection(0) - this.getYDirection(1) * wallCount1];
+        Item NextWallInDir = items.getItemList()[this.getXCoord() + this.getXDirection(0)][this.getYCoord() + this.getYDirection(0)]; // xcoord in shortest direction
+        do {
+            System.out.println("The first loop");
+            System.out.println("XC: "+this.getXCoord()+" XD(1): "+this.getXDirection(0)+"XD(0): "+this.getXDirection(1)+"p: "+wallList1.size()+" YC: "+this.getYCoord()+" YD(1): "+this.getYDirection(0)+"YD(0): "+this.getYDirection(1)+" p: "+ wallList1.size());
+            NextWallInDir = items.getItemList()[this.getXCoord() + this.getXDirection(0) - this.getXDirection(1) * (wallList1.size() + 1) ][ this.getYCoord() + this.getYDirection(0) - this.getYDirection(1) * (wallList1.size() + 1)];
+            inputList1[0] = -this.getXDirection(1);
+            inputList1[1] = -this.getYDirection(1);
+            wallList1.add(inputList1);
         }
-        /*
-        while (NextWallInDir instanceof Wall && wallCount2 < 10) { // checks for escape in direction opposite of best move
-            wallCount2 ++;
-            System.out.println("!!22 wa;lly wall wall"+wallCount2);
-            NextWallInDir = items.getItemList()[this.getNewXCoord() +this.getXDirection(1) - this.getXDirection(0) * wallCount2][ this.getNewYCoord() + this.getYDirection(1) - this.getYDirection(0) * wallCount2];
+        while (NextWallInDir instanceof Wall && wallList1.size() < 10); // checks for escape in direction opposite of second best move
+        wallList1.add(this.getDirection(0));
+
+
+
+        NextWallInDir = items.getItemList()[this.getXCoord() + this.getXDirection(1)][this.getYCoord() + this.getYDirection(1)]; // xcoord in shortest direction
+        do {
+            System.out.println("The second loop");
+            NextWallInDir = items.getItemList()[this.getXCoord() + this.getXDirection(1) - this.getXDirection(0) * wallList2.size()][ this.getYCoord() + this.getYDirection(1) - this.getYDirection(0) * wallList2.size() ];
+            inputList2[0] = -this.getXDirection(0);
+            inputList2[1] = -this.getYDirection(0);
+            wallList2.add(inputList2);
         }
-        */
-        // if (wallCount1 > wallCount2) { // choose fewer moves
-        //    System.out.println("wa;lly count " + wallCount1 + " " + wallCount2);
-        //    this.setMvCount(wallCount2);
-        //   this.setCurrentDir(this.getXDirection(0) * -1, this.getYDirection(0) * -1);
-        // }
+        while (NextWallInDir instanceof Wall && wallList2.size() < 10);  // checks for escape in direction opposite of best move
+        wallList2.add(this.getDirection(1));
 
-        // else {
-            this.setMvCount(wallCount1);
-            this.setCurrentDir(this.getXDirection(1) * -1, this.getYDirection(1) * -1);
-            //}
 
+
+
+        if (wallList1.size() > wallList2.size()) { // choose fewer moves
+            this.mvDirQue.addAll(wallList2);
+            this.setCurrentDir(-this.getXDirection(0), -this.getYDirection(0));
+         }
+
+        else {
+            this.mvDirQue.addAll(wallList1);
+            this.setCurrentDir(-this.getXDirection(1), -this.getYDirection(1));
+        }
+        wallList1.clear();
+        wallList2.clear();
         return;
     }
 
@@ -200,40 +219,46 @@ public class AI extends MovableItem {
      */
     public void genMv(Avatar avatar, ItemProcess items) {
         System.out.println("genny gen gen");
-        System.out.println("mv count "+this.getMvCount());
         // check if the enemy is stuck from a previous turn
-        if (this.getMvCount() > 0) {
-            System.out.println("gen mv count >0");
-            this.setMvCount(this.getMvCount() - 1);
-            this.setNewCoord(this.getXCoord() + this.getCurrentXDir(), this.getYCoord() + this.getCurrentYDir());
+        if (this.mvDirQue.size() > 0) {
+            System.out.println("gen move: mvDirQue > 0");
+
+            this.setNewCoord(this.getXCoord() + this.mvDirQue.get(0)[0], this.getYCoord() + this.mvDirQue.get(0)[1]);
+
+            this.mvDirQue.remove(0); // removes the first entry of the move list
+            // process move: check wall collision if no wall then move
             items.processMv(this);
+            // check for collision with avatar
             this.avatarCollision(items);
+            return;
         }
 
         else {
             System.out.println("genny set dist set dir");
             this.setDistance(avatar);
             this.setDirections();
-            System.out.println("These are the directions: " + this.getXDirection(0)+ ", " + this.getYDirection(0)+"|| "+this.getXDirection(1)+", "+this.getYDirection(1));
-
             for (int i=0; i<2; i ++) { // try to move in the two best directions
-                System.out.println("attempt"+i);
                 this.setNewCoord(this.getXCoord() + this.getXDirection(i), this.getYCoord() + this.getYDirection(i));
-
                 if (items.wallCheck(this) == false) {
                     items.processMv(this);
                     this.avatarCollision(items);
                     return;
                 }
+                if (this.getDistanceX() == 0) {
+                    break;
+                }
+                else if (this.getDistanceY() == 0) {
+                    break;
+                }
             }
-
-            // if all else fails
-            this.wallEscape(items);
-            System.out.println("wall escaped");
-            items.processMv(this);
-            this.avatarCollision(items);
-
-            return;
         }
+
+        // if all else fails
+        this.wallEscape(items);
+        System.out.println("wall escaped");
+        items.processMv(this);
+        this.avatarCollision(items);
+
+        return;
     }
 }
