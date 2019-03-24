@@ -24,7 +24,7 @@ public class AI extends MovableItem {
     private void avatarCollision(ItemProcess items) {
         // Enemy-Avatar collision check
         if (((Math.abs(this.getDistX()) <= 1 && this.getDistY() == 0) || (Math.abs(this.getDistY()) <= 1 && this.getDistX() == 0)))  {
-            items.setGameOnOff(false);
+            //items.setGameOnOff(false);
             return;
         }
         else {

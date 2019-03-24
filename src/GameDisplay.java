@@ -15,6 +15,9 @@ import javafx.scene.layout.VBox;
 
 public class GameDisplay extends Application {
 
+	Scene mainMenu;
+	Scene gamePlay;
+	
     // image arrays for pacman movement
     Image[] rightPacman = new Image[3];
     Image[] leftPacman = new Image[3];
@@ -75,7 +78,29 @@ public class GameDisplay extends Application {
 
     public void start(Stage stage) throws Exception {
 
-        stage.setTitle("Pac Man");
+    	// MAIN MENU SCENE !!!!!!!!!!!!!!!!!!!!!
+		
+    	VBox layout1 = new VBox(20);
+    	Canvas menuCanvas = new Canvas(ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT);
+    	layout1.getChildren().add(menuCanvas);
+
+    	GraphicsContext gcMenu = menuCanvas.getGraphicsContext2D();
+    	       
+    	gcMenu.setFont(Font.font ("Verdana", 20));
+    	gcMenu.setFill(Color.WHITE);
+    	gcMenu.fillText("Press [n] to start a new game.", 10, 30);
+    			
+    	mainMenu = new Scene(layout1, ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT, Color.BLACK);
+    	mainMenu.setOnKeyPressed(e -> {		
+    		switch(e.getCode()) {
+    				
+    		case N:
+    			stage.setScene(gamePlay);
+    			break;
+    		}
+    	});    	
+    	
+    	// GAME PLAY SCENE !!!!!!!!
         VBox root = new VBox();
 
         Canvas scoreboard = new Canvas(ConstantVariables.WORLD_WIDTH, ConstantVariables.SCOREBOARD_HEIGHT);
@@ -147,13 +172,14 @@ public class GameDisplay extends Application {
             }
         }.start();
 
-      Scene scene = new Scene(root, ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT, Color.BLACK);
-      stage.setScene(scene);
+      gamePlay = new Scene(root, ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT, Color.BLACK);
+      stage.setScene(mainMenu);
+      stage.setTitle("Pac Man");
       stage.setResizable(false);	// sets it so that the game window is not resizable
       stage.sizeToScene();	// gets rid of exra padding around maze image
       stage.show();
 
-      scene.setOnKeyPressed(new EventHandler<KeyEvent>() { //scene.setOnKeyReleased fixes holding key,
+      gamePlay.setOnKeyPressed(new EventHandler<KeyEvent>() { //scene.setOnKeyReleased fixes holding key,
 
       @Override
       public void handle(KeyEvent event) {
