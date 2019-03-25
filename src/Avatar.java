@@ -28,16 +28,6 @@ public class Avatar extends MovableItem {
     }
 
 
-    private void setLastMvDir(char dir) {
-        this.lastMvDir = dir;
-    }
-
-
-    public char getLastMvDir() {
-        return this.lastMvDir;
-    }
-
-
     /**
     * Takes user input and attempts to move the player
     * @param key the user's input, as a String
