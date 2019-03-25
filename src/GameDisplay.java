@@ -85,10 +85,14 @@ public class GameDisplay extends Application {
     	layout1.getChildren().add(menuCanvas);
 
     	GraphicsContext gcMenu = menuCanvas.getGraphicsContext2D();
-    	       
+    	
+    	Image title = new Image("title.png");
+    	gcMenu.drawImage(title, 50 ,100, 360, 84);
+    	
     	gcMenu.setFont(Font.font ("Verdana", 20));
     	gcMenu.setFill(Color.WHITE);
-    	gcMenu.fillText("Press [n] to start a new game.", 10, 30);
+    	gcMenu.fillText("Press [N] to start a new game.", 80, 400);
+    	gcMenu.fillText("Press [L] to load an existing game.", 60, 450);
     			
     	mainMenu = new Scene(layout1, ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT, Color.BLACK);
     	mainMenu.setOnKeyPressed(e -> {		
@@ -96,6 +100,10 @@ public class GameDisplay extends Application {
     				
     		case N:
     			stage.setScene(gamePlay);
+    			break;
+    			
+    		case L:
+    			//
     			break;
     		}
     	});    	
