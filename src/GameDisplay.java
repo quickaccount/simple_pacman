@@ -26,6 +26,9 @@ public class GameDisplay extends Application {
 
     // image arrays for blinky movement
     Image[] rightBlinky = new Image[2];
+    
+    private int menuAnimX = 0;
+    //private int menuAnimY = ConstantVariables.DISPLAY_INITIAL_Y;
 
     // x and y for displaying pacman in the gui
     private int pac_X = ConstantVariables.DISPLAY_INITIAL_X;
@@ -35,6 +38,7 @@ public class GameDisplay extends Application {
     private int blinky_Y = ConstantVariables.DISPLAY_INITIAL_E;
 
     private int mvRefreshCount;
+    private boolean gameStarted = false;
 
     ItemProcess items = new ItemProcess();
     AnimatedImage pacman = new AnimatedImage();
@@ -87,7 +91,7 @@ public class GameDisplay extends Application {
     	GraphicsContext gcMenu = menuCanvas.getGraphicsContext2D();
     	    	
     	 final long menuStartTime = System.nanoTime();	// start time in nano seconds
-    	 pac_X = 0;
+    	 //pac_X = 0;
          // updates visual display approx 60 times/seconds
          new AnimationTimer()
          {
@@ -104,12 +108,14 @@ public class GameDisplay extends Application {
             	 gcMenu.fillText("Press [L] to load an existing game.", 60, 450);
             	
                  double elapsedSeconds = (currentNanoTime - menuStartTime) / 1000000000.0; // convert the elapsed time in nanoseconds to seconds
-                 gcMenu.drawImage(pacman.getFrame(elapsedSeconds), pac_X, pac_Y+20);	// add pacman to display
-                 if(pac_X < ConstantVariables.WINDOW_WIDTH) {
-                	 pac_X +=2;;
-                	 //MOVE_AMNT
-                 } else {
-                	 pac_X = 0;
+                 gcMenu.drawImage(pacman.getFrame(elapsedSeconds), menuAnimX, pac_Y+20);	// add pacman to display
+                 if(!gameStarted) {
+                	 if(menuAnimX < ConstantVariables.WINDOW_WIDTH) {
+                	 	menuAnimX +=2;;
+                	 	
+                 	} else {
+                	 	menuAnimX = 0;
+                 	}
                  }
              }
          }.start();
@@ -119,6 +125,8 @@ public class GameDisplay extends Application {
     		switch(e.getCode()) {
     				
     		case N:
+    			//pac_X=0;
+    			gameStarted = true;
     			stage.setScene(gamePlay);
     			break;
     			
@@ -196,8 +204,9 @@ public class GameDisplay extends Application {
 
                 mvRefreshCount ++; // adds one to the refresh count since last move
                 // Calls the timedMove method, which will be replaced by a separate main class with its own timer
-                if (mvRefreshCount > 18) { // change the number to slow the move timer
+                if (mvRefreshCount > 18 && gameStarted) { // change the number to slow the move timer
                     timedMove("continue in current direction");
+
                 }
             }
         }.start();
