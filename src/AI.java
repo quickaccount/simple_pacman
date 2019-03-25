@@ -264,11 +264,7 @@ public class AI extends MovableItem {
                 this.setInputY(this.getProjY() + wallIndexDir[1]);
                 xyAttempts.add(0, Arrays.copyOf(this.getInputXY(), 2));
 
-                // if (this.getAttemptDir() == this.getDirection(dirAlt)) {
-                //  dirAttempts.add(0, Arrays.copyOf(this.getAttemptDir(), 2)); // movement direction attempts
-                //  break;
-                    // end loop condition
-                // }
+
 
 
                 System.out.println("projX: " + this.getProjX()  +" projY: " + this.getProjY());
@@ -315,6 +311,12 @@ public class AI extends MovableItem {
                     System.out.println("s ");
                     results.add(0, 's');
                     dirAttempts.add(0, Arrays.copyOf(this.getAttemptDir(), 2)); // movement direction attempts
+
+                    if (this.getAttemptDir() == this.getDirection(dirAlt)) {
+                        dirAttempts.add(0, Arrays.copyOf(this.getAttemptDir(), 2)); // movement direction attempts
+                        break;
+                        // end loop condition
+                    }
                 }
 
 
@@ -324,6 +326,11 @@ public class AI extends MovableItem {
                     results.add(0, 'S');
                     dirAttempts.add(0, Arrays.copyOf(this.getAttemptDir(), 2)); // movement direction attempts
 
+                    if (this.getAttemptDir() == this.getDirection(dirAlt)) {
+                        dirAttempts.add(0, Arrays.copyOf(this.getAttemptDir(), 2)); // movement direction attempts
+                        break;
+                        // end loop condition
+                    }
 
                     // add the move into adjacent space with no wall
 
@@ -337,7 +344,7 @@ public class AI extends MovableItem {
                 System.out.println("new AttemprXdir: " + this.getAttemptDir()[0] + " y: " +  this.getAttemptDir()[1]);
                 System.out.println("prev dirAttemptX0: " + dirAttempts.get(1)[0] + " y: " +  dirAttempts.get(1)[1]);
             }
-            while (dirAttempts.size() < 24); // or initial attempted direction successfully plotted
+            while (dirAttempts.size() < 16); // or initial attempted direction successfully plotted
 
             while (results.contains('f')) {
                 dirAttempts.remove(results.indexOf('f'));
