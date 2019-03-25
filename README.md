@@ -20,11 +20,11 @@
 - Open a command prompt, change to proper directory: cd Downloads/simple_pacman-master/src <br/>
 - Compile the AI class: javac AI.java <br/>
 - Compile JUnit: <br/>
-- >Windows: javac -cp .;junit-4.12.jar;hamcrest-core-1.3.jar *.java <br/>
-- >Other: javac -cp .:junit-4.12.jar:hamcrest-core-1.3.jar *.java <br/>
+>Windows: javac -cp .;junit-4.12.jar;hamcrest-core-1.3.jar *.java <br/>
+>Other: javac -cp .:junit-4.12.jar:hamcrest-core-1.3.jar *.java <br/>
 - Run JUnit: <br/>
-- >Windows: java -cp .;junit-4.12.jar;hamcrest-core-1.3.jar org.junit.runner.JUnitCore aiTest <br/>
-- >Other: java -cp .:junit-4.12.jar:hamcrest-core-1.3.jar org.junit.runner.JUnitCore aiTest <br/>
+>Windows: java -cp .;junit-4.12.jar;hamcrest-core-1.3.jar org.junit.runner.JUnitCore aiTest <br/>
+>Other: java -cp .:junit-4.12.jar:hamcrest-core-1.3.jar org.junit.runner.JUnitCore aiTest <br/>
 
 ## Version History
 **v1.0** <br/> 
