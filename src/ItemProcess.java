@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.ArrayList;
 import constants.ConstantVariables;
+import java.lang.Math;
 
 
 /**
@@ -13,6 +14,7 @@ public class ItemProcess {
     private ArrayList<Coin> coinList = new ArrayList<Coin>(); //Array of coins
     private ArrayList<Wall> wallList = new ArrayList<Wall>(); //Array of walls
     private Item[][] itemList = new Item [ConstantVariables.NUM_COL] [ConstantVariables.NUM_ROWS];
+    private boolean gameOn = false;
 
 
     /**
@@ -37,11 +39,12 @@ public class ItemProcess {
      * Constructor that creates AnimationApp items and populates wallList, coinList, objList
      */
     public ItemProcess() {
+        this.setGameOn(true);
 
-      // The name of the file containing the display template.
-      String fileName = "maze.txt";
-      // Line Reference
-      String line = null;
+        // The name of the file containing the display template.
+        String fileName = "maze.txt";
+        // Line Reference
+        String line = null;
 
       try {
         // FileReader reads text files in the default encoding.
@@ -142,5 +145,31 @@ public class ItemProcess {
             }
         }
         return false;
+    }
+
+
+    private void setGameOn(boolean onOff) {
+        this.gameOn = onOff;
+    }
+
+
+    public boolean getGameOn() {
+        return new Boolean(this.gameOn);
+    }
+
+
+    public void avatarEnemyCollision(AI enemy) {
+        // Enemy-Avatar collision check
+        if (((Math.abs(enemy.getGoalDistanceX()) <= 1 && enemy.getGoalDistanceY() == 0) || (Math.abs(enemy.getGoalDistanceY()) <= 1 && enemy.getGoalDistanceX() == 0)))  {
+            System.out.println("game over");
+            System.out.println("game over");
+            System.out.println("game over");
+            System.out.println("game over");
+            this.setGameOn(false);
+            return;
+        }
+        else {
+            return;
+        }
     }
 }

@@ -26,31 +26,19 @@ public class AI extends MovableItem {
     }
 
 
-    private void avatarCollision(ItemProcess items) {
-        // Enemy-Avatar collision check
-        if (((Math.abs(this.getDistX()) <= 1 && this.getDistY() == 0) || (Math.abs(this.getDistY()) <= 1 && this.getDistX() == 0)))  {
-            //items.setGameOnOff(false);
-            return;
-        }
-        else {
-            return;
-        }
-    }
-
-
     /**
     * Sets the distance between the current object and the player
     * @param avatar the user/player: Pacman
     */
-    private void setDistance(Avatar avatar) {
+    private void setGoalDistance(Avatar avatar) {
         this.dist[0] = this.getXCoord() - avatar.getXCoord();
         this.dist[1] = this.getYCoord() - avatar.getYCoord();
     }
 
-    private int getDistanceX() {
+    public int getGoalDistanceX() {
         return this.dist[0];
     }
-    private int getDistanceY() {
+    public int getGoalDistanceY() {
         return this.dist[1];
     }
 
@@ -351,15 +339,7 @@ public class AI extends MovableItem {
                 xyAttempts.remove(results.indexOf('f'));
                 results.remove(results.indexOf('f'));
             }
-            /*
-              for (int i = dirAttempts.size() -1; i >=0; i--){
-              System.out.println("i: " + i);
-              System.out.println(results.get(i)+"");
-              System.out.println("dirx: "+dirAttempts.get(i)[0]+" y "+dirAttempts.get(i)[1]);
-              System.out.println("Wallx: "+xyAttempts.get(i)[0]+" y "+xyAttempts.get(i)[1]);
-              System.out.println("");
-              }
-            */
+
 
             if (this.mvDirQue.size() > 0 && this.mvDirQue.size() <= dirAttempts.size()) {
                 System.out.println("run one shorter");
@@ -403,25 +383,25 @@ public class AI extends MovableItem {
             // process move: check wall collision if no wall then move
             items.processMv(this);
             // check for collision with avatar
-            this.avatarCollision(items);
+            items.avatarEnemyCollision(this);
             return;
         }
 
         else {
             System.out.println("genny set dist set dir");
-            this.setDistance(avatar);
+            this.setGoalDistance(avatar);
             this.setDirections();
             for (int i=0; i<2; i ++) { // try to move in the two best directions
                 this.setNewCoord(this.getXCoord() + this.getXDirection(i), this.getYCoord() + this.getYDirection(i));
                 if (items.wallCheck(this) == false) {
                     items.processMv(this);
-                    this.avatarCollision(items);
+                    items.avatarEnemyCollision(this);
                     return;
                 }
-                if (this.getDistanceX() == 0) {
+                if (this.getGoalDistanceX() == 0) {
                     break;
                 }
-                else if (this.getDistanceY() == 0) {
+                else if (this.getGoalDistanceY() == 0) {
                     break;
                 }
             }
@@ -431,7 +411,7 @@ public class AI extends MovableItem {
         this.wallEscape(items);
         System.out.println("wall escaped");
         items.processMv(this);
-        this.avatarCollision(items);
+        items.avatarEnemyCollision(this);
 
         return;
     }
