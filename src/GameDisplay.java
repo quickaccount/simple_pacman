@@ -85,14 +85,34 @@ public class GameDisplay extends Application {
     	layout1.getChildren().add(menuCanvas);
 
     	GraphicsContext gcMenu = menuCanvas.getGraphicsContext2D();
-    	
-    	Image title = new Image("title.png");
-    	gcMenu.drawImage(title, 50 ,100, 360, 84);
-    	
-    	gcMenu.setFont(Font.font ("Verdana", 20));
-    	gcMenu.setFill(Color.WHITE);
-    	gcMenu.fillText("Press [N] to start a new game.", 80, 400);
-    	gcMenu.fillText("Press [L] to load an existing game.", 60, 450);
+    	    	
+    	 final long menuStartTime = System.nanoTime();	// start time in nano seconds
+    	 pac_X = 0;
+         // updates visual display approx 60 times/seconds
+         new AnimationTimer()
+         {
+             // handle is invoked every time a frame is rendered (by javafx default, 60 times/second)
+             public void handle(long currentNanoTime) {
+                 gcMenu.setFill(Color.BLACK);
+                 gcMenu.fillRect(0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT);		// black out the screen
+             	 Image title = new Image("title.png");
+            	 gcMenu.drawImage(title, 50 ,100, 360, 84);
+            	
+            	 gcMenu.setFont(Font.font ("Verdana", 20));
+            	 gcMenu.setFill(Color.WHITE);
+            	 gcMenu.fillText("Press [N] to start a new game.", 80, 400);
+            	 gcMenu.fillText("Press [L] to load an existing game.", 60, 450);
+            	
+                 double elapsedSeconds = (currentNanoTime - menuStartTime) / 1000000000.0; // convert the elapsed time in nanoseconds to seconds
+                 gcMenu.drawImage(pacman.getFrame(elapsedSeconds), pac_X, pac_Y+20);	// add pacman to display
+                 if(pac_X < ConstantVariables.WINDOW_WIDTH) {
+                	 pac_X +=2;;
+                	 //MOVE_AMNT
+                 } else {
+                	 pac_X = 0;
+                 }
+             }
+         }.start();
     			
     	mainMenu = new Scene(layout1, ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT, Color.BLACK);
     	mainMenu.setOnKeyPressed(e -> {		
@@ -129,6 +149,8 @@ public class GameDisplay extends Application {
         // Maybe we should separate the method below into its own class?
         final long startNanoTime = System.nanoTime();	// start time in nano seconds
 
+        pac_X = ConstantVariables.DISPLAY_INITIAL_X;
+        pac_Y = ConstantVariables.DISPLAY_INITIAL_Y;
         // updates visual display approx 60 times/seconds
         new AnimationTimer()
         {
