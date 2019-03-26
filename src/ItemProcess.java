@@ -155,6 +155,11 @@ public class ItemProcess {
         // update thing Coordinates
         thing.setXYCoord(thing.getNewXCoord(), thing.getNewYCoord());
         // set new avatar location in printable object list
+        if (thing instanceof Avatar) {
+            System.out.println("xCoord" +thing.getXCoord() + " y " + thing.getYCoord());
+        }
+        else
+            System.out.println("xCoord" +thing.getXCoord() + " y " + thing.getYCoord());
     }
 
 

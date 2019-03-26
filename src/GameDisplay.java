@@ -270,6 +270,8 @@ public class GameDisplay extends Application {
                 for (int x=0; x < ConstantVariables.NUM_COL; x++) {
                     rowString += '#';
                 }
+                System.out.println(rowString);
+                rowString = "";
             }
         }
     }
