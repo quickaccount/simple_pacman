@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.ArrayList;
 import constants.ConstantVariables;
+import java.lang.Math;
 
 
 /**
@@ -13,6 +14,8 @@ public class ItemProcess {
     private ArrayList<Coin> coinList = new ArrayList<Coin>(); //Array of coins
     private ArrayList<Wall> wallList = new ArrayList<Wall>(); //Array of walls
     private Item[][] itemList = new Item [ConstantVariables.NUM_COL] [ConstantVariables.NUM_ROWS];
+    private char[][] objList = new char [ConstantVariables.NUM_COL] [ConstantVariables.NUM_ROWS];
+    private boolean gameOn = false;
 
 
     /**
@@ -37,11 +40,12 @@ public class ItemProcess {
      * Constructor that creates AnimationApp items and populates wallList, coinList, objList
      */
     public ItemProcess() {
+        this.setGameOn(true);
 
-      // The name of the file containing the display template.
-      String fileName = "maze.txt";
-      // Line Reference
-      String line = null;
+        // The name of the file containing the display template.
+        String fileName = "maze.txt";
+        // Line Reference
+        String line = null;
 
       try {
         // FileReader reads text files in the default encoding.
@@ -57,15 +61,21 @@ public class ItemProcess {
 
             if (c == ConstantVariables.COIN_CHAR) {
 
+                this.objList[x][y] = '.'; // text-based only
                 Coin cCoin = new Coin(x, y);
                 this.coinList.add(cCoin);
                 this.itemList[x][y] = cCoin;
 
+
             } else if (c == ConstantVariables.WALL_CHAR) {
 
+                this.objList[x][y] = 'X'; //text-based
                 Wall w = new Wall(x, y);
                 this.wallList.add(w);
                 this.itemList[x][y] = w;
+            }
+            else {
+                this.objList[x][y] = ' '; // empty-coin
             }
           }
             y++;
@@ -80,6 +90,12 @@ public class ItemProcess {
       catch(IOException ex) {
         System.out.println("Error reading file '" + fileName + "'");
       }
+
+      // set default Avatar location
+      // this.objList[INITIAL_X][INITIAL_Y] = 'A';
+      // set default Enemy location
+      // this.objList[INITIAL_E_X][INITIAL_E_Y] = 'E';
+
     }
 
 
@@ -87,6 +103,23 @@ public class ItemProcess {
         return this.itemList;
     }
 
+
+    /**
+     * Returns a printable list with char representations of objects
+     * @return list of char represented objects
+     */
+    public char[][] getObjList() {
+        return this.objList;
+    }
+
+
+    /**
+     * Returns a printable list with char representations of objects
+     * @return list of char represented objects
+     */
+    public char getObjList(int x, int y) {
+        return this.objList[x][y];
+    }
 
 
     /**
@@ -113,6 +146,7 @@ public class ItemProcess {
             Coin coinNewLoc = (Coin)this.getItemList()[thing.getNewXCoord()][thing.getNewYCoord()];
             if ((thing instanceof Avatar) && coinNewLoc.getCoinIsOn()) {
                 coinNewLoc.setCoinOff((Avatar)thing);
+                this.objList[thing.getXCoord()][thing.getYCoord()] = ' ';
             }
             thing.setOnCoin(true);
         }
@@ -121,6 +155,11 @@ public class ItemProcess {
         // update thing Coordinates
         thing.setXYCoord(thing.getNewXCoord(), thing.getNewYCoord());
         // set new avatar location in printable object list
+        if (thing instanceof Avatar) {
+            System.out.println("xCoord" +thing.getXCoord() + " y " + thing.getYCoord());
+        }
+        else
+            System.out.println("xCoord" +thing.getXCoord() + " y " + thing.getYCoord());
     }
 
 
@@ -142,5 +181,31 @@ public class ItemProcess {
             }
         }
         return false;
+    }
+
+
+    private void setGameOn(boolean onOff) {
+        this.gameOn = onOff;
+    }
+
+
+    public boolean getGameOn() {
+        return new Boolean(this.gameOn);
+    }
+
+
+    public void avatarEnemyCollision(AI enemy) {
+        // Enemy-Avatar collision check
+        if (((Math.abs(enemy.getGoalDistanceX()) <= 1 && enemy.getGoalDistanceY() == 0) || (Math.abs(enemy.getGoalDistanceY()) <= 1 && enemy.getGoalDistanceX() == 0)))  {
+            System.out.println("game over");
+            System.out.println("game over");
+            System.out.println("game over");
+            System.out.println("game over");
+            this.setGameOn(false);
+            return;
+        }
+        else {
+            return;
+        }
     }
 }

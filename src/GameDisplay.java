@@ -15,6 +15,9 @@ import javafx.scene.layout.VBox;
 
 public class GameDisplay extends Application {
 
+    // tells the game whether or not to load text-based version
+    private boolean textBasedVersion;
+
     // image arrays for pacman movement
     Image[] rightPacman = new Image[3];
     Image[] leftPacman = new Image[3];
@@ -60,7 +63,7 @@ public class GameDisplay extends Application {
         pacman.duration = 0.150;	// set duration of one entire movement animation
 
         // initializing blinky movement image arrays
- 
+
         for(int i = 0; i < 2; i++) {
             rightBlinky[i] = new Image("blinkyRight" + i + ".png");
         }
@@ -69,7 +72,9 @@ public class GameDisplay extends Application {
     }
 
     public static void main(String[] args) {
-
+        if (args[0].equals("text-based")) {
+            System.out.println(args[0]);
+        }
         launch(args);
     }
 
@@ -110,7 +115,7 @@ public class GameDisplay extends Application {
                 for (int y=0; y < ConstantVariables.NUM_ROWS; y++) {	// go through every row
                     for (int x=0; x < ConstantVariables.NUM_COL; x++) {		// and column
                         if (items.getItemList()[x][y] instanceof Coin) {	// of the itemList and if the item is of type Coin
-                        	if ( ((Coin)items.getItemList()[x][y]).getCoinIsOn() ) {	// and it is "on" (hasn't been collected yet)
+                          if ( ((Coin)items.getItemList()[x][y]).getCoinIsOn() ) {	// and it is "on" (hasn't been collected yet)
                               // draw the coin
                                 gc.drawImage(coin, x * ConstantVariables.WIDTH + ConstantVariables.COIN_OFFSET, y * ConstantVariables.HEIGHT - ConstantVariables.COIN_OFFSET);
                             }
@@ -130,7 +135,7 @@ public class GameDisplay extends Application {
                 score.fillText(scoreString, 10, 30);
 
                 // display End Game and stop application
-                if(avatar.intersects(enemy)) {	// if pacman and the ghost intersect
+                if (items.getGameOn() == false) {	// avatar.intersects(enemy)if pacman and the ghost intersect
                   gc.setFont(Font.font ("Verdana", 20));
                   gc.setFill(Color.BLACK);
                   gc.fillRect(0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT);		// black out the screen
@@ -141,7 +146,7 @@ public class GameDisplay extends Application {
 
                 mvRefreshCount ++; // adds one to the refresh count since last move
                 // Calls the timedMove method, which will be replaced by a separate main class with its own timer
-                if (mvRefreshCount > 18) { // change the number to slow the move timer
+                if (mvRefreshCount > 18 && items.getGameOn() == true) { // change the number to slow the move timer
                     timedMove("continue in current direction");
                 }
             }
@@ -158,6 +163,7 @@ public class GameDisplay extends Application {
       @Override
       public void handle(KeyEvent event) {
         String input = "";
+        if (items.getGameOn() == true) {
             switch(event.getCode()) {
             case W:
                 input = "w";
@@ -180,6 +186,7 @@ public class GameDisplay extends Application {
                 timedMove(input);
                 break;
             }
+        }
       }
     });
   }
@@ -208,6 +215,7 @@ public class GameDisplay extends Application {
         movePac(key);
         enemy.genMv(avatar, items);
         tempMoveAI();
+        printDisplay(avatar, enemy);
     }
 
 
@@ -228,4 +236,44 @@ public class GameDisplay extends Application {
       avatar.mvAttempt(input);
 
   }
+
+
+    // starts only text-based version insted of GUI
+    private void turnOnTextBasedVersion() {
+        this.textBasedVersion = true;
+    }
+
+
+    // temporary text-based display --> maybe create a simple class to call?
+    // text-based print method
+    public void printDisplay(Avatar avatar, AI enemy) {
+        String rowString = "";
+        if (items.getGameOn() == true) {
+            for (int y=0; y < ConstantVariables.NUM_ROWS; y++) {
+                for (int x=0; x < ConstantVariables.NUM_COL; x++) {
+                    if (x == avatar.getXCoord() && y == avatar.getYCoord()) {
+                        rowString += ConstantVariables.AV_CHAR;
+                    }
+                    else if (x == enemy.getXCoord() && y == enemy.getYCoord()) {
+                        rowString += ConstantVariables.AI_CHAR;
+                    }
+                    else
+                        rowString += items.getObjList(x, y);
+                }
+                System.out.println(rowString);
+                rowString = "";
+            }
+        }
+        else {
+            System.out.println("GAME OVER!");
+            for (int y=0; y < ConstantVariables.NUM_ROWS; y++) {
+                for (int x=0; x < ConstantVariables.NUM_COL; x++) {
+                    rowString += '#';
+                }
+                System.out.println(rowString);
+                rowString = "";
+            }
+        }
+    }
+
 }
