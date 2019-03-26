@@ -13,7 +13,6 @@ public class ItemProcess {
     private ArrayList<Coin> coinList = new ArrayList<Coin>(); //Array of coins
     private ArrayList<Wall> wallList = new ArrayList<Wall>(); //Array of walls
     private Item[][] itemList = new Item [ConstantVariables.NUM_COL] [ConstantVariables.NUM_ROWS];
-    //private Item[][] mazeText = new Item[ConstantVariables.NUM_COL][ConstantVariables.NUM_ROWS];
 
 
     /**
@@ -61,7 +60,7 @@ public class ItemProcess {
 
             char c = line.charAt(x);
 
-            if (c == ConstantVariables.COIN_CHAR || c == ConstantVariables.EMPTY_CHAR) {
+            if (c == ConstantVariables.COIN_CHAR || c == ConstantVariables.EMPTY_CHAR) {	// for now.. treat empty space as a deactivated coin
 
                 Coin cCoin = new Coin(x, y);
                 if(c == ConstantVariables.EMPTY_CHAR) {
@@ -95,8 +94,6 @@ public class ItemProcess {
     public Item[][] getItemList() {
         return this.itemList;
     }
-
-
 
     /**
     * Collision checking of moving objects

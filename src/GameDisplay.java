@@ -18,6 +18,7 @@ import javafx.scene.layout.VBox;
 
 public class GameDisplay extends Application {
 
+	// the two scenes we switch on the stage
 	Scene mainMenu;
 	Scene gamePlay;
 	
@@ -30,18 +31,18 @@ public class GameDisplay extends Application {
     // image arrays for blinky movement
     Image[] rightBlinky = new Image[2];
     
+    // keeps track of x coord of main menu pacman animation
     private int menuAnimX = 0;
-    //private int menuAnimY = ConstantVariables.DISPLAY_INITIAL_Y;
 
     // x and y for displaying pacman in the gui
     private int pac_X = ConstantVariables.DISPLAY_INITIAL_X;
     private int pac_Y = ConstantVariables.DISPLAY_INITIAL_Y;
 
-    private int blinky_X =	ConstantVariables.DISPLAY_INITIAL_E;	// i just put a random position for now
+    private int blinky_X =	ConstantVariables.DISPLAY_INITIAL_E;	// x and y for blinky gui display
     private int blinky_Y = ConstantVariables.DISPLAY_INITIAL_E;
 
-    private int mvRefreshCount;
-    private boolean gameStarted = false;
+    private int mvRefreshCount;	// counter to slow down movements
+    private boolean gameStarted = false;	// true when we leave main menu and go to game
 
     ItemProcess items = new ItemProcess("maze.txt");
     AnimatedImage pacman = new AnimatedImage();
@@ -50,6 +51,7 @@ public class GameDisplay extends Application {
     AI enemy = new AI (ConstantVariables.INITIAL_E_X, ConstantVariables.INITIAL_E_Y);	// an instance of a "ghost" used to process movements
 
     public GameDisplay() {
+    	
         //initializing pacman movement image arrays
         for (int i = 0; i < 3; i++) {
             upPacman[i] = new Image( "pacUp" + i + ".png" );
@@ -93,46 +95,45 @@ public class GameDisplay extends Application {
 
     	GraphicsContext gcMenu = menuCanvas.getGraphicsContext2D();
     	    	
-    	 final long menuStartTime = System.nanoTime();	// start time in nano seconds
-    	 //pac_X = 0;
-         // updates visual display approx 60 times/seconds
-         new AnimationTimer()
-         {
-             // handle is invoked every time a frame is rendered (by javafx default, 60 times/second)
-             public void handle(long currentNanoTime) {
-                 gcMenu.setFill(Color.BLACK);
-                 gcMenu.fillRect(0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT);		// black out the screen
-             	 Image title = new Image("title.png");
-            	 gcMenu.drawImage(title, 50 ,100, 360, 84);
+    	final long menuStartTime = System.nanoTime();	// start time in nano seconds
+        // updates visual display approx 60 times/seconds
+        new AnimationTimer()
+        {
+   
+        	public void handle(long currentNanoTime) {
+        		
+        		gcMenu.setFill(Color.BLACK);
+                gcMenu.fillRect(0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT);		// black out the screen/clear canvas
+             	Image title = new Image("title.png");	// add the pacman logo
+            	gcMenu.drawImage(title, 50 ,100, 360, 84);
             	
-            	 gcMenu.setFont(Font.font ("Verdana", 20));
-            	 gcMenu.setFill(Color.WHITE);
-            	 gcMenu.fillText("Press [N] to start a new game.", 80, 400);
-            	 gcMenu.fillText("Press [L] to load an existing game.", 60, 450);
+            	gcMenu.setFont(Font.font ("Verdana", 20));
+            	gcMenu.setFill(Color.WHITE);
+            	gcMenu.fillText("Press [N] to start a new game.", 80, 400);	// draw message strings
+            	gcMenu.fillText("Press [L] to load an existing game.", 60, 450);
             	
-                 double elapsedSeconds = (currentNanoTime - menuStartTime) / 1000000000.0; // convert the elapsed time in nanoseconds to seconds
-                 gcMenu.drawImage(pacman.getFrame(elapsedSeconds), menuAnimX, pac_Y+20);	// add pacman to display
-                 if(!gameStarted) {
-                	 if(menuAnimX < ConstantVariables.WINDOW_WIDTH) {
-                	 	menuAnimX +=2;;
-                	 	
+                double elapsedSeconds = (currentNanoTime - menuStartTime) / 1000000000.0; // convert the elapsed time in nanoseconds to seconds
+                gcMenu.drawImage(pacman.getFrame(elapsedSeconds), menuAnimX, pac_Y+20);	// add pacman to display
+                if(!gameStarted) {	// if the game has not started (still on main screen)
+                	if(menuAnimX < ConstantVariables.WINDOW_WIDTH) {	// if not at right edge of screen
+                		menuAnimX +=2;;	// move to the right           	 	
                  	} else {
-                	 	menuAnimX = 0;
+                	 	menuAnimX = 0;	// if at right edge, go back to left edge
                  	}
-                 }
-             }
+                }
+            }
          }.start();
     			
-    	mainMenu = new Scene(layout1, ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT, Color.BLACK);
-    	mainMenu.setOnKeyPressed(e -> {		
+    	mainMenu = new Scene(layout1, ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT, Color.BLACK);	// instantiate the main menu with the respective scene
+    	mainMenu.setOnKeyPressed(e -> {	// check for user input
     		switch(e.getCode()) {
-    		case N:
-    			gameStarted = true;
-    			stage.setScene(gamePlay);
+    		case N:	// if they press n key
+    			gameStarted = true;	// game has begun
+    			stage.setScene(gamePlay);	// change the scene to the game scene
     			break;
     			
-    		case L:
-    			items = new ItemProcess("savedGame.txt");
+    		case L:	// if pressed l 
+    			items = new ItemProcess("savedGame.txt");	// process the game with saved game text file
     			gameStarted = true;
     			stage.setScene(gamePlay);
     			break;
@@ -143,31 +144,23 @@ public class GameDisplay extends Application {
         VBox root = new VBox();
 
         Canvas scoreboard = new Canvas(ConstantVariables.WORLD_WIDTH, ConstantVariables.SCOREBOARD_HEIGHT);
-        root.getChildren().add(scoreboard);
+        Canvas canvas = new Canvas(ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT);
+        root.getChildren().addAll(scoreboard, canvas);
 
         GraphicsContext score = scoreboard.getGraphicsContext2D();
-
-        Canvas canvas = new Canvas(ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT);
-        root.getChildren().add(canvas);
-
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         Image maze = new Image("maze.png");
-
         Image coin = new Image("coin.png");
 
-
-        // Maybe we should separate the method below into its own class?
         final long startNanoTime = System.nanoTime();	// start time in nano seconds
 
-        pac_X = ConstantVariables.DISPLAY_INITIAL_X;
-        pac_Y = ConstantVariables.DISPLAY_INITIAL_Y;
         // updates visual display approx 60 times/seconds
         new AnimationTimer()
         {
             // handle is invoked every time a frame is rendered (by javafx default, 60 times/second)
-            public void handle(long currentNanoTime) {
-                double elapsedSeconds = (currentNanoTime - startNanoTime) / 1000000000.0; // convert the elapsed time in nanoseconds to seconds
+        	public void handle(long currentNanoTime) {
+        		double elapsedSeconds = (currentNanoTime - startNanoTime) / 1000000000.0; // convert the elapsed time in nanoseconds to seconds
 
                 // background image essentially "clears" canvas
                 gc.drawImage(maze, 0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT);
@@ -214,8 +207,9 @@ public class GameDisplay extends Application {
             }
         }.start();
 
-      gamePlay = new Scene(root, ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT, Color.BLACK);
-      stage.setScene(mainMenu);
+      gamePlay = new Scene(root, ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT, Color.BLACK);	// instantiate game scene with the layout we just made
+      
+      stage.setScene(mainMenu);	// start application on main menu
       stage.setTitle("Pac Man");
       stage.setResizable(false);	// sets it so that the game window is not resizable
       stage.sizeToScene();	// gets rid of exra padding around maze image
@@ -326,8 +320,7 @@ public class GameDisplay extends Application {
 				  }
 			  } else if(itemList[row][col] instanceof Wall) {
 				  writer.print("X");
-			  }	// problem... itemList only holds items and doesn't keep track of "empty" (collected coin) spaces
-			  // also doesn't know if coin has been collected, adds it regardless bc it's in list
+			  }	
 		  }
 		  writer.println();
 	  }
