@@ -1,3 +1,6 @@
+import java.io.IOException;
+import java.io.PrintWriter;
+
 import constants.ConstantVariables;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -40,7 +43,7 @@ public class GameDisplay extends Application {
     private int mvRefreshCount;
     private boolean gameStarted = false;
 
-    ItemProcess items = new ItemProcess();
+    ItemProcess items = new ItemProcess("maze.txt");
     AnimatedImage pacman = new AnimatedImage();
     AnimatedImage blinky = new AnimatedImage();
     Avatar avatar = new Avatar (ConstantVariables.INITIAL_X, ConstantVariables.INITIAL_Y);	// pacman avatar we use to process movements
@@ -123,15 +126,15 @@ public class GameDisplay extends Application {
     	mainMenu = new Scene(layout1, ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT, Color.BLACK);
     	mainMenu.setOnKeyPressed(e -> {		
     		switch(e.getCode()) {
-    				
     		case N:
-    			//pac_X=0;
     			gameStarted = true;
     			stage.setScene(gamePlay);
     			break;
     			
     		case L:
-    			//
+    			items = new ItemProcess("savedGame.txt");
+    			gameStarted = true;
+    			stage.setScene(gamePlay);
     			break;
     		}
     	});    	
@@ -244,7 +247,16 @@ public class GameDisplay extends Application {
                 pacman.frames = rightPacman;
                 timedMove(input);
                 break;
+            case P:
+            	try {
+            		saveToTextFile("savedGame.txt");
+					stop();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+            	break;
             }
+            
       }
     });
   }
@@ -292,5 +304,34 @@ public class GameDisplay extends Application {
       //System.out.println(input + " was pressed.");
       avatar.mvAttempt(input);
 
+  }
+  
+  public void saveToTextFile(String gameName) throws IOException{
+	  PrintWriter writer = new PrintWriter(gameName);
+	  String line = null;
+	  Item[][] itemList = items.getItemList();
+	  
+	  writer.println("avatar coords: " + avatar.getXCoord() + ", " + avatar.getYCoord() + " avatar display: " + pac_X + ", " + pac_Y +
+			  " enemy coords: " + enemy.getXCoord() + ", " + enemy.getYCoord() + " enemy display: " + blinky_X + ", " + blinky_Y);
+	  
+	  for(int row = 0; row < itemList.length; row++) {
+		  for(int col = 0; col < itemList[0].length; col++) {
+			  
+			  if(itemList[row][col] instanceof Coin) {
+				  
+				  if(((Coin)items.getItemList()[row][col]).getCoinIsOn()) {
+					  writer.print(".");
+				  } else {
+					  writer.print(" ");
+				  }
+			  } else if(itemList[row][col] instanceof Wall) {
+				  writer.print("X");
+			  }	// problem... itemList only holds items and doesn't keep track of "empty" (collected coin) spaces
+			  // also doesn't know if coin has been collected, adds it regardless bc it's in list
+		  }
+		  writer.println();
+	  }
+  	
+	  writer.close();
   }
 }

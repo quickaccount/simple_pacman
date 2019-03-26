@@ -13,6 +13,7 @@ public class ItemProcess {
     private ArrayList<Coin> coinList = new ArrayList<Coin>(); //Array of coins
     private ArrayList<Wall> wallList = new ArrayList<Wall>(); //Array of walls
     private Item[][] itemList = new Item [ConstantVariables.NUM_COL] [ConstantVariables.NUM_ROWS];
+    //private Item[][] mazeText = new Item[ConstantVariables.NUM_COL][ConstantVariables.NUM_ROWS];
 
 
     /**
@@ -36,10 +37,10 @@ public class ItemProcess {
     /**
      * Constructor that creates AnimationApp items and populates wallList, coinList, objList
      */
-    public ItemProcess() {
+    public ItemProcess(String file) {
 
       // The name of the file containing the display template.
-      String fileName = "maze.txt";
+      String fileName = file;
       // Line Reference
       String line = null;
 
@@ -55,9 +56,13 @@ public class ItemProcess {
 
             char c = line.charAt(x);
 
-            if (c == ConstantVariables.COIN_CHAR) {
+            if (c == ConstantVariables.COIN_CHAR || c == ConstantVariables.EMPTY_CHAR) {
 
                 Coin cCoin = new Coin(x, y);
+                if(c == ConstantVariables.EMPTY_CHAR) {
+                	Avatar temp = new Avatar(0,0);
+                	cCoin.setCoinOff(temp);
+                }
                 this.coinList.add(cCoin);
                 this.itemList[x][y] = cCoin;
 
@@ -81,8 +86,7 @@ public class ItemProcess {
         System.out.println("Error reading file '" + fileName + "'");
       }
     }
-
-
+    
     public Item[][] getItemList() {
         return this.itemList;
     }
@@ -122,7 +126,6 @@ public class ItemProcess {
         thing.setXYCoord(thing.getNewXCoord(), thing.getNewYCoord());
         // set new avatar location in printable object list
     }
-
 
     /**
      * Collision checking of moving objects and walls / boundaries

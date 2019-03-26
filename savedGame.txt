@@ -1,27 +1,27 @@
-avatar coords: 7, 7 avatar display: 112, 112 enemy coords: 7, 9 enemy display: 112, 144
+avatar coords: 18, 21 avatar display: 288, 336 enemy coords: 15, 16 enemy display: 240, 256
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 X.........X........X.....X.....X
 X.........X........X.....X.....X
-X..XX..X.....X..X.....X.....X..X
-X..XX..X.....X..X.....X.....X..X
-X..XX..X..XXXX..XXXX..XXXX..X..X
-X..............................X
-X..............................X
-X..XX..XXXX..XXXXXXX..X..XXXX..X
-X..XX.....X...........X.....X..X
-X..XX.....X...........X.....X..X
-X..XX..X..X..XXXXX.X..X..X..X..X
-X......X.....XX.X.....X.....X
-X......X......X.X.....X.....X
-XXX..XXXXXX...X.X..XXXXXXX..X
-X......X......X.X.....X.....X
-X......X.....XX.X.....X.....X
-X..XX..X..X..XXXXX.X..X..X..X..X
-X..XX.....X...........X.....X..X
-X..XX.....X...........X.....X..X
-X..XX..XXXX..XXXXXXX..X..XXXX..X
-X..............................X
-X..............................X
+X..XX..X.....X..X.....X.....X. X
+X..XX..X.....X..X.....X.....X. X
+X..XX..X..XXXX..XXXX..XXXX..X  X
+X...................           X
+X................... ......... X
+X..XX..XXXX..XXXXXXX .X..XXXX. X
+X..XX.....X......... .X.....X. X
+X..XX.....X......... .X.....X. X
+X..XX..X..X..XXXXX.X .X..X..X. X
+X......X.....X   X.X ....X.... X
+X......X......   X.X ....X.... X
+XXX..XXXXXX      X.X .XXXXXXX. X
+X......X... ..   X.X ....X.... X
+X......X... .X   X.X ....X.... X
+X..XX..X..X .XXXXX.X .X..X..X. X
+X..XX.....X ........  X.....X. X
+X..XX.....X ..........X.....X. X
+X..XX..XXXX .XXXXXXX..X..XXXX. X
+X.......... .................. X
+X..........                    X
 X..XX..X..XXXX..XXXX..XXXX..X..X
 X..XX..X.....X..X.....X.....X..X
 X..XX..X.....X..X.....X.....X..X
