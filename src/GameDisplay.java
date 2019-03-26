@@ -15,6 +15,9 @@ import javafx.scene.layout.VBox;
 
 public class GameDisplay extends Application {
 
+    // tells the game whether or not to load text-based version
+    private boolean textBasedVersion;
+
     // image arrays for pacman movement
     Image[] rightPacman = new Image[3];
     Image[] leftPacman = new Image[3];
@@ -69,7 +72,9 @@ public class GameDisplay extends Application {
     }
 
     public static void main(String[] args) {
-
+        if (args[0].equals("text-based")) {
+            System.out.println(args[0]);
+        }
         launch(args);
     }
 
@@ -210,6 +215,7 @@ public class GameDisplay extends Application {
         movePac(key);
         enemy.genMv(avatar, items);
         tempMoveAI();
+        printDisplay(avatar, enemy);
     }
 
 
@@ -231,24 +237,40 @@ public class GameDisplay extends Application {
 
   }
 
+
+    // starts only text-based version insted of GUI
+    private void turnOnTextBasedVersion() {
+        this.textBasedVersion = true;
+    }
+
+
     // temporary text-based display --> maybe create a simple class to call?
     // text-based print method
     public void printDisplay(Avatar avatar, AI enemy) {
         String rowString = "";
-
-        for (int y=0; y < NUM_ROWS; y++) {
-            for (int x=0; x < NUM_COL; x++) {
-                if (x = avatar.getXCoord() && y = avatar.getYCoord()) {
-                    rowString += ConstantVariables.AV_CHAR;
+        if (items.getGameOn() == true) {
+            for (int y=0; y < ConstantVariables.NUM_ROWS; y++) {
+                for (int x=0; x < ConstantVariables.NUM_COL; x++) {
+                    if (x == avatar.getXCoord() && y == avatar.getYCoord()) {
+                        rowString += ConstantVariables.AV_CHAR;
+                    }
+                    else if (x == enemy.getXCoord() && y == enemy.getYCoord()) {
+                        rowString += ConstantVariables.AI_CHAR;
+                    }
+                    else
+                        rowString += items.getObjList(x, y);
                 }
-                else if (x = enemy.getXCoord() && y = enemy.getYCoord()) {
-                    rowString += ConstantVariables.AV_CHAR;
-                }
-                else
-                    rowString += this.getObjList(x, y);
+                System.out.println(rowString);
+                rowString = "";
             }
-            System.out.println(rowString);
-            rowString = "";
+        }
+        else {
+            System.out.println("GAME OVER!");
+            for (int y=0; y < ConstantVariables.NUM_ROWS; y++) {
+                for (int x=0; x < ConstantVariables.NUM_COL; x++) {
+                    rowString += '#';
+                }
+            }
         }
     }
 

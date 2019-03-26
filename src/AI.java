@@ -216,13 +216,12 @@ public class AI extends MovableItem {
         // for (int alt = -1; alt<2; alt++) { // alternates the starting direction
             // simplyify all to end
              this.setAttemptDir(this.getDirection(dirAlt));
-            int [] wallIndexDir = perpDir(this.getDirection(dirAlt));
+            int [] wallIndexDir = Arrays.copyOf(this.getAttemptDir(), 2);
 
             results.add(0, 'f');
 
             this.setInputX(this.getXCoord() + this.getDirection(dirAlt)[0]);
             this.setInputY(this.getYCoord() + this.getDirection(dirAlt)[1]);
-            System.out.println("first call InputX: " + this.getInputXY()[0]  +" InputY: " + this.getInputXY()[1]);
             xyAttempts.add(0, Arrays.copyOf(this.getInputXY(), 2));
 
             // reset XY input coords
@@ -233,7 +232,6 @@ public class AI extends MovableItem {
             this.setProjX(this.getXCoord()); //this.setProjX(xyAttempts.get(0)[0] - lastFailDir[0]);
             this.setProjY(this.getYCoord());
 
-            wallIndexDir = Arrays.copyOf(this.getAttemptDir(), 2);
 
 
             // sets first direction either positive or negative
@@ -243,8 +241,6 @@ public class AI extends MovableItem {
 
 
             do {
-                System.out.println("The first loop");
-                System.out.println("dirAttsize" + dirAttempts.size());
                 this.setProjX(this.getProjX() + this.getAttemptDir()[0]);
                 this.setProjY(this.getProjY() + this.getAttemptDir()[1]);
 
@@ -294,7 +290,7 @@ public class AI extends MovableItem {
                 }
 
                 //has this been set? set projX?
-                else if (items.getItemList()[ (xyAttempts.get(0)[0]) ][ (xyAttempts.get(0)[1]) ] instanceof Wall) { // continue case
+                else if (items.getItemList()[ (xyAttempts.get(0)[0]) ][ (xyAttempts.get(0)[1]) ] instanceof Wall) { // continue case   this.getProjX() + wallIndexDir[0]
 
                     System.out.println("s ");
                     results.add(0, 's');

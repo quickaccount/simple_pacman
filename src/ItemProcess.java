@@ -14,7 +14,7 @@ public class ItemProcess {
     private ArrayList<Coin> coinList = new ArrayList<Coin>(); //Array of coins
     private ArrayList<Wall> wallList = new ArrayList<Wall>(); //Array of walls
     private Item[][] itemList = new Item [ConstantVariables.NUM_COL] [ConstantVariables.NUM_ROWS];
-    private char[][] objList = new char [NUM_COL] [NUM_ROWS];
+    private char[][] objList = new char [ConstantVariables.NUM_COL] [ConstantVariables.NUM_ROWS];
     private boolean gameOn = false;
 
 
@@ -117,7 +117,7 @@ public class ItemProcess {
      * Returns a printable list with char representations of objects
      * @return list of char represented objects
      */
-    public char[][] getObjList(int x, int y) {
+    public char getObjList(int x, int y) {
         return this.objList[x][y];
     }
 
@@ -146,6 +146,7 @@ public class ItemProcess {
             Coin coinNewLoc = (Coin)this.getItemList()[thing.getNewXCoord()][thing.getNewYCoord()];
             if ((thing instanceof Avatar) && coinNewLoc.getCoinIsOn()) {
                 coinNewLoc.setCoinOff((Avatar)thing);
+                this.objList[thing.getXCoord()][thing.getYCoord()] = ' ';
             }
             thing.setOnCoin(true);
         }
