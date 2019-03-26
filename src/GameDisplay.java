@@ -72,9 +72,6 @@ public class GameDisplay extends Application {
     }
 
     public static void main(String[] args) {
-        if (args[0].equals("text-based")) {
-            System.out.println(args[0]);
-        }
         launch(args);
     }
 
