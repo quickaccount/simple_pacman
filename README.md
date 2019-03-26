@@ -16,7 +16,7 @@
 
 ## JUnit Testing of Avatar Class
 1. Follow *Installation and Usage* steps 1 - 5 <br/>
-2. Compile the AI class: javac AI.java <br/>
+2. Compile the Avatar class: javac Avatar.java <br/>
 3. Compile JUnit: <br/>
 >Windows: javac -cp .;junit-4.12.jar;hamcrest-core-1.3.jar *.java <br/>
 >Other: javac -cp .:junit-4.12.jar:hamcrest-core-1.3.jar *.java <br/>
