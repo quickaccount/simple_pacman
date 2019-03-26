@@ -41,6 +41,11 @@ public class ItemProcess {
 
       // The name of the file containing the display template.
       String fileName = file;
+      
+      if(fileName.equals("savedGame.txt")) {
+    	  //some how seperate the first line to get score and x and y coordinates of ai and av
+      }
+      
       // Line Reference
       String line = null;
 

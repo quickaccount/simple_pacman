@@ -311,7 +311,7 @@ public class GameDisplay extends Application {
 	  String line = null;
 	  Item[][] itemList = items.getItemList();
 	  
-	  writer.println("avatar coords: " + avatar.getXCoord() + ", " + avatar.getYCoord() + " avatar display: " + pac_X + ", " + pac_Y +
+	  writer.println("score: " + avatar.getScore() + " avatar coords: " + avatar.getXCoord() + ", " + avatar.getYCoord() + " avatar display: " + pac_X + ", " + pac_Y +
 			  " enemy coords: " + enemy.getXCoord() + ", " + enemy.getYCoord() + " enemy display: " + blinky_X + ", " + blinky_Y);
 	  
 	  for(int row = 0; row < itemList.length; row++) {
