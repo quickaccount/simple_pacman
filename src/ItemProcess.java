@@ -14,6 +14,7 @@ public class ItemProcess {
     private ArrayList<Coin> coinList = new ArrayList<Coin>(); //Array of coins
     private ArrayList<Wall> wallList = new ArrayList<Wall>(); //Array of walls
     private Item[][] itemList = new Item [ConstantVariables.NUM_COL] [ConstantVariables.NUM_ROWS];
+    private char[][] objList = new char [NUM_COL] [NUM_ROWS];
     private boolean gameOn = false;
 
 
@@ -60,15 +61,21 @@ public class ItemProcess {
 
             if (c == ConstantVariables.COIN_CHAR) {
 
+                this.objList[x][y] = '.'; // text-based only
                 Coin cCoin = new Coin(x, y);
                 this.coinList.add(cCoin);
                 this.itemList[x][y] = cCoin;
 
+
             } else if (c == ConstantVariables.WALL_CHAR) {
 
+                this.objList[x][y] = 'X'; //text-based
                 Wall w = new Wall(x, y);
                 this.wallList.add(w);
                 this.itemList[x][y] = w;
+            }
+            else {
+                this.objList[x][y] = ' '; // empty-coin
             }
           }
             y++;
@@ -83,6 +90,11 @@ public class ItemProcess {
       catch(IOException ex) {
         System.out.println("Error reading file '" + fileName + "'");
       }
+
+      //set default Avatar location
+      this.objList[INITIAL_X][INITIAL_Y] = 'A';
+      //set default Enemy location
+      this.objList[INITIAL_E_X][INITIAL_E_Y] = 'E';
     }
 
 
@@ -90,6 +102,23 @@ public class ItemProcess {
         return this.itemList;
     }
 
+
+    /**
+     * Returns a printable list with char representations of objects
+     * @return list of char represented objects
+     */
+    public char[][] getObjList() {
+        return this.objList;
+    }
+
+
+    /**
+     * Returns a printable list with char representations of objects
+     * @return list of char represented objects
+     */
+    public char[][] getObjList(int x, int y) {
+        return this.objList[x][y];
+    }
 
 
     /**
@@ -170,6 +199,21 @@ public class ItemProcess {
         }
         else {
             return;
+        }
+    }
+
+
+    // temporary text-based display --> maybe create a simple class to call?
+    // text-based print method
+    public void printDisplay() {
+        String rowString = "";
+
+        for (int y=0; y < NUM_ROWS; y++) {
+            for (int x=0; x < NUM_COL; x++) {
+                rowString += this.getObjList(x, y);
+            }
+            System.out.println(rowString);
+            rowString = "";
         }
     }
 }
