@@ -91,10 +91,11 @@ public class ItemProcess {
         System.out.println("Error reading file '" + fileName + "'");
       }
 
-      //set default Avatar location
-      this.objList[INITIAL_X][INITIAL_Y] = 'A';
-      //set default Enemy location
-      this.objList[INITIAL_E_X][INITIAL_E_Y] = 'E';
+      // set default Avatar location
+      // this.objList[INITIAL_X][INITIAL_Y] = 'A';
+      // set default Enemy location
+      // this.objList[INITIAL_E_X][INITIAL_E_Y] = 'E';
+
     }
 
 
@@ -199,21 +200,6 @@ public class ItemProcess {
         }
         else {
             return;
-        }
-    }
-
-
-    // temporary text-based display --> maybe create a simple class to call?
-    // text-based print method
-    public void printDisplay() {
-        String rowString = "";
-
-        for (int y=0; y < NUM_ROWS; y++) {
-            for (int x=0; x < NUM_COL; x++) {
-                rowString += this.getObjList(x, y);
-            }
-            System.out.println(rowString);
-            rowString = "";
         }
     }
 }

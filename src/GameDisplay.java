@@ -230,4 +230,26 @@ public class GameDisplay extends Application {
       avatar.mvAttempt(input);
 
   }
+
+    // temporary text-based display --> maybe create a simple class to call?
+    // text-based print method
+    public void printDisplay(Avatar avatar, AI enemy) {
+        String rowString = "";
+
+        for (int y=0; y < NUM_ROWS; y++) {
+            for (int x=0; x < NUM_COL; x++) {
+                if (x = avatar.getXCoord() && y = avatar.getYCoord()) {
+                    rowString += ConstantVariables.AV_CHAR;
+                }
+                else if (x = enemy.getXCoord() && y = enemy.getYCoord()) {
+                    rowString += ConstantVariables.AV_CHAR;
+                }
+                else
+                    rowString += this.getObjList(x, y);
+            }
+            System.out.println(rowString);
+            rowString = "";
+        }
+    }
+
 }

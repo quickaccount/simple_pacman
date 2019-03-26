@@ -332,7 +332,7 @@ public class AI extends MovableItem {
                 System.out.println("new AttemprXdir: " + this.getAttemptDir()[0] + " y: " +  this.getAttemptDir()[1]);
                 System.out.println("prev dirAttemptX0: " + dirAttempts.get(1)[0] + " y: " +  dirAttempts.get(1)[1]);
             }
-            while (dirAttempts.size() < 16); // or initial attempted direction successfully plotted
+            while (dirAttempts.size() < 17); // or initial attempted direction successfully plotted
 
             while (results.contains('f')) {
                 dirAttempts.remove(results.indexOf('f'));
