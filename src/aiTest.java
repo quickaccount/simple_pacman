@@ -9,12 +9,12 @@ java -cp .;junit-4.12.jar;hamcrest-core-1.3.jar org.junit.runner.JUnitCore aiTes
 import static org.junit.Assert.*;
 import org.junit.Test;
 import constants.ConstantVariables;
+import java.lang.Math;
 
 
 public class aiTest {
 
 	//Constructor Tests
-
 
 	@Test
 	public void test_constructor_left() {
@@ -55,20 +55,29 @@ public class aiTest {
 		assertEquals("Tried creating a valid AI", ">11", ">" + testAi.getXCoord() + testAi.getYCoord());
 	}
 
+
 	//Getters and Setters
-
-
+	/*
 	@Test
 	public void test_setXDir_doubleMove() {
 		AI testAi = new AI(ConstantVariables.INITIAL_E_X, ConstantVariables.INITIAL_E_Y); //Create at proper position
+		testAi.setNewDir
 
-
-		assertEquals("Tested for a move of more than one tile", 1, testAi.getXCoord());
+		assertEquals("Tested for a move of more than one tile", 1, Math.abs(testAi.getNewXCoord() - testAi.getXCoord()));
 	}
+*/
 
 
+	//Wall collisions
+/*
 	@Test
-	public void test_setYDir() {
+	public void test_wallCollision_up() {
+		AI testAi = new AI(1, 1); //Create in corner, with east and south directions cut off
+		Avatar testPlayer = new Avatar(28, 31);
+		ItemProcess items = new ItemProcess();
+		testAi.genMv(testPlayer, items);
 
+		assertEquals("Tried moving up into a wall", 0, Math.abs(testAi.getNewXCoord() - testAi.getXCoord()));
 	}
+*/
 }
