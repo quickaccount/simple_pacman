@@ -2,7 +2,6 @@ import java.lang.Math;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-
 public class AI extends MovableItem {
 
 
@@ -13,7 +12,6 @@ public class AI extends MovableItem {
     private int [] simDirection = new int[2];
     private int simEnemyXCoord;
     private int simEnemyYCoord;
-
 
     /**
     * Constructor that creates an AI ghost
@@ -27,18 +25,6 @@ public class AI extends MovableItem {
     }
 
 
-    private void avatarCollision(ItemProcess items) {
-        // Enemy-Avatar collision check
-        if (((Math.abs(this.getDistX()) <= 1 && this.getDistY() == 0) || (Math.abs(this.getDistY()) <= 1 && this.getDistX() == 0)))  {
-            items.setGameOnOff(false);
-            return;
-        }
-        else {
-            return;
-        }
-    }
-
-
     /**
     * Sets the distance between the current object and the player
     * @param avatar the user/player: Pacman
@@ -48,14 +34,12 @@ public class AI extends MovableItem {
         this.dist[1] = this.getYCoord() - avatar.getYCoord();
     }
 
-  
     public int getGoalDistanceX() {
         return this.dist[0];
     }
     public int getGoalDistanceY() {
         return this.dist[1];
     }
-
 
     private void setDirections() { //added i-1 and 2->3
         for (int i=0; i < 2; i++) {
@@ -72,7 +56,6 @@ public class AI extends MovableItem {
                         this.directions[1][i] = 0;
                     }
                 }
-
 
 
                 else { // same as above, but y direction is preferred
@@ -304,7 +287,6 @@ public class AI extends MovableItem {
                         dirAttempts.add(0, Arrays.copyOf(this.getSimDir(), 2)); // movement direction attempts
                         break;
                         // end loop condition
-
                     }
 
                     // add the move into adjacent space with no wall
@@ -317,7 +299,6 @@ public class AI extends MovableItem {
                     wallIndexDir[1] = new Integer(-dirAttempts.get(0)[1]);
 
                 }
-
 
             } while (dirAttempts.size() < 17); // or initial attempted direction successfully plotted
 
@@ -336,39 +317,11 @@ public class AI extends MovableItem {
                 System.out.println("run two shorter");
                 this.mvDirQue.clear();
                 this.mvDirQue.addAll(dirAttempts);
-
             }
             dirAttempts.clear();
             results.clear();
             //}
         return;
-    }
-
-
-    private int getXDirection(int rank) { // 0: best move, 1: 2nd best, 2: 3rd, 3: worst move
-        return this.directions[0][rank];
-    }
-
-
-    private int getYDirection(int rank) { // 0: best move, 1: 2nd best, 2: 3rd, 3: worst move
-        return this.directions[1][rank];
-    }
-
-
-
-    private void setCurrentDir(int x, int y) {
-        this.currentDir[0] = x;
-        this.currentDir[1] = y;
-    }
-
-
-    private int getCurrentXDir() {
-        return this.currentDir[0];
-    }
-
-
-    private int getCurrentYDir() {
-        return this.currentDir[1];
     }
 
 
@@ -414,17 +367,8 @@ public class AI extends MovableItem {
                 }
                 else if (this.getGoalDistanceY() == 0) {
                     break;
-
                 }
             }
-
-            // if all else fails
-            this.wallEscape(items);
-            System.out.println("wall escaped");
-            items.processMv(this);
-            this.avatarCollision(items);
-
-            return;
         }
 
         // if all else fails
