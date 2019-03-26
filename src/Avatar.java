@@ -48,5 +48,6 @@ public class Avatar extends MovableItem {
         }
 
         this.setNewCoord(this.getDir(0) + this.getXCoord(), this.getDir(1) + this.getYCoord()); //Apply movement
+        return;
     }
 }
