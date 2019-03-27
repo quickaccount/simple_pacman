@@ -21,7 +21,7 @@ public class AvatarTest {
 	public void test_constructor_left() {
 		Avatar testAv = new Avatar(0, 1); //Spawn inside wall on left side
 
-		assertEquals("Tried creating the player at an invalid x position, too far left - [x-coord]", 1, testAv.getXCoord());
+		assertEquals("Tried creating the player at an invalid x position, too far left - [x-coord]\n", "" + ConstantVariables.INITIAL_X + ", " + ConstantVariables.INITIAL_Y, "" + testAv.getXCoord() + ", " + testAv.getYCoord());
 	}
 
 
@@ -29,7 +29,7 @@ public class AvatarTest {
 	public void test_constructor_top() {
 		Avatar testAv = new Avatar(1, 0); //Spawn inside wall along top row
 
-		assertEquals("Tried creating the player at an invalid y position, too high up - [y-coord]", ConstantVariables.NUM_ROWS - 1, testAv.getYCoord());
+		assertEquals("Tried creating the player at an invalid y position, too high up - [y-coord]\n", "" + ConstantVariables.INITIAL_X + ", " +  ConstantVariables.INITIAL_Y, "" + testAv.getXCoord() + ", " +  testAv.getYCoord());
 	}
 
 
@@ -37,7 +37,7 @@ public class AvatarTest {
 	public void test_constructor_right() {
 		Avatar testAv = new Avatar(ConstantVariables.NUM_COL, 1); //Spawn inside wall on right side
 
-		assertEquals("Tried creating the player at an invalid x position, too far right - [x-coord]", 1, testAv.getXCoord());
+		assertEquals("Tried creating the player at an invalid x position, too far right - [x-coord]\n", "" + ConstantVariables.INITIAL_X + ", " +  ConstantVariables.INITIAL_Y, "" + testAv.getXCoord() + ", " +  testAv.getYCoord());
 	}
 
 
@@ -45,7 +45,7 @@ public class AvatarTest {
 	public void test_constructor_bottom() {
 		Avatar testAv = new Avatar(1, ConstantVariables.NUM_ROWS); //Spawn inside wall along top row
 
-		assertEquals("Tried creating the player at an invalid y position, too far down - [y-coord]", ConstantVariables.NUM_ROWS - 1, testAv.getYCoord());
+		assertEquals("Tried creating the player at an invalid y position, too far down - [y-coord]\n", "" + ConstantVariables.INITIAL_X + ", " +  ConstantVariables.INITIAL_Y, "" + testAv.getXCoord() + ", " +  testAv.getYCoord());
 	}
 
 
@@ -54,6 +54,14 @@ public class AvatarTest {
 		Avatar testAv = new Avatar(6, 3); //Acceptable spawn
 
 		assertEquals("Tried creating a valid player, [x, y]", "63", "" + testAv.getXCoord() + testAv.getYCoord());
+	}
+
+
+	@Test
+	public void test_constructor_defaultStart() {
+		Avatar testAv = new Avatar(ConstantVariables.INITIAL_X, ConstantVariables.INITIAL_Y); //Acceptable spawn
+
+		assertEquals("Tried creating a valid player, [x, y]", "" + ConstantVariables.INITIAL_X + ConstantVariables.INITIAL_Y, "" + testAv.getXCoord() + testAv.getYCoord());
 	}
 
 
