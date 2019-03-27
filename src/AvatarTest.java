@@ -10,6 +10,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import constants.ConstantVariables;
 import java.lang.Math;
+import java.util.ArrayList;
 
 
 public class AvatarTest {
@@ -77,26 +78,63 @@ public class AvatarTest {
 
 
 	//Getters and Setters
-	/**
+	
 	@Test
-	public void test_setXDir_doubleMove() {
-		Avatar testAv = new AI(ConstantVariables.INITIAL_E_X, ConstantVariables.INITIAL_E_Y); //Create at proper position
-		testAv.setNewDir
+	public void test_getScore_addScore() {
+		Avatar testAv = new Avatar(1, 1);
+		for (int i = 0; i < 5; i++) {
+			testAv.addScore();
+		}
 
-		assertEquals("Tested for a move of more than one tile", 1, Math.abs(testAi.getNewXCoord() - testAi.getXCoord()));
+		assertEquals("Added 5 points", 5, testAv.getScore());
 	}
 
 
-	//Wall collisions
+	//Other Methods
 
 	@Test
-	public void test_wallCollision_up() {
-		AI testAi = new AI(1, 1); //Create in corner, with east and south directions cut off
-		ItemProcess items = new ItemProcess();
-		testAi.genMv(null, items);
+	public void test_mvAttempt_invalidButton() {
+		Avatar testAv = new Avatar(1, 1);
+		ItemProcess items = new ItemProcess("maze.txt");
+		ArrayList<String> goThrough = new ArrayList<String>(); //List of elements to try
+		goThrough.add("e"); //Add keys to try
+		goThrough.add("Bop");
+		goThrough.add("A");
+		goThrough.add("ew");
 
-		assertEquals("Tried moving up into a wall", 0, Math.abs(testAi.getNewXCoord() - testAi.getXCoord()));
+		for (int x = 0; x < goThrough.size() - 1; x++) {
+			testAv.mvAttempt(goThrough.get(x), items);
+
+			assertEquals("Tried moving using valid keys", "00", "" + testAv.getDir(0) + testAv.getDir(1)); //Test for each element in list
+		}
 	}
-	*/
+
+
+	@Test
+	public void test_mvAttempt_validButton() {
+		Avatar testAv = new Avatar(1, 1);
+		ItemProcess items = new ItemProcess("maze.txt");
+		ArrayList<String> goThrough = new ArrayList<String>(); //List of elements to try
+		int dir = 0; //Expected direction output
+		goThrough.add("d"); //Add keys to try
+		goThrough.add("dab on them");
+		goThrough.add("a");
+		goThrough.add("w");
+
+		for (int x = 0; x < goThrough.size() - 1; x++) {
+			testAv.mvAttempt(goThrough.get(x), items);
+			
+			if (x == 0 || x ==1) {
+				dir = 10; 
+			} else if (x == 2) {
+				dir = -10;
+			} else {
+				dir = 01;
+			}
+
+			assertEquals("Tried moving using valid keys", "" + dir, "" + testAv.getDir(0) + testAv.getDir(1)); //Test for each element in list
+		}
+	}
+
 
 }
