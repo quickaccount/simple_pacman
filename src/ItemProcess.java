@@ -124,7 +124,8 @@ public class ItemProcess {
 			} catch (IOException e) {
 				System.out.println("Error reading file '" + file + "'");
 			}
-			gd.setScore(Integer.valueOf(loadedVals[0]));
+			//gd.setScore(Integer.valueOf(loadedVals[0]));
+			gd.loadSavedValues(loadedVals);
 			
     }
 

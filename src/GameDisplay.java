@@ -359,15 +359,13 @@ public class GameDisplay extends Application {
         }
     }
     
-    public void setScore(int score) {
-    	avatar.setScore(score);
-    }
-    
-    public void setPacX(int coord) {
-    	pac_X = coord;
-    }
-    
-    public void setPacY(int coord) {
-    	pac_Y = coord;
+    public void loadSavedValues(String[] loadedVals) {
+    	avatar.setScore(Integer.valueOf(loadedVals[0]));
+    	avatar.setXYCoord(Integer.valueOf(loadedVals[1]), Integer.valueOf(loadedVals[2]));
+    	pac_X = Integer.valueOf(loadedVals[3]);
+    	pac_Y = Integer.valueOf(loadedVals[4]);	//enemy blinky
+    	enemy.setXYCoord(Integer.valueOf(loadedVals[5]), Integer.valueOf(loadedVals[6]));
+    	blinky_X = Integer.valueOf(loadedVals[7]);
+    	blinky_Y = Integer.valueOf(loadedVals[8]);
     }
 }

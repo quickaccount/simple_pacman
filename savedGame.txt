@@ -1,4 +1,4 @@
-69 25 30 400 480 15 24 240 384
+71 7 21 112 336 12 27 192 432
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 X.............X.............X
 X.............X.............X
@@ -20,14 +20,14 @@ X....X..X..XXXXXXX..X. X....X
 X....X..X...........X. X....X
 XXX..X..X..XXXXXXX..X. X..XXX
 X..................... .....X
-X..................... .....X
-X..XXX..XXXX..X..XXXX. XXX..X
-X....X........X....... X....X
-X....X........X....... X....X
-XXX..X..X..XXXXXXX..X. X..XXX
-X.......X.....X.....X. .....X
-X.......X.....X.....X. .....X
-X..XXX..XXXX..X..XXXX. XXX..X
-X..                    .....X
-X..                       ..X
+X...... ..............     .X
+X..XXX. XXXX..X..XXXX..XXX .X
+X....X. ......X........X.. .X
+X....X. ......X........X   .X
+XXX..X. X..XXXXXXX..X..X .XXX
+X...... X.....X.....X...   .X
+X...... X.    X.....X..... .X
+X..XXX. XXXX  X..XXXX..XXX .X
+X......       ............ .X
+X...........               .X
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXX
