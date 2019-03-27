@@ -216,4 +216,10 @@ public class ItemProcess {
             return;
         }
     }
+
+    public void allCollected(Avatar player) {
+      if (player.getScore() >= coinList.size()) {
+        this.setGameOn(false);
+      }
+    }
 }
