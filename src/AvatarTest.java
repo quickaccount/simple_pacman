@@ -132,7 +132,7 @@ public class AvatarTest {
 			} else if (x == 3) {
 				dir = "0-1"; //Moving up
 			} else {
-				dir = "01";
+				dir = "01"; //Moving down
 			}
 
 			assertEquals("Tried moving using valid keys", dir, "" + testAv.getDir(0) + testAv.getDir(1)); //Test for each element in list
