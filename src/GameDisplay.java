@@ -359,7 +359,7 @@ public class GameDisplay extends Application {
         }
     }
     
-    public void loadSavedValues(String[] loadedVals) {
+    public void loadSavedValues(String[] loadedVals) {	// loads in and applies the saved score and movable item coords
     	avatar.setScore(Integer.valueOf(loadedVals[0]));
     	avatar.setXYCoord(Integer.valueOf(loadedVals[1]), Integer.valueOf(loadedVals[2]));
     	pac_X = Integer.valueOf(loadedVals[3]);
