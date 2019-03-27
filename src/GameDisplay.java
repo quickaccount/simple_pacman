@@ -301,6 +301,11 @@ public class GameDisplay extends Application {
 
   }
   
+  /**
+   * Creates a textfile to save game progress of score, collected coins and MovableItem coordinates.
+   * @param gameName the name that you would like to save the game textfile as
+   * @throws IOException
+   */
   public void saveToTextFile(String gameName) throws IOException{
 	  PrintWriter writer = new PrintWriter(gameName);
 	  String line = null;
@@ -327,8 +332,11 @@ public class GameDisplay extends Application {
   }
 
 
-    // temporary text-based display --> maybe create a simple class to call?
-    // text-based print method
+    /**
+     * Prints the text-based display in the console.
+     * @param avatar the pacman Avatar object.
+     * @param enemy the ghost AI (blinky) object.
+     */
     public void printDisplay(Avatar avatar, AI enemy) {
         String rowString = "";
         if (items.getGameOn() == true) {
@@ -359,6 +367,10 @@ public class GameDisplay extends Application {
         }
     }
     
+    /**
+     * Applies saved game values.
+     * @param loadedVals an array of Strings that hold the saved game values
+     */
     public void loadSavedValues(String[] loadedVals) {	// loads in and applies the saved score and movable item coords
     	avatar.setScore(Integer.valueOf(loadedVals[0]));
     	avatar.setXYCoord(Integer.valueOf(loadedVals[1]), Integer.valueOf(loadedVals[2]));

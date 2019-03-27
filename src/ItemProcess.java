@@ -5,7 +5,7 @@ import java.lang.Math;
 
 
 /**
- * The ItemProcess class is an updated version of out text-based AnimationApp, but it was renamed to better reflect its functionality
+ * The ItemProcess class is an updated version of our text-based AnimationApp, but it was renamed to better reflect its functionality
  * This class is most of the logic behind the app. It loads in a text file and creates lists of objects
  * so that we can check collisions.
  */
@@ -108,7 +108,9 @@ public class ItemProcess {
       // this.objList[INITIAL_E_X][INITIAL_E_Y] = 'E';
 
     }
-    
+    /**
+     * Constructor for creating game from saved game textfile.
+     */
     public ItemProcess(String file, GameDisplay gd) {
     	this(file);
     	String line = null;
@@ -129,6 +131,10 @@ public class ItemProcess {
 			
     }
 
+    /**
+     * Returns the 2D array of Items.
+     * @return array of Items.
+     */
     public Item[][] getItemList() {
         return this.itemList;
     }
@@ -212,17 +218,18 @@ public class ItemProcess {
         return false;
     }
 
-
+    /**
+     * Change whether the game is on or off.
+     * @param onOff the boolean value of whether the game is on or not.
+     */
     private void setGameOn(boolean onOff) {
         this.gameOn = onOff;
     }
-
-
+    
     public boolean getGameOn() {
         return new Boolean(this.gameOn);
     }
-
-
+    
     public void avatarEnemyCollision(AI enemy) {
         // Enemy-Avatar collision check
         if (((Math.abs(enemy.getGoalDistanceX()) <= 1 && enemy.getGoalDistanceY() == 0) || (Math.abs(enemy.getGoalDistanceY()) <= 1 && enemy.getGoalDistanceX() == 0)))  {

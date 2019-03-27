@@ -29,7 +29,11 @@ public class Avatar extends MovableItem {
     public void addScore() {
         this.score += 1;
     }
-
+    
+    /**
+     * Set the game score. 
+     * @param score the value that the score is to be set to.
+     */
     public void setScore(int score) {
     	this.score = score;
     }    
