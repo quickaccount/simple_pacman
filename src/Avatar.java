@@ -20,6 +20,10 @@ public class Avatar extends MovableItem {
         this.score += 1;
     }
 
+    public void setScore(int score) {
+    	this.score = score;
+    }    
+    
     /**
      * Used to return the player's score
      */

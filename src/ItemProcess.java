@@ -16,6 +16,7 @@ public class ItemProcess {
     private Item[][] itemList = new Item [ConstantVariables.NUM_COL] [ConstantVariables.NUM_ROWS];
     private char[][] objList = new char [ConstantVariables.NUM_COL] [ConstantVariables.NUM_ROWS];
     private boolean gameOn = false;
+    private String[] loadedVals;
 
 
     /**
@@ -45,10 +46,6 @@ public class ItemProcess {
       // The name of the file containing the display template.
       String fileName = file;
 
-      if(fileName.equals("savedGame.txt")) {
-        //some how seperate the first line to get score and x and y coordinates of ai and av
-      }
-
       // Line Reference
       String line = null;
 
@@ -58,7 +55,11 @@ public class ItemProcess {
         FileReader template = new FileReader(fileName);
         BufferedReader bTemplate = new BufferedReader(template);
         int y = 0;
-
+        
+        if(fileName.equals("savedGame.txt")) {
+        	bTemplate.readLine(); //skip first
+        }
+        
         while((line = bTemplate.readLine()) != null) {
 
           for(int x = 0; x < ConstantVariables.NUM_COL; x++) {
@@ -106,6 +107,25 @@ public class ItemProcess {
       // set default Enemy location
       // this.objList[INITIAL_E_X][INITIAL_E_Y] = 'E';
 
+    }
+    
+    public ItemProcess(String file, GameDisplay gd) {
+    	this(file);
+    	String line = null;
+			try {
+				FileReader template = new FileReader(file);
+				BufferedReader bTemplate = new BufferedReader(template);
+				line = bTemplate.readLine();
+				if(line != null){
+					loadedVals = line.split(" ");
+				}
+			} catch (FileNotFoundException e) {
+				System.out.println("Cannot open file '" + file + "'");
+			} catch (IOException e) {
+				System.out.println("Error reading file '" + file + "'");
+			}
+			gd.setScore(Integer.valueOf(loadedVals[0]));
+			
     }
 
     public Item[][] getItemList() {

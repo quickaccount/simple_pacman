@@ -132,7 +132,7 @@ public class GameDisplay extends Application {
     			break;
     			
     		case L:	// if pressed l 
-    			items = new ItemProcess("savedGame.txt");	// process the game with saved game text file
+    			items = new ItemProcess("savedGame.txt", GameDisplay.this);	// process the game with saved game text file
     			gameStarted = true;
     			stage.setScene(gamePlay);
     			break;
@@ -306,26 +306,23 @@ public class GameDisplay extends Application {
 	  String line = null;
 	  Item[][] itemList = items.getItemList();
 	  
-	  writer.println("score: " + avatar.getScore() + " avatar coords: " + avatar.getXCoord() + ", " + avatar.getYCoord() + " avatar display: " + pac_X + ", " + pac_Y +
-			  " enemy coords: " + enemy.getXCoord() + ", " + enemy.getYCoord() + " enemy display: " + blinky_X + ", " + blinky_Y);
+	  writer.println(avatar.getScore() + " " + avatar.getXCoord() + " " + avatar.getYCoord() + " " + pac_X + " " + pac_Y +
+			  " " + enemy.getXCoord() + " " + enemy.getYCoord() + " " + blinky_X + " " + blinky_Y);
 	  
-	  for(int row = 0; row < itemList.length; row++) {
-		  for(int col = 0; col < itemList[0].length; col++) {
-			  
-			  if(itemList[row][col] instanceof Coin) {
-				  
-				  if(((Coin)items.getItemList()[row][col]).getCoinIsOn()) {
-					  writer.print(".");
-				  } else {
+	  for (int y=0; y < ConstantVariables.NUM_ROWS; y++) {
+          for (int x=0; x < ConstantVariables.NUM_COL; x++) {
+        	  if(itemList[x][y] instanceof Coin) {
+        		  if(((Coin)items.getItemList()[x][y]).getCoinIsOn()) {
+        			  writer.print(".");
+        		  } else {
 					  writer.print(" ");
 				  }
-			  } else if(itemList[row][col] instanceof Wall) {
-				  writer.print("X");
-			  }	
-		  }
-		  writer.println();
+        	  } else if(itemList[x][y] instanceof Wall) {
+        		  writer.print("X");
+        	  }
+          }
+          writer.println();
 	  }
-  	
 	  writer.close();
   }
 
@@ -360,5 +357,17 @@ public class GameDisplay extends Application {
                 rowString = "";
             }
         }
+    }
+    
+    public void setScore(int score) {
+    	avatar.setScore(score);
+    }
+    
+    public void setPacX(int coord) {
+    	pac_X = coord;
+    }
+    
+    public void setPacY(int coord) {
+    	pac_Y = coord;
     }
 }
