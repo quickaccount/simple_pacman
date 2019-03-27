@@ -8,11 +8,12 @@
 1. Visit [the code repository](https://github.com/quickaccount/simple_pacman) <br/>
 2. Download all files in the master-branch as a ZIP <br/>
 3. Extract all files in the zipped folder <br/>
-4. Find the simple_pacman-master/src/images folder. Move all images in this folder to the src folder. <br/>
+4. Find the simple_pacman-master/src/images folder. Move all images in this folder to the src folder <br/>
 5. Open a command prompt, change to proper directory: cd Downloads/simple_pacman-master/src <br/>
 6. Compile: javac GameDisplay.java <br/>
 7. Run: java GameDisplay <br/>
-8. Use 'WASD' keys to move and play the game. 'P' can be used to save all progress
+8. Start the game with 'N', or load a previous save with 'L' <br/>
+9. Use 'WASD' keys to move and play the game. 'P' can be used to save all progress
 
 ## JUnit Testing of Avatar Class
 1. Follow *Installation and Usage* steps 1 - 5 <br/>
