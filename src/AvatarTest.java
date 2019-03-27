@@ -51,9 +51,9 @@ public class AvatarTest {
 
 	@Test
 	public void test_constructor_proper() {
-		Avatar testAv = new Avatar(4, 3); //Acceptable spawn
+		Avatar testAv = new Avatar(6, 3); //Acceptable spawn
 
-		assertEquals("Tried creating a valid player, [x, y]", "11", "" + testAv.getXCoord() + testAv.getYCoord());
+		assertEquals("Tried creating a valid player, [x, y]", "63", "" + testAv.getXCoord() + testAv.getYCoord());
 	}
 
 
@@ -100,7 +100,7 @@ public class AvatarTest {
 		goThrough.add("e"); //Add keys to try
 		goThrough.add("Bop");
 		goThrough.add("A");
-		goThrough.add("ew");
+		goThrough.add("ow");
 
 		for (int x = 0; x < goThrough.size() - 1; x++) {
 			testAv.mvAttempt(goThrough.get(x), items);
@@ -115,24 +115,27 @@ public class AvatarTest {
 		Avatar testAv = new Avatar(1, 1);
 		ItemProcess items = new ItemProcess("maze.txt");
 		ArrayList<String> goThrough = new ArrayList<String>(); //List of elements to try
-		int dir = 0; //Expected direction output
+		String dir = ""; //Expected direction output
 		goThrough.add("d"); //Add keys to try
 		goThrough.add("dab on them");
 		goThrough.add("a");
 		goThrough.add("w");
+		goThrough.add("s");
 
 		for (int x = 0; x < goThrough.size() - 1; x++) {
 			testAv.mvAttempt(goThrough.get(x), items);
 			
 			if (x == 0 || x ==1) {
-				dir = 10; 
+				dir = "10"; //Moving right
 			} else if (x == 2) {
-				dir = -10;
+				dir = "-10"; //Moving left
+			} else if (x == 3) {
+				dir = "0-1"; //Moving up
 			} else {
-				dir = 01;
+				dir = "01";
 			}
 
-			assertEquals("Tried moving using valid keys", "" + dir, "" + testAv.getDir(0) + testAv.getDir(1)); //Test for each element in list
+			assertEquals("Tried moving using valid keys", dir, "" + testAv.getDir(0) + testAv.getDir(1)); //Test for each element in list
 		}
 	}
 
