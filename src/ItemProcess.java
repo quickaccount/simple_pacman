@@ -113,22 +113,24 @@ public class ItemProcess {
      */
     public ItemProcess(String file, GameDisplay gd) {
     	this(file);
+    	
     	String line = null;
-			try {
-				FileReader template = new FileReader(file);
-				BufferedReader bTemplate = new BufferedReader(template);
-				line = bTemplate.readLine();
-				if(line != null){
-					loadedVals = line.split(" ");
-				}
-			} catch (FileNotFoundException e) {
-				System.out.println("Cannot open file '" + file + "'");
-			} catch (IOException e) {
-				System.out.println("Error reading file '" + file + "'");
-			}
-			//gd.setScore(Integer.valueOf(loadedVals[0]));
-			gd.loadSavedValues(loadedVals);
+		try {
 			
+			FileReader template = new FileReader(file);
+			BufferedReader bTemplate = new BufferedReader(template);
+			line = bTemplate.readLine();
+			if(line != null){
+				loadedVals = line.split(" ");
+			}
+			bTemplate.close();
+		} catch (FileNotFoundException e) {
+			System.out.println("Cannot open file '" + file + "'");
+		} catch (IOException e) {
+			System.out.println("Error reading file '" + file + "'");
+		}
+		
+		gd.loadSavedValues(loadedVals);
     }
 
     /**

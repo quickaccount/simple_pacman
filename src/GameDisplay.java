@@ -96,6 +96,7 @@ public class GameDisplay extends Application {
     	    	
     	final long menuStartTime = System.nanoTime();	// start time in nano seconds
         // updates visual display approx 60 times/seconds
+    	Image title = new Image("title.png");
         new AnimationTimer()
         {
    
@@ -103,8 +104,7 @@ public class GameDisplay extends Application {
         		
         		gcMenu.setFill(Color.BLACK);
                 gcMenu.fillRect(0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT);		// black out the screen/clear canvas
-             	Image title = new Image("title.png");	// add the pacman logo
-            	gcMenu.drawImage(title, 50 ,100, 360, 84);
+            	gcMenu.drawImage(title, 50 ,100, 360, 84);	// add the pacman logo to main menu
             	
             	gcMenu.setFont(Font.font ("Verdana", 20));
             	gcMenu.setFill(Color.WHITE);
