@@ -23,12 +23,13 @@ public abstract class Item {
         */
 
         //This is for if we use columns and rows for initial positions
-        if (this instanceof AI || this instanceof Avatar) { //Ensure proper creation for ghosts and pacman only
+        if (this instanceof Avatar) { //Ensure proper creation for ghosts and pacman only
             if (x > ConstantVariables.NUM_COL - 1 || x < 1) { //Invalid x, uses movable items' width and accounts for walls
-                x = 1; //Create along left-hand side
-                y = ConstantVariables.NUM_ROWS - 1; //Ensure it is created along the bottom row, as there are no walls that could cause problems in a spawn there
+                x = ConstantVariables.INITIAL_X; //Create along left-hand side
+                y = ConstantVariables.INITIAL_Y; //Ensure it is created along the bottom row, as there are no walls that could cause problems in a spawn there
             } else if (y > ConstantVariables.NUM_ROWS - 1 || y < 1) { //Only invalid y
-                y = ConstantVariables.NUM_ROWS - 1; //Create somewhere along bottom wall, as no problems can occur there (x coord does not matter there)
+                x = ConstantVariables.INITIAL_X;
+                y = ConstantVariables.INITIAL_Y; //Create somewhere along bottom wall, as no problems can occur there (x coord does not matter there)
             }
         }
         

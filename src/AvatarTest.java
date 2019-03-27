@@ -10,6 +10,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import constants.ConstantVariables;
 import java.lang.Math;
+import java.util.ArrayList;
 
 
 public class AvatarTest {
@@ -20,7 +21,7 @@ public class AvatarTest {
 	public void test_constructor_left() {
 		Avatar testAv = new Avatar(0, 1); //Spawn inside wall on left side
 
-		assertEquals("Tried creating the player at an invalid x position, too far left - [x-coord]", 1, testAv.getXCoord());
+		assertEquals("Tried creating the player at an invalid x position, too far left - [x-coord]\n", "" + ConstantVariables.INITIAL_X + ", " + ConstantVariables.INITIAL_Y, "" + testAv.getXCoord() + ", " + testAv.getYCoord());
 	}
 
 
@@ -28,7 +29,7 @@ public class AvatarTest {
 	public void test_constructor_top() {
 		Avatar testAv = new Avatar(1, 0); //Spawn inside wall along top row
 
-		assertEquals("Tried creating the player at an invalid y position, too high up - [y-coord]", ConstantVariables.NUM_ROWS - 1, testAv.getYCoord());
+		assertEquals("Tried creating the player at an invalid y position, too high up - [y-coord]\n", "" + ConstantVariables.INITIAL_X + ", " +  ConstantVariables.INITIAL_Y, "" + testAv.getXCoord() + ", " +  testAv.getYCoord());
 	}
 
 
@@ -36,7 +37,7 @@ public class AvatarTest {
 	public void test_constructor_right() {
 		Avatar testAv = new Avatar(ConstantVariables.NUM_COL, 1); //Spawn inside wall on right side
 
-		assertEquals("Tried creating the player at an invalid x position, too far right - [x-coord]", 1, testAv.getXCoord());
+		assertEquals("Tried creating the player at an invalid x position, too far right - [x-coord]\n", "" + ConstantVariables.INITIAL_X + ", " +  ConstantVariables.INITIAL_Y, "" + testAv.getXCoord() + ", " +  testAv.getYCoord());
 	}
 
 
@@ -44,15 +45,23 @@ public class AvatarTest {
 	public void test_constructor_bottom() {
 		Avatar testAv = new Avatar(1, ConstantVariables.NUM_ROWS); //Spawn inside wall along top row
 
-		assertEquals("Tried creating the player at an invalid y position, too far down - [y-coord]", ConstantVariables.NUM_ROWS - 1, testAv.getYCoord());
+		assertEquals("Tried creating the player at an invalid y position, too far down - [y-coord]\n", "" + ConstantVariables.INITIAL_X + ", " +  ConstantVariables.INITIAL_Y, "" + testAv.getXCoord() + ", " +  testAv.getYCoord());
 	}
 
 
 	@Test
 	public void test_constructor_proper() {
-		Avatar testAv = new Avatar(4, 3); //Acceptable spawn
+		Avatar testAv = new Avatar(6, 3); //Acceptable spawn
 
-		assertEquals("Tried creating a valid player, [x, y]", "11", "" + testAv.getXCoord() + testAv.getYCoord());
+		assertEquals("Tried creating a valid player, [x, y]", "63", "" + testAv.getXCoord() + testAv.getYCoord());
+	}
+
+
+	@Test
+	public void test_constructor_defaultStart() {
+		Avatar testAv = new Avatar(ConstantVariables.INITIAL_X, ConstantVariables.INITIAL_Y); //Acceptable spawn
+
+		assertEquals("Tried creating a valid player, [x, y]", "" + ConstantVariables.INITIAL_X + ConstantVariables.INITIAL_Y, "" + testAv.getXCoord() + testAv.getYCoord());
 	}
 
 
@@ -77,26 +86,66 @@ public class AvatarTest {
 
 
 	//Getters and Setters
-	/**
+	
 	@Test
-	public void test_setXDir_doubleMove() {
-		Avatar testAv = new AI(ConstantVariables.INITIAL_E_X, ConstantVariables.INITIAL_E_Y); //Create at proper position
-		testAv.setNewDir
+	public void test_getScore_addScore() {
+		Avatar testAv = new Avatar(1, 1);
+		for (int i = 0; i < 5; i++) {
+			testAv.addScore();
+		}
 
-		assertEquals("Tested for a move of more than one tile", 1, Math.abs(testAi.getNewXCoord() - testAi.getXCoord()));
+		assertEquals("Added 5 points", 5, testAv.getScore());
 	}
 
 
-	//Wall collisions
+	//Other Methods
 
 	@Test
-	public void test_wallCollision_up() {
-		AI testAi = new AI(1, 1); //Create in corner, with east and south directions cut off
-		ItemProcess items = new ItemProcess();
-		testAi.genMv(null, items);
+	public void test_mvAttempt_invalidButton() {
+		Avatar testAv = new Avatar(1, 1);
+		ItemProcess items = new ItemProcess("maze.txt");
+		ArrayList<String> goThrough = new ArrayList<String>(); //List of elements to try
+		goThrough.add("e"); //Add keys to try
+		goThrough.add("Bop");
+		goThrough.add("A");
+		goThrough.add("ow");
 
-		assertEquals("Tried moving up into a wall", 0, Math.abs(testAi.getNewXCoord() - testAi.getXCoord()));
+		for (int x = 0; x < goThrough.size() - 1; x++) {
+			testAv.mvAttempt(goThrough.get(x), items);
+
+			assertEquals("Tried moving using valid keys", "00", "" + testAv.getDir(0) + testAv.getDir(1)); //Test for each element in list
+		}
 	}
-	*/
+
+
+	@Test
+	public void test_mvAttempt_validButton() {
+		Avatar testAv = new Avatar(1, 1);
+		ItemProcess items = new ItemProcess("maze.txt");
+		ArrayList<String> goThrough = new ArrayList<String>(); //List of elements to try
+		String dir = ""; //Expected direction output
+		goThrough.add("d"); //Add keys to try
+		goThrough.add("dab on them");
+		goThrough.add("a");
+		goThrough.add("w");
+		goThrough.add("s");
+
+		for (int x = 0; x < goThrough.size() - 1; x++) {
+			testAv.mvAttempt(goThrough.get(x), items);
+			
+			if (x == 0 || x ==1) {
+				dir = "10"; //Moving right
+			} else if (x == 2) {
+				dir = "-10"; //Moving left
+			} else if (x == 3) {
+				dir = "0-1"; //Moving up
+			} else {
+				dir = "01"; //Moving down
+			}
+
+			assertEquals("Tried moving using valid keys", dir, "" + testAv.getDir(0) + testAv.getDir(1)); //Test for each element in list
+		}
+	}
+
 
 }
