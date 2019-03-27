@@ -274,7 +274,7 @@ public class GameDisplay extends Application {
     private void timedMove(String key) {
 
         mvRefreshCount = 0;
-        avatar.mvAttempt(key);
+        avatar.mvAttempt(key, items);
         items.processMv(avatar);
         movePac(key);
         enemy.genMv(avatar, items);
@@ -297,7 +297,7 @@ public class GameDisplay extends Application {
    */
   private void handleInput(String input) {
       //System.out.println(input + " was pressed.");
-      avatar.mvAttempt(input);
+      avatar.mvAttempt(input, items);
 
   }
   

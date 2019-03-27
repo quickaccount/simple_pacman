@@ -36,7 +36,7 @@ public class Avatar extends MovableItem {
     * Takes user input and attempts to move the player
     * @param key the user's input, as a String
     */
-    public void mvAttempt(String key) {
+    public void mvAttempt(String key, ItemProcess itemList) {
 
         char takeFirst = key.charAt(0); //Takes the first character from the user's input
 
@@ -51,6 +51,7 @@ public class Avatar extends MovableItem {
         } else {
         }
 
+        itemList.allCollected(this);
         this.setNewCoord(this.getDir(0) + this.getXCoord(), this.getDir(1) + this.getYCoord()); //Apply movement
         return;
     }
