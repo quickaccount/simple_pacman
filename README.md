@@ -24,7 +24,7 @@
 >Other: javac -cp .:junit-4.12.jar:hamcrest-core-1.3.jar *.java <br/>
 4. Run JUnit: <br/>
 >Windows: java -cp .;junit-4.12.jar;hamcrest-core-1.3.jar org.junit.runner.JUnitCore AvatarTest <br/>
->Other: java -cp .:junit-4.12.jar:hamcrest-core-1.3.jar org.junit.runner.JUnitCore AvatarTest <br/>
+>Other : java -cp .:junit-4.12.jar:hamcrest-core-1.3.jar org.junit.runner.JUnitCore AvatarTest <br/>
 
 ## Version History
 **v1.0** <br/> 
@@ -33,7 +33,7 @@ Text-based completed <br/><br/>
 Text-based refined, AI improved <br/>
 GUI-based nearly finished <br/><br/>
 **v3.0** <br/>
-GUI-based: save feature and end-game conditions added. Improved AI
+GUI-based: save feature, main-menu and end-game conditions added. Improved AI
 
 ## Authors
 Daniel Stamper <br/>
