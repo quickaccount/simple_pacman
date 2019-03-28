@@ -50,7 +50,7 @@ public abstract class MovableItem extends Item {
     * @param xNew the new x position
     * @param yNew the new y position
     */
-    protected void setXYCoord(int xNew, int yNew) {
+    public void setXYCoord(int xNew, int yNew) {
         super.setXCoord(xNew);
         super.setYCoord(yNew);
     }
@@ -71,7 +71,7 @@ public abstract class MovableItem extends Item {
     * @param yNew the new y position
     */
     @Override
-    protected void setYCoord(int yNew){
+    public void setYCoord(int yNew){
         super.setYCoord(yNew);
     }
 

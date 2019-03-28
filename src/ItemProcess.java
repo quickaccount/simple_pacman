@@ -5,7 +5,7 @@ import java.lang.Math;
 
 
 /**
- * The ItemProcess class is an updated version of out text-based AnimationApp, but it was renamed to better reflect its functionality
+ * The ItemProcess class is an updated version of our text-based AnimationApp, but it was renamed to better reflect its functionality
  * This class is most of the logic behind the app. It loads in a text file and creates lists of objects
  * so that we can check collisions.
  */
@@ -16,6 +16,7 @@ public class ItemProcess {
     private Item[][] itemList = new Item [ConstantVariables.NUM_COL] [ConstantVariables.NUM_ROWS];
     private char[][] objList = new char [ConstantVariables.NUM_COL] [ConstantVariables.NUM_ROWS];
     private boolean gameOn = false;
+    private String[] loadedVals;
 
 
     /**
@@ -39,30 +40,40 @@ public class ItemProcess {
     /**
      * Constructor that creates AnimationApp items and populates wallList, coinList, objList
      */
-    public ItemProcess() {
+    public ItemProcess(String file) {
         this.setGameOn(true);
 
-        // The name of the file containing the display template.
-        String fileName = "maze.txt";
-        // Line Reference
-        String line = null;
+      // The name of the file containing the display template.
+      String fileName = file;
+
+      // Line Reference
+      String line = null;
+
 
       try {
         // FileReader reads text files in the default encoding.
         FileReader template = new FileReader(fileName);
         BufferedReader bTemplate = new BufferedReader(template);
         int y = 0;
-
+        
+        if(fileName.equals("savedGame.txt")) {
+        	bTemplate.readLine(); //skip first
+        }
+        
         while((line = bTemplate.readLine()) != null) {
 
           for(int x = 0; x < ConstantVariables.NUM_COL; x++) {
 
             char c = line.charAt(x);
 
-            if (c == ConstantVariables.COIN_CHAR) {
+            if (c == ConstantVariables.COIN_CHAR || c == ConstantVariables.EMPTY_CHAR) {	// for now.. treat empty space as a deactivated coin
 
                 this.objList[x][y] = '.'; // text-based only
                 Coin cCoin = new Coin(x, y);
+                if(c == ConstantVariables.EMPTY_CHAR) {
+                  Avatar temp = new Avatar(0,0);
+                  cCoin.setCoinOff(temp);
+                }
                 this.coinList.add(cCoin);
                 this.itemList[x][y] = cCoin;
 
@@ -97,8 +108,35 @@ public class ItemProcess {
       // this.objList[INITIAL_E_X][INITIAL_E_Y] = 'E';
 
     }
+    /**
+     * Constructor for creating game from saved game textfile.
+     */
+    public ItemProcess(String file, GameDisplay gd) {
+    	this(file);
+    	
+    	String line = null;
+		try {
+			
+			FileReader template = new FileReader(file);
+			BufferedReader bTemplate = new BufferedReader(template);
+			line = bTemplate.readLine();
+			if(line != null){
+				loadedVals = line.split(" ");
+			}
+			bTemplate.close();
+		} catch (FileNotFoundException e) {
+			System.out.println("Cannot open file '" + file + "'");
+		} catch (IOException e) {
+			System.out.println("Error reading file '" + file + "'");
+		}
+		
+		gd.loadSavedValues(loadedVals);
+    }
 
-
+    /**
+     * Returns the 2D array of Items.
+     * @return array of Items.
+     */
     public Item[][] getItemList() {
         return this.itemList;
     }
@@ -162,7 +200,6 @@ public class ItemProcess {
             System.out.println("xCoord" +thing.getXCoord() + " y " + thing.getYCoord());
     }
 
-
     /**
      * Collision checking of moving objects and walls / boundaries
      * @param thing the object to test
@@ -183,17 +220,18 @@ public class ItemProcess {
         return false;
     }
 
-
+    /**
+     * Change whether the game is on or off.
+     * @param onOff the boolean value of whether the game is on or not.
+     */
     private void setGameOn(boolean onOff) {
         this.gameOn = onOff;
     }
-
-
+    
     public boolean getGameOn() {
         return new Boolean(this.gameOn);
     }
-
-
+    
     public void avatarEnemyCollision(AI enemy) {
         // Enemy-Avatar collision check
         if (((Math.abs(enemy.getGoalDistanceX()) <= 1 && enemy.getGoalDistanceY() == 0) || (Math.abs(enemy.getGoalDistanceY()) <= 1 && enemy.getGoalDistanceX() == 0)))  {
@@ -207,5 +245,11 @@ public class ItemProcess {
         else {
             return;
         }
+    }
+
+    public void allCollected(Avatar player) {
+      if (player.getScore() >= coinList.size()) {
+        this.setGameOn(false);
+      }
     }
 }

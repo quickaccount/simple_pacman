@@ -25,6 +25,18 @@ public class AI extends MovableItem {
     }
 
 
+    private void avatarCollision(ItemProcess items) {
+        // Enemy-Avatar collision check
+        if (((Math.abs(this.getDistX()) <= 1 && this.getDistY() == 0) || (Math.abs(this.getDistY()) <= 1 && this.getDistX() == 0)))  {
+            //items.setGameOnOff(false);
+            return;
+        }
+        else {
+            return;
+        }
+    }
+
+
     /**
     * Sets the distance between the current object and the player
     * @param avatar the user/player: Pacman

@@ -1,6 +1,6 @@
 public class Avatar extends MovableItem {
 
-    private int score = 0;
+    private int score = 0; //Player score
 
 
     /**
@@ -8,8 +8,18 @@ public class Avatar extends MovableItem {
     * @param x initial x-coordinate
     * @param y initial y-coordinate
     */
-    public Avatar (int x, int y) {
+    public Avatar(int x, int y) {
         super(x, y);
+    }
+
+
+    /**
+    * Copy constructor
+    * @param toCopy the Avatar to be cloned
+    */
+    public Avatar(Avatar toCopy) {
+        this(toCopy.getXCoord(), toCopy.getYCoord());
+        this.score = toCopy.getScore();
     }
 
 
@@ -19,9 +29,18 @@ public class Avatar extends MovableItem {
     public void addScore() {
         this.score += 1;
     }
-
+    
+    /**
+     * Set the game score. 
+     * @param score the value that the score is to be set to.
+     */
+    public void setScore(int score) {
+    	this.score = score;
+    }    
+    
     /**
      * Used to return the player's score
+     * @return the current score
      */
     public int getScore() {
         return this.score;
@@ -31,8 +50,9 @@ public class Avatar extends MovableItem {
     /**
     * Takes user input and attempts to move the player
     * @param key the user's input, as a String
+    * @param itemList the list of all items on the screen
     */
-    public void mvAttempt(String key) {
+    public void mvAttempt(String key, ItemProcess itemList) {
 
         char takeFirst = key.charAt(0); //Takes the first character from the user's input
 
@@ -47,7 +67,7 @@ public class Avatar extends MovableItem {
         } else {
         }
 
+        itemList.allCollected(this); //Check for all coins collected
         this.setNewCoord(this.getDir(0) + this.getXCoord(), this.getDir(1) + this.getYCoord()); //Apply movement
-        return;
     }
 }
