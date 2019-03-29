@@ -17,6 +17,7 @@ public class ItemProcess {
     private char[][] objList = new char [ConstantVariables.NUM_COL] [ConstantVariables.NUM_ROWS];
     private boolean gameOn = false;
     private String[] loadedVals;
+    private boolean win;
 
 
     /**
@@ -55,18 +56,18 @@ public class ItemProcess {
         FileReader template = new FileReader(fileName);
         BufferedReader bTemplate = new BufferedReader(template);
         int y = 0;
-        
+
         if(fileName.equals("savedGame.txt")) {
-        	bTemplate.readLine(); //skip first
+          bTemplate.readLine(); //skip first
         }
-        
+
         while((line = bTemplate.readLine()) != null) {
 
           for(int x = 0; x < ConstantVariables.NUM_COL; x++) {
 
             char c = line.charAt(x);
 
-            if (c == ConstantVariables.COIN_CHAR || c == ConstantVariables.EMPTY_CHAR) {	// for now.. treat empty space as a deactivated coin
+            if (c == ConstantVariables.COIN_CHAR) {	// for now.. treat empty space as a deactivated coin
 
                 this.objList[x][y] = '.'; // text-based only
                 Coin cCoin = new Coin(x, y);
@@ -112,25 +113,25 @@ public class ItemProcess {
      * Constructor for creating game from saved game textfile.
      */
     public ItemProcess(String file, GameDisplay gd) {
-    	this(file);
-    	
-    	String line = null;
-		try {
-			
-			FileReader template = new FileReader(file);
-			BufferedReader bTemplate = new BufferedReader(template);
-			line = bTemplate.readLine();
-			if(line != null){
-				loadedVals = line.split(" ");
-			}
-			bTemplate.close();
-		} catch (FileNotFoundException e) {
-			System.out.println("Cannot open file '" + file + "'");
-		} catch (IOException e) {
-			System.out.println("Error reading file '" + file + "'");
-		}
-		
-		gd.loadSavedValues(loadedVals);
+      this(file);
+
+      String line = null;
+    try {
+
+      FileReader template = new FileReader(file);
+      BufferedReader bTemplate = new BufferedReader(template);
+      line = bTemplate.readLine();
+      if(line != null){
+        loadedVals = line.split(" ");
+      }
+      bTemplate.close();
+    } catch (FileNotFoundException e) {
+      System.out.println("Cannot open file '" + file + "'");
+    } catch (IOException e) {
+      System.out.println("Error reading file '" + file + "'");
+    }
+
+    gd.loadSavedValues(loadedVals);
     }
 
     /**
@@ -227,11 +228,28 @@ public class ItemProcess {
     private void setGameOn(boolean onOff) {
         this.gameOn = onOff;
     }
-    
+
     public boolean getGameOn() {
         return new Boolean(this.gameOn);
     }
-    
+
+
+    /**
+     * sets the win condition to true
+     */
+    private void winCondition() {
+        this.win = true;
+        this.setGameOn(false);
+    }
+
+
+    /**
+     * Check whether a gameOver was caused by a win or a loss
+     */
+    public boolean getWin() {
+        return this.win;
+    }
+
     public void avatarEnemyCollision(AI enemy) {
         // Enemy-Avatar collision check
         if (((Math.abs(enemy.getGoalDistanceX()) <= 1 && enemy.getGoalDistanceY() == 0) || (Math.abs(enemy.getGoalDistanceY()) <= 1 && enemy.getGoalDistanceX() == 0)))  {
@@ -248,8 +266,9 @@ public class ItemProcess {
     }
 
     public void allCollected(Avatar player) {
-      if (player.getScore() >= coinList.size()) {
-        this.setGameOn(false);
-      }
+        System.out.println(this.coinList.size());
+        if (player.getScore() >= this.coinList.size()) {
+            this.winCondition();
+        }
     }
 }
