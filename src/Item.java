@@ -1,15 +1,21 @@
 import constants.ConstantVariables;
 
+/**
+ * The Item class is the superclass of Wall, Coin and all MovableItems (Avatar and AI).
+ * An Item is any item that would be found in the maze.
+ *
+ */
 public abstract class Item {
 
-    private int xcoord;
-    private int ycoord;
+    private int xcoord;    // x coordinate of the Item
+    private int ycoord;    // y coordinate of the Item
 
     /**
-    * Constructor that creates a moveable object at the specified location
-    * @param x the initial x-coord
-    * @param y the initial y-coord
-    */
+     * Constructor that creates an Item at the specified location.
+     * 
+     * @param x the initial x-coord.
+     * @param y the initial y-coord.
+     */
     protected Item(int x, int y) {
         /* THIS IS FOR IF WE USE PIXELS FOR CREATION
         if (this instanceof AI || this instanceof Avatar) { //Ensure proper creation for ghosts and pacman only
@@ -39,8 +45,9 @@ public abstract class Item {
 
 
     /**
-    * Change only the x coordinate of the object
-    * @param xNew the new x position
+    * Change only the x coordinate of the Item.
+    * 
+    * @param xNew the new x position.
     */
     protected void setXCoord(int xNew){
         this.xcoord = xNew;
@@ -48,8 +55,9 @@ public abstract class Item {
 
 
     /**
-    * Change only the y coordinate of the movable object
-    * @param yNew the new y position
+    * Change only the y coordinate of the Item.
+    * 
+    * @param yNew the new y position.
     */
     protected void setYCoord(int yNew){
         this.ycoord = yNew;
@@ -57,8 +65,9 @@ public abstract class Item {
 
 
     /**
-    * Returns the object's current x coordinate
-    * @return an integer value for the x coordinate
+    * Returns the object's current x coordinate.
+    * 
+    * @return an integer value for the x coordinate.
     */
     public int getXCoord() {
         return this.xcoord;
@@ -66,8 +75,9 @@ public abstract class Item {
 
 
     /**
-    * Returns the object's current y coordinate
-    * @return an integer value for the y coordinate
+    * Returns the object's current y coordinate.
+    * 
+    * @return an integer value for the y coordinate.
     */
     public int getYCoord() {
         return this.ycoord;

@@ -3,272 +3,294 @@ import java.util.ArrayList;
 import constants.ConstantVariables;
 import java.lang.Math;
 
-
 /**
- * The ItemProcess class is an updated version of our text-based AnimationApp, but it was renamed to better reflect its functionality
- * This class is most of the logic behind the app. It loads in a text file and creates lists of objects
- * so that we can check collisions.
+ * The ItemProcess class is an updated version of our text-based AnimationApp,
+ * but it was renamed to better reflect its functionality. This class is most of
+ * the logic behind the app. It loads in a text file and creates lists of
+ * objects so that we can check collisions.
  */
 public class ItemProcess {
 
-    private ArrayList<Coin> coinList = new ArrayList<Coin>(); //Array of coins
-    private ArrayList<Wall> wallList = new ArrayList<Wall>(); //Array of walls
-    private Item[][] itemList = new Item [ConstantVariables.NUM_COL] [ConstantVariables.NUM_ROWS];
-    private char[][] objList = new char [ConstantVariables.NUM_COL] [ConstantVariables.NUM_ROWS];
-    private boolean gameOn = false;
-    private String[] loadedVals;
-    private boolean win;
+	private ArrayList<Coin> coinList = new ArrayList<Coin>(); // ArrayList of Coin objects in the maze
+	private ArrayList<Wall> wallList = new ArrayList<Wall>(); // ArrayList of Wall objects in the maze
+	private Item[][] itemList = new Item[ConstantVariables.NUM_COL][ConstantVariables.NUM_ROWS]; // 2D array of Items in the maze
+	private char[][] objList = new char[ConstantVariables.NUM_COL][ConstantVariables.NUM_ROWS]; // 2D array of char representations of
+																								// Items (for textbased display in console)
+	private boolean gameOn = false;
+	private String[] loadedVals;
+	private boolean win;
 
+	/**
+	 * Constructor that creates ItemProcess items and loads in data from the
+	 * specified text file to populate wallList, coinList, objList and itemList.
+	 * 
+	 * @param file the name of the text file to load in and use to create lists of Items.
+	 */
+	public ItemProcess(String file) {
+		this.setGameOn(true);
 
-    /**
-    * Return the full list of coins.
-    * @return an ArrayList with all coins inside
-    */
-    private ArrayList<Coin> getCoinList() {
-        return this.coinList;
-    }
+		// The name of the file containing the display template.
+		String fileName = file;
 
+		// Line Reference
+		String line = null;
 
-    /**
-    * Return list of all walls.
-    * @return an ArrayList with all the walls inside
-    */
-    private ArrayList<Wall> getWallList() {
-        return this.wallList;
-    }
+		try {
+			// FileReader reads text files in the default encoding.
+			FileReader template = new FileReader(fileName);
+			BufferedReader bTemplate = new BufferedReader(template);
+			int y = 0;
 
+			if (fileName.equals("savedGame.txt")) {
+				bTemplate.readLine(); // skip first
+			}
 
-    /**
-     * Constructor that creates AnimationApp items and populates wallList, coinList, objList
-     */
-    public ItemProcess(String file) {
-        this.setGameOn(true);
+			while ((line = bTemplate.readLine()) != null) {
 
-      // The name of the file containing the display template.
-      String fileName = file;
+				for (int x = 0; x < ConstantVariables.NUM_COL; x++) {
 
-      // Line Reference
-      String line = null;
+					char c = line.charAt(x);
 
+					if (c == ConstantVariables.COIN_CHAR) { // for now.. treat empty space as a deactivated coin
 
-      try {
-        // FileReader reads text files in the default encoding.
-        FileReader template = new FileReader(fileName);
-        BufferedReader bTemplate = new BufferedReader(template);
-        int y = 0;
+						this.objList[x][y] = '.'; // text-based only
+						Coin cCoin = new Coin(x, y);
+						if (c == ConstantVariables.EMPTY_CHAR) {
+							Avatar temp = new Avatar(0, 0);
+							cCoin.setCoinOff(temp);
+						}
+						this.coinList.add(cCoin);
+						this.itemList[x][y] = cCoin;
 
-        if(fileName.equals("savedGame.txt")) {
-          bTemplate.readLine(); //skip first
-        }
+					} else if (c == ConstantVariables.WALL_CHAR) {
 
-        while((line = bTemplate.readLine()) != null) {
+						this.objList[x][y] = 'X'; // text-based
+						Wall w = new Wall(x, y);
+						this.wallList.add(w);
+						this.itemList[x][y] = w;
+					} else {
+						this.objList[x][y] = ' '; // empty-coin
+					}
+				}
+				y++;
+			}
+			// Close default_display.txt
+			bTemplate.close();
+		}
+		// Error checking
+		catch (FileNotFoundException ex) {
+			System.out.println("Cannot open file '" + fileName + "'");
+		} catch (IOException ex) {
+			System.out.println("Error reading file '" + fileName + "'");
+		}
 
-          for(int x = 0; x < ConstantVariables.NUM_COL; x++) {
+		// set default Avatar location
+		// this.objList[INITIAL_X][INITIAL_Y] = 'A';
+		// set default Enemy location
+		// this.objList[INITIAL_E_X][INITIAL_E_Y] = 'E';
 
-            char c = line.charAt(x);
+	}
 
-            if (c == ConstantVariables.COIN_CHAR) {	// for now.. treat empty space as a deactivated coin
+	/**
+	 * Constructor for creating a game from a saved game text file.
+	 * 
+	 * @param file the name of the saved game text file.
+	 * @param gd the GameDisplay object that we would like to apply the loaded values to.
+	 */
+	public ItemProcess(String file, GameDisplay gd) {
+		this(file);
 
-                this.objList[x][y] = '.'; // text-based only
-                Coin cCoin = new Coin(x, y);
-                if(c == ConstantVariables.EMPTY_CHAR) {
-                  Avatar temp = new Avatar(0,0);
-                  cCoin.setCoinOff(temp);
-                }
-                this.coinList.add(cCoin);
-                this.itemList[x][y] = cCoin;
+		String line = null;
+		try {
 
+			FileReader template = new FileReader(file);
+			BufferedReader bTemplate = new BufferedReader(template);
+			line = bTemplate.readLine();
+			if (line != null) {
+				loadedVals = line.split(" ");
+			}
+			bTemplate.close();
+		} catch (FileNotFoundException e) {
+			System.out.println("Cannot open file '" + file + "'");
+		} catch (IOException e) {
+			System.out.println("Error reading file '" + file + "'");
+		}
 
-            } else if (c == ConstantVariables.WALL_CHAR) {
+		gd.loadSavedValues(loadedVals);
+	}
+	
+	
+	/**
+	 * Return the full list of coins in the maze.
+	 * 
+	 * @return an ArrayList with all coins inside
+	 */
+	private ArrayList<Coin> getCoinList() {
+		return this.coinList;
+	}
 
-                this.objList[x][y] = 'X'; //text-based
-                Wall w = new Wall(x, y);
-                this.wallList.add(w);
-                this.itemList[x][y] = w;
-            }
-            else {
-                this.objList[x][y] = ' '; // empty-coin
-            }
-          }
-            y++;
-        }
-          // Close default_display.txt
-          bTemplate.close();
-      }
-      // Error checking
-      catch(FileNotFoundException ex) {
-        System.out.println("Cannot open file '" + fileName + "'");
-      }
-      catch(IOException ex) {
-        System.out.println("Error reading file '" + fileName + "'");
-      }
+	/**
+	 * Return list of all walls in the maze.
+	 * 
+	 * @return an ArrayList with all the walls inside
+	 */
+	private ArrayList<Wall> getWallList() {
+		return this.wallList;
+	}
 
-      // set default Avatar location
-      // this.objList[INITIAL_X][INITIAL_Y] = 'A';
-      // set default Enemy location
-      // this.objList[INITIAL_E_X][INITIAL_E_Y] = 'E';
+	/**
+	 * Returns the 2D array of Items.
+	 * 
+	 * @return array of Items.
+	 */
+	public Item[][] getItemList() {
+		return this.itemList;
+	}
 
-    }
-    /**
-     * Constructor for creating game from saved game textfile.
-     */
-    public ItemProcess(String file, GameDisplay gd) {
-      this(file);
+	/**
+	 * Returns a printable list with char representations of objects
+	 * 
+	 * @return list of char represented objects
+	 */
+	public char[][] getObjList() {
+		return this.objList;
+	}
 
-      String line = null;
-    try {
+	/**
+	 * Returns the char representations of the object at the specified index.
+	 * 
+	 * @return the char at the specified index in the objList array.
+	 */
+	public char getObjList(int x, int y) {
+		return this.objList[x][y];
+	}
 
-      FileReader template = new FileReader(file);
-      BufferedReader bTemplate = new BufferedReader(template);
-      line = bTemplate.readLine();
-      if(line != null){
-        loadedVals = line.split(" ");
-      }
-      bTemplate.close();
-    } catch (FileNotFoundException e) {
-      System.out.println("Cannot open file '" + file + "'");
-    } catch (IOException e) {
-      System.out.println("Error reading file '" + file + "'");
-    }
+	/**
+	 * Collision checking of moving objects.
+	 * Checks for MovableItem collision with coins and walls.
+	 * 
+	 * @param thing the MovableItem to process movement for.
+	 */
+	public void processMv(MovableItem thing) {
+		
+		if (this.wallCheck(thing) == true) {	// check for wall collision
+			// System.out.println("hit wall");
+			return;
+		}
 
-    gd.loadSavedValues(loadedVals);
-    }
+		// coin collision checking
+		ArrayList<Coin> cL = this.getCoinList();
+		Item item = this.getItemList()[thing.getXCoord() / 16][thing.getYCoord() / 16];
 
-    /**
-     * Returns the 2D array of Items.
-     * @return array of Items.
-     */
-    public Item[][] getItemList() {
-        return this.itemList;
-    }
+		// Is thing moving off coin or empty? display the position that the avatar moved off of
+		if (thing.getOnCoin()) {
+			thing.setOnCoin(false);
+		}
 
+		// check if MovableItem moving onto a coin turn coin off if appropriate, then move Movable item
+		if (this.getItemList()[thing.getNewXCoord()][thing.getNewYCoord()] instanceof Coin) {
+			Coin coinNewLoc = (Coin) this.getItemList()[thing.getNewXCoord()][thing.getNewYCoord()];
+			if ((thing instanceof Avatar) && coinNewLoc.getCoinIsOn()) {
+				coinNewLoc.setCoinOff((Avatar) thing);
+				this.objList[thing.getXCoord()][thing.getYCoord()] = ' ';
+			}
+			thing.setOnCoin(true);
+		}
 
-    /**
-     * Returns a printable list with char representations of objects
-     * @return list of char represented objects
-     */
-    public char[][] getObjList() {
-        return this.objList;
-    }
+		// update thing Coordinates
+		thing.setXYCoord(thing.getNewXCoord(), thing.getNewYCoord());
+		// set new avatar location in printable object list
+		if (thing instanceof Avatar) {
+			System.out.println("xCoord" + thing.getXCoord() + " y " + thing.getYCoord());
+		} else
+			System.out.println("xCoord" + thing.getXCoord() + " y " + thing.getYCoord());
+	}
 
+	/**
+	 * Collision checking of moving objects and walls/boundaries.
+	 * 
+	 * @param thing the MovableItem we want to check for wall collisions.
+	 * @return true if thing is at a wall, false if not at a wall.
+	 **/
+	public boolean wallCheck(MovableItem thing) {
+		if ((thing.getNewXCoord() < 0) || (thing.getNewXCoord() > ConstantVariables.NUM_COL - 1)
+				|| (thing.getNewYCoord() < 0) || (thing.getNewYCoord() > ConstantVariables.NUM_ROWS - 1)) {
+			System.out.println("Attempted to leave boundary");
+			return true;
+		}
+		ArrayList<Wall> wL = this.getWallList();
+		for (Wall w : wL) {
+			int xWall = w.getXCoord();
+			int yWall = w.getYCoord();
+			if ((thing.getNewXCoord() == xWall) && (thing.getNewYCoord() == yWall)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-    /**
-     * Returns a printable list with char representations of objects
-     * @return list of char represented objects
-     */
-    public char getObjList(int x, int y) {
-        return this.objList[x][y];
-    }
+	/**
+	 * Change whether the game is on or off.
+	 * 
+	 * @param onOff the boolean value of whether the game is on or not.
+	 */
+	private void setGameOn(boolean onOff) {
+		this.gameOn = onOff;
+	}
 
+	/**
+	 * Get the boolean value of whether the game is on or off.
+	 * 
+	 * @return the value of the gameOn boolean.
+	 */
+	public boolean getGameOn() {
+		return new Boolean(this.gameOn);
+	}
 
-    /**
-    * Collision checking of moving objects
-    * @param thing the object to test
-    */
-    public void processMv(MovableItem thing) {
-        if (this.wallCheck(thing) == true) {
-            //System.out.println("hit wall");
-            return;
-        }
+	/**
+	 * Sets the win condition to true. Turns game off.
+	 */
+	private void winCondition() {
+		this.win = true;
+		this.setGameOn(false);
+	}
 
-        //coin collision checking
-        ArrayList<Coin> cL = this.getCoinList();
-        Item item = this.getItemList()[thing.getXCoord() / 16][thing.getYCoord() /16];
+	/**
+	 * Check whether a gameOver was caused by a win or a loss.
+	 */
+	public boolean getWin() {
+		return this.win;
+	}
 
-        // Is thing moving off coin or empty? display the position that the avatar moved off of
-        if (thing.getOnCoin()) {
-            thing.setOnCoin(false);
-        }
+	/**
+	 * Checks for collision of an Avatar with an AI object.
+	 * 
+	 * @param enemy the enemy to check for collision with.
+	 */
+	public void avatarEnemyCollision(AI enemy) {
+		// Enemy-Avatar collision check
+		if (((Math.abs(enemy.getGoalDistanceX()) <= 1 && enemy.getGoalDistanceY() == 0)
+				|| (Math.abs(enemy.getGoalDistanceY()) <= 1 && enemy.getGoalDistanceX() == 0))) {
+			System.out.println("game over");
+			System.out.println("game over");
+			System.out.println("game over");
+			System.out.println("game over");
+			this.setGameOn(false);
+			return;
+		} else {
+			return;
+		}
+	}
 
-      // check if MovableItem moving onto a coin turn coin off if appropriate, then move moveable item
-        if (this.getItemList()[thing.getNewXCoord()][thing.getNewYCoord()] instanceof Coin) {
-            Coin coinNewLoc = (Coin)this.getItemList()[thing.getNewXCoord()][thing.getNewYCoord()];
-            if ((thing instanceof Avatar) && coinNewLoc.getCoinIsOn()) {
-                coinNewLoc.setCoinOff((Avatar)thing);
-                this.objList[thing.getXCoord()][thing.getYCoord()] = ' ';
-            }
-            thing.setOnCoin(true);
-        }
-
-
-        // update thing Coordinates
-        thing.setXYCoord(thing.getNewXCoord(), thing.getNewYCoord());
-        // set new avatar location in printable object list
-        if (thing instanceof Avatar) {
-            System.out.println("xCoord" +thing.getXCoord() + " y " + thing.getYCoord());
-        }
-        else
-            System.out.println("xCoord" +thing.getXCoord() + " y " + thing.getYCoord());
-    }
-
-    /**
-     * Collision checking of moving objects and walls / boundaries
-     * @param thing the object to test
-     **/
-    public boolean wallCheck(MovableItem thing) {
-        if ((thing.getNewXCoord() < 0) || (thing.getNewXCoord() > ConstantVariables.NUM_COL - 1) || (thing.getNewYCoord() < 0) || (thing.getNewYCoord() > ConstantVariables.NUM_ROWS - 1)) {
-            System.out.println("Attempted to leave boundary");
-            return true;
-        }
-        ArrayList<Wall> wL = this.getWallList();
-        for (Wall w: wL) {
-            int xWall = w.getXCoord();
-            int yWall = w.getYCoord();
-            if ((thing.getNewXCoord() == xWall) && (thing.getNewYCoord() == yWall)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Change whether the game is on or off.
-     * @param onOff the boolean value of whether the game is on or not.
-     */
-    private void setGameOn(boolean onOff) {
-        this.gameOn = onOff;
-    }
-
-    public boolean getGameOn() {
-        return new Boolean(this.gameOn);
-    }
-
-
-    /**
-     * sets the win condition to true
-     */
-    private void winCondition() {
-        this.win = true;
-        this.setGameOn(false);
-    }
-
-
-    /**
-     * Check whether a gameOver was caused by a win or a loss
-     */
-    public boolean getWin() {
-        return this.win;
-    }
-
-    public void avatarEnemyCollision(AI enemy) {
-        // Enemy-Avatar collision check
-        if (((Math.abs(enemy.getGoalDistanceX()) <= 1 && enemy.getGoalDistanceY() == 0) || (Math.abs(enemy.getGoalDistanceY()) <= 1 && enemy.getGoalDistanceX() == 0)))  {
-            System.out.println("game over");
-            System.out.println("game over");
-            System.out.println("game over");
-            System.out.println("game over");
-            this.setGameOn(false);
-            return;
-        }
-        else {
-            return;
-        }
-    }
-
-    public void allCollected(Avatar player) {
-        System.out.println(this.coinList.size());
-        if (player.getScore() >= this.coinList.size()) {
-            this.winCondition();
-        }
-    }
+	/**
+	 * End game condition. If all coins are collected, turns the game off.
+	 * 
+	 * @param player the Pac-Man avatar player that collects coins.
+	 */
+	public void allCollected(Avatar player) {
+		System.out.println(this.coinList.size());
+		if (player.getScore() >= this.coinList.size()) {
+			this.winCondition();
+		}
+	}
 }

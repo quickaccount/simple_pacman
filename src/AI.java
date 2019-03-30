@@ -2,6 +2,11 @@ import java.lang.Math;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * The AI class extends the abstract class MovableItem. An AI object
+ * represents an enemy/ghost object at specific (x,y) coordinates in the
+ * Pac-Man maze.
+ */
 public class AI extends MovableItem {
 
 
@@ -14,17 +19,23 @@ public class AI extends MovableItem {
     private int simEnemyYCoord;
 
     /**
-    * Constructor that creates an AI ghost
-    * @param x initial x-coordinate
-    * @param y initial y-coordinate
-    * @param dist[0] the displacement between the enemy and avatar x-coordinates
-    * @param dist[1] the displacement between the enemy and avatar y-coordinates
+    * Constructor that creates an AI ghost.
+    * 
+    * @param x initial x-coordinate.
+    * @param y initial y-coordinate.
+    * @param dist[0] the displacement between the enemy and avatar x-coordinates.
+    * @param dist[1] the displacement between the enemy and avatar y-coordinates.
     */
     public AI (int x, int y) {
         super(x, y);
     }
 
 
+    /**
+     * Checks for AI collision with Avatar.
+     * 
+     * @param items the ItemProcess object used for processing.
+     */
     private void avatarCollision(ItemProcess items) {
         // Enemy-Avatar collision check
         if (((Math.abs(this.getDistX()) <= 1 && this.getDistY() == 0) || (Math.abs(this.getDistY()) <= 1 && this.getDistX() == 0)))  {
@@ -38,8 +49,9 @@ public class AI extends MovableItem {
 
 
     /**
-    * Sets the distance between the current object and the player
-    * @param avatar the user/player: Pacman
+    * Sets the distance between the current object and the player.
+    * 
+    * @param avatar the user/player: Pacman.
     */
     private void setGoalDistance(Avatar avatar) {
         this.dist[0] = this.getXCoord() - avatar.getXCoord();

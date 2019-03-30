@@ -1,14 +1,19 @@
-import constants.ConstantVariables;
+//import constants.ConstantVariables;
 
+/**
+ * The MovableItem class extends the abstract class Item and is, itself,
+ * abstract. A MovableItem object is any object that moves (AI and Avatar).
+ */
 public abstract class MovableItem extends Item {
 
-    private int[] dir = new int[] {0, 0};
-    private int[] newCoord = new int[] {0, 0}; //Store coordinates as one item
-    private boolean onCoin;
+    private int[] dir = new int[] {0, 0};    // stores the x and y direction of the Item
+    private int[] newCoord = new int[] {0, 0};    // store coordinates of the Item as one item
+    private boolean onCoin;    // holds whether the Item is on a coin or not
 
 
     /**
-    * Constructor that creates a moveable object at the specified location
+    * Constructor that creates a moveable object at the specified location.
+    * 
     * @param x the initial x-coord
     * @param y the initial y-coord
     */
@@ -18,38 +23,46 @@ public abstract class MovableItem extends Item {
 
 
     /**
-     * Returns T or F depending on if the two MovableItems are occupying the same square of space.
-     * @param item the MovableItem we want to check our intersection with
-     * @return	either 'true' or 'false', depending on whether the two MovableItems are intersecting or not.
-     */
+	 * Returns T or F depending on if the two MovableItems are at the same
+	 * coordinates.
+	 * 
+	 * @param item the MovableItem we want to check our intersection with.
+	 * @return either 'true' or 'false', depending on whether the two MovableItems
+	 *         are intersecting or not.
+	 */
     public boolean intersects(MovableItem item)
     {
       return (item.getXCoord()==this.getXCoord() && item.getYCoord()==this.getYCoord());
     }
 
-    /**
-     * Sets the onCoin variable. Depends on if the player is on a coin
-     * @param onOrOff a boolean that is true if the player is currently on a coin, and false otherwise
-     */
+	/**
+	 * Sets the onCoin variable. Depends on if the player is on a coin or not.
+	 * 
+	 * @param onOrOff a boolean that is true if the player is currently on a coin,
+	 *                and false otherwise.
+	 */
     protected void setOnCoin (boolean onOrOff) {
         this.onCoin = onOrOff;
     }
 
 
     /**
-     * Returns T or F depending on if the player is currently on a coin
-     * @return either 'true' or 'false', depending on what onCoin is currently set to
-     */
+	 * Returns T or F depending on if the player is currently on a coin.
+	 * 
+	 * @return either 'true' or 'false', depending on what onCoin is currently set
+	 *         to.
+	 */
     public boolean getOnCoin() {
         return this.onCoin;
     }
 
 
     /**
-    * Updates the object's x and y coordinates
-    * @param xNew the new x position
-    * @param yNew the new y position
-    */
+	 * Updates the object's x and y coordinates.
+	 * 
+	 * @param xNew the new x position.
+	 * @param yNew the new y position.
+	 */
     public void setXYCoord(int xNew, int yNew) {
         super.setXCoord(xNew);
         super.setYCoord(yNew);
@@ -57,8 +70,9 @@ public abstract class MovableItem extends Item {
 
 
     /**
-    * Change only the x coordinate of the object
-    * @param xNew the new x position
+    * Change only the x coordinate of the object.
+    * 
+    * @param xNew the new x position.
     */
     @Override
     public void setXCoord(int xNew){
@@ -67,8 +81,9 @@ public abstract class MovableItem extends Item {
 
 
     /**
-    * Change only the y coordinate of the movable object
-    * @param yNew the new y position
+    * Change only the y coordinate of the movable object.
+    * 
+    * @param yNew the new y position.
     */
     @Override
     public void setYCoord(int yNew){
@@ -77,8 +92,9 @@ public abstract class MovableItem extends Item {
 
 
     /**
-    * Returns the object's current x coordinate
-    * @return an integer value for the x coordinate
+    * Returns the object's current x coordinate.
+    * 
+    * @return an integer value for the x coordinate.
     */
     @Override
     public int getXCoord() {
@@ -87,8 +103,9 @@ public abstract class MovableItem extends Item {
 
 
     /**
-    * Returns the object's current y coordinate
-    * @return an integer value for the y coordinate
+    * Returns the object's current y coordinate.
+    * 
+    * @return an integer value for the y coordinate.
     */
     @Override
     public int getYCoord() {
@@ -97,8 +114,9 @@ public abstract class MovableItem extends Item {
 
 
     /**
-    * Returns int from first index of newCoord list
-    * @return New x-coordinate
+    * Returns int from first index of newCoord list.
+    * 
+    * @return New x-coordinate.
     */
     public int getNewXCoord() {
         return this.newCoord[0];
@@ -106,8 +124,9 @@ public abstract class MovableItem extends Item {
 
 
     /**
-     * Returns int from first index of newCoord list
-     * @return New x-coordinate
+     * Returns int from second index of newCoord list.
+     * 
+     * @return New y-coordinate.
      */
     public int getNewYCoord() {
         return this.newCoord[1];
@@ -115,30 +134,19 @@ public abstract class MovableItem extends Item {
 
 
     /**
-    * Change the x and y coordinates in the array of the object
-    * @param xNew the new x position
-    * @param yNew the new y position
+    * Change the x and y coordinates in the array of the object.
+    * 
+    * @param xNew the new x position.
+    * @param yNew the new y position.
     */
     protected void setNewCoord(int xNew, int yNew) {
         this.newCoord[0] = xNew;
         this.newCoord[1] = yNew;
     }
 
-
     /**
-    * Returns the object's current location
-    * @return an array with the current x and y coords
-    */
-    /*
-    public int[] getObjectLoc() {
-        // int[] ObjLoc = new int [] {(int)this.getBox().getX(), (int)this.getBox().getY()};
-        int[] ObjLoc = {this.getXCoord(), this.getYCoord()};
-        return ObjLoc;
-    }
-    */
-
-    /**
-    * Get the object's current direction
+    * Get the object's current direction.
+    * 
     * @param xy the index of the dir array to be accessed.
     * @return the direction of the object as an integer.
     */
@@ -149,6 +157,7 @@ public abstract class MovableItem extends Item {
 
     /**
     * Set the direction of the object.
+    * 
     * @param x the x direction: 1, 0, -1
     * @param y the y direction: 1, 0, -1
     */
@@ -156,4 +165,17 @@ public abstract class MovableItem extends Item {
         this.dir[0] = x;
         this.dir[1] = y;
     }
+    
+    /**
+    * Returns the object's current location
+    * 
+    * @return an array with the current x and y coords
+    */
+    /*
+    public int[] getObjectLoc() {
+        // int[] ObjLoc = new int [] {(int)this.getBox().getX(), (int)this.getBox().getY()};
+        int[] ObjLoc = {this.getXCoord(), this.getYCoord()};
+        return ObjLoc;
+    }
+    */
 }

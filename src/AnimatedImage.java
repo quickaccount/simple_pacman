@@ -1,19 +1,21 @@
+import javafx.scene.image.Image;
+
 /**
- * This is a class used for creating Animations/AnimatedImages. An AnimatedImage has an array of Images (frames) that
+ * The AnimatedImage class is a class used for creating Animations/AnimatedImages. An AnimatedImage has an array of Images (frames) that
  * it loops through to create an animation and a duration of how long the animation is to last.
  * 
  * @author MichaelJW, Drademacher, Axelkennedal, Introduction-to-JavaFX-for-Game-Development/AnimatedImage.java (2016),
  * GitHub repository, https://github.com/tutsplus/Introduction-to-JavaFX-for-Game-Development/blob/master/AnimatedImage.java (Cited Source)
  */
-import javafx.scene.image.Image;
 
 public class AnimatedImage
 {
-    public Image[] frames;
-    public double duration;
+    public Image[] frames;    // array of images/frames in the animation
+    public double duration;    // duration of one full animation loop
     
     /**
      * Ensures that frames are each displayed for equal amount of time in the animation.
+     * 
      * @param time the amount of time in seconds that the animation has been running for.
      * @return the image/frame to be shown in the animation.
      */

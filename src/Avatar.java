@@ -1,12 +1,18 @@
+
+/**
+ * The Avatar class extends the abstract class MovableItem. An Avatar object represents a
+ * user/player/pacman objects at specific (x,y) coordinates in the Pac-Man maze.
+ */
 public class Avatar extends MovableItem {
 
     private int score = 0; //Player score
 
 
     /**
-    * Constructor, creates the player
-    * @param x initial x-coordinate
-    * @param y initial y-coordinate
+    * Constructor, creates the player at specified coordinates.
+    * 
+    * @param x initial x-coordinate.
+    * @param y initial y-coordinate.
     */
     public Avatar(int x, int y) {
         super(x, y);
@@ -14,7 +20,8 @@ public class Avatar extends MovableItem {
 
 
     /**
-    * Copy constructor
+    * Copy constructor.
+    * 
     * @param toCopy the Avatar to be cloned
     */
     public Avatar(Avatar toCopy) {
@@ -24,7 +31,7 @@ public class Avatar extends MovableItem {
 
 
     /**
-    * Used to add to the player's score
+    * Used to add to the player's score.
     */
     public void addScore() {
         this.score += 1;
@@ -32,6 +39,7 @@ public class Avatar extends MovableItem {
     
     /**
      * Set the game score. 
+     * 
      * @param score the value that the score is to be set to.
      */
     public void setScore(int score) {
@@ -39,8 +47,9 @@ public class Avatar extends MovableItem {
     }    
     
     /**
-     * Used to return the player's score
-     * @return the current score
+     * Used to return the player's score.
+     * 
+     * @return the current score.
      */
     public int getScore() {
         return this.score;
@@ -48,7 +57,8 @@ public class Avatar extends MovableItem {
 
 
     /**
-    * Takes user input and attempts to move the player
+    * Takes user input and attempts to move the player accordingly.
+    * 
     * @param key the user's input, as a String
     * @param itemList the list of all items on the screen
     */
