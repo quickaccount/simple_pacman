@@ -1,4 +1,4 @@
-54 27 30 432 480 22 26 352 416
+43 20 29 320 464 18 12 288 192
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 X.............X.............X
 X.............X.............X
@@ -13,21 +13,21 @@ XXX..X..XXXX..X..XXXX..X..XXX
 X....X.................X....X
 X....X........         X....X
 X..XXX..X..XX. .XX..X. XXX..X
-X.......X..XX..X. .....X
-X.......X..XX..X. .....X
-X..XXX..X..XX..X. XXX..X
+X.......X..X     X..X. .....X
+X.......X..X     X..X. .....X
+X..XXX..X..X     X..X. XXX..X
 X....X..X..XXXXXXX..X. X....X
 X....X..X...........X. X....X
 XXX..X..X..XXXXXXX..X. X..XXX
-X..................... .....X
-X..................... .....X
-X..XXX..XXXX..X..XXXX. XXX..X
-X....X........X......  X....X
-X....X........X....    X....X
-XXX..X..X..XXXXXXX. X  X..XXX
-X.......X.....X...  X.......X
-X.......X.....X    .X.......X
-X..XXX..XXXX..X .XXXX..XXX  X
-X.............. .........   X
-X..............           . X
+X.....................      X
+X.......................... X
+X..XXX..XXXX..X..XXXX..XXX. X
+X....X........X........X... X
+X....X........X........X.   X
+XXX..X..X..XXXXXXX..X..X. XXX
+X.......X.....X.....X.... ..X
+X.......X.....X.....X....   X
+X..XXX..XXXX..X..XXXX..XXX. X
+X...................        X
+X...........................X
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXX

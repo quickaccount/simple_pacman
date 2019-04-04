@@ -51,13 +51,14 @@ public class ItemProcess {
 
 					char c = line.charAt(x);
 
-					if (c == ConstantVariables.COIN_CHAR) { // for now.. treat empty space as a deactivated coin
+					if (c == ConstantVariables.COIN_CHAR || c == ConstantVariables.EMPTY_CHAR) { // for now.. treat empty space as a deactivated coin
 
-						this.objList[x][y] = '.'; // text-based only
 						Coin cCoin = new Coin(x, y);
 						if (c == ConstantVariables.EMPTY_CHAR) {
 							Avatar temp = new Avatar(0, 0);
 							cCoin.setCoinOff(temp);
+						} else {
+							this.objList[x][y] = '.'; // text-based only
 						}
 						this.coinList.add(cCoin);
 						this.itemList[x][y] = cCoin;
@@ -288,8 +289,8 @@ public class ItemProcess {
 	 * @param player the Pac-Man avatar player that collects coins.
 	 */
 	public void allCollected(Avatar player) {
-		System.out.println(this.coinList.size());
-		if (player.getScore() >= this.coinList.size()) {
+		System.out.println(this.coinList.size()-ConstantVariables.SPACES_IN_MID);
+		if (player.getScore() >= this.coinList.size()-ConstantVariables.SPACES_IN_MID) {
 			this.winCondition();
 		}
 	}
