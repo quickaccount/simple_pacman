@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.AudioClip;
 
 /**
  * GameDisplay is the main class of this program. It is a JavaFX Application and
@@ -34,7 +35,11 @@ public class GameDisplay extends Application {
 
 	// image arrays for blinky movement
 	Image[] rightBlinky = new Image[2];
-
+	
+	AudioClip introMusic = new AudioClip(this.getClass().getResource("pacman_beginning.wav").toString());
+	AudioClip endingSound = new AudioClip(this.getClass().getResource("pacman_death.wav").toString());
+	AudioClip munchSound = new AudioClip(this.getClass().getResource("pacman_chomp.wav").toString());
+	
 	// keeps track of x coord of main menu Pac-Man animation
 	private int menuAnimX = 0;
 
@@ -97,7 +102,7 @@ public class GameDisplay extends Application {
 	public void start(Stage stage) throws Exception {
 
 		// MAIN MENU SCENE !!!!!!!!!!!!!!!!!!!!!
-
+		introMusic.play();
 		VBox layout1 = new VBox(20);
 		Canvas menuCanvas = new Canvas(ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT);
 		layout1.getChildren().add(menuCanvas);
@@ -108,7 +113,7 @@ public class GameDisplay extends Application {
 		// updates visual display approx 60 times/seconds
 		Image title = new Image("title.png");
 		new AnimationTimer() {
-
+			
 			public void handle(long currentNanoTime) {
 
 				gcMenu.setFill(Color.BLACK);
@@ -141,12 +146,16 @@ public class GameDisplay extends Application {
 			case N: // if they press n key
 				gameStarted = true; // game has begun
 				stage.setScene(gamePlay); // change the scene to the game scene
+				munchSound.setCycleCount(AudioClip.INDEFINITE);
+				munchSound.play();
 				break;
 
 			case L: // if pressed l
 				items = new ItemProcess("savedGame.txt", GameDisplay.this); // process the game with saved game text file
 				gameStarted = true;
 				stage.setScene(gamePlay);
+				munchSound.setCycleCount(AudioClip.INDEFINITE);
+				munchSound.play();
 				break;
 			}
 		});
@@ -203,6 +212,8 @@ public class GameDisplay extends Application {
 
 				// display End Game and stop application
 				if (items.getGameOn() == false) { // avatar.intersects(enemy)if pacman and the ghost intersect
+					munchSound.stop();
+					endingSound.play();
 					gc.setFont(Font.font("Verdana", 20));
 					gc.setFill(Color.BLACK);
 					gc.fillRect(0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT); // black out the screen
@@ -213,7 +224,7 @@ public class GameDisplay extends Application {
 					} else {
 						gc.setFill(Color.BLUE);
 						gc.fillText("You Win, kudos!", ConstantVariables.WINDOW_WIDTH / 2 - 65,
-								ConstantVariables.WORLD_HEIGHT / 2 - 20); // display blue "You Win, kudos!" string
+								ConstantVariables.WORLD_HEIGHT / 2 - 30); // display blue "You Win, kudos!" string
 					}
 					stop(); // stop the application
 				}
