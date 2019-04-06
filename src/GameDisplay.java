@@ -52,6 +52,7 @@ public class GameDisplay extends Application {
 
 	private int mvRefreshCount; // counter to slow down movements
 	private boolean gameStarted = false; // true when we leave main menu and go to game
+	private boolean gamePaused = false;
 
 	ItemProcess items = new ItemProcess("maze.txt");
 	AnimatedImage pacman = new AnimatedImage();
@@ -257,38 +258,50 @@ public class GameDisplay extends Application {
 				if (items.getGameOn() == true) {
 					switch (event.getCode()) {
 					case W:
-						input = "w";
-						pacman.frames = upPacman;
-						timedMove(input);
+						if(!gamePaused) {
+							input = "w";
+							pacman.frames = upPacman;
+							timedMove(input);
+						}
 						break;
 					case A:
-						input = "a";
-						pacman.frames = leftPacman;
-						timedMove(input);
+						if(!gamePaused) {
+							input = "a";
+							pacman.frames = leftPacman;
+							timedMove(input);
+						}
 						break;
 					case S:
-						input = "s";
-						pacman.frames = downPacman;
-						timedMove(input);
+						if(!gamePaused) {
+							input = "s";
+							pacman.frames = downPacman;
+							timedMove(input);
+						}
 						break;
 					case D:
-						input = "d";
-						pacman.frames = rightPacman;
-						timedMove(input);
+						if(!gamePaused) {
+							input = "d";
+							pacman.frames = rightPacman;
+							timedMove(input);
+						}
 						break;
 					case P:
 						try {
-							saveToTextFile("savedGame.txt");
-							game.stop();
+							if(!gamePaused) {
+								saveToTextFile("savedGame.txt");
+								game.stop();
+							}
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
 						break;
 					case SPACE:
+						gamePaused = true;
 						game.stop();
 						break;
 					case SHIFT:
 						game.start();
+						gamePaused = false;
 						break;
 					}
 				}
