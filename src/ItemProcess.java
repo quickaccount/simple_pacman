@@ -236,7 +236,7 @@ public class ItemProcess {
 	 * 
 	 * @param onOff the boolean value of whether the game is on or not.
 	 */
-	private void setGameOn(boolean onOff) {
+	public void setGameOn(boolean onOff) {
 		this.gameOn = onOff;
 	}
 

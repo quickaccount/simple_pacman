@@ -124,8 +124,9 @@ public class GameDisplay extends Application {
 				gcPaused.fillText("GAME PAUSED", 50, 160); // draw message string
 				gcPaused.setFont(Font.font("Verdana", 20));
 				gcPaused.setFill(Color.WHITE);
-				gcPaused.fillText("Press [SHIFT] to resume your game.", 60, 300); // draw message strings
-				gcPaused.fillText("Press [N] to start a new game.", 70, 350);
+				gcPaused.fillText("Press [SHIFT] to resume your game.", 55, 250); // draw message strings
+				gcPaused.fillText("Press [N] to start a new game.", 70, 300);
+				gcPaused.fillText("Press [S] to save your current\n            game progress.", 70, 350);
 			}
 			
 		}.start();
@@ -143,6 +144,19 @@ public class GameDisplay extends Application {
 						stage.setScene(gamePlay);
 						game.start();
 						gamePaused = false;
+						break;
+					case S:
+						try {
+							saveToTextFile("savedGame.txt");
+							//game.stop();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						break;
+					case N:
+						stage.setScene(mainMenu);
+						game.start();
+						restartGame();
 						break;
 					}
 				}
@@ -263,19 +277,22 @@ public class GameDisplay extends Application {
 				if (items.getGameOn() == false) { // avatar.intersects(enemy)if pacman and the ghost intersect
 					munchSound.stop();
 					endingSound.play();
-					gc.setFont(Font.font("Verdana", 20));
+					gc.setFont(Font.font("Verdana", 40));
 					gc.setFill(Color.BLACK);
 					gc.fillRect(0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT); // black out the screen
 					if (items.getWin() == false) {
 						gc.setFill(Color.RED);
-						gc.fillText("GAME OVER!!", ConstantVariables.WINDOW_WIDTH / 2 - 65,
-								ConstantVariables.WORLD_HEIGHT / 2 - 20); // display red "game over" string
+						gc.fillText("GAME OVER!!", ConstantVariables.WINDOW_WIDTH / 2 - 140,
+								ConstantVariables.WORLD_HEIGHT / 2 - 30); // display red "game over" string
 					} else {
 						gc.setFill(Color.BLUE);
-						gc.fillText("You Win, kudos!", ConstantVariables.WINDOW_WIDTH / 2 - 65,
+						gc.fillText("You Win, kudos!", ConstantVariables.WINDOW_WIDTH / 2 - 160,
 								ConstantVariables.WORLD_HEIGHT / 2 - 30); // display blue "You Win, kudos!" string
 					}
-					stop(); // stop the application
+					gc.setFont(Font.font("Verdana", 20));
+					gc.setFill(Color.WHITE);
+					gc.fillText("Press [SPACE] to play again.", 90, 300);
+					//stop(); // stop the application
 				}
 
 				mvRefreshCount++; // adds one to the refresh count since last move
@@ -344,10 +361,17 @@ public class GameDisplay extends Application {
 						}
 						break;
 					case SPACE:
-						gamePaused = true;
-						stage.setScene(pausedMenu);
-						game.stop();
-						break;
+						if (items.getGameOn() == false) {
+							items.setGameOn(true);
+							stage.setScene(pausedMenu);
+							System.out.print("not workingggg");
+							restartGame();
+						} else {
+							gamePaused = true;
+							stage.setScene(pausedMenu);
+							game.stop();
+							break;
+						}
 					}
 				}
 			}
@@ -480,5 +504,22 @@ public class GameDisplay extends Application {
 		enemy.setXYCoord(Integer.valueOf(loadedVals[5]), Integer.valueOf(loadedVals[6]));
 		blinky_X = Integer.valueOf(loadedVals[7]);
 		blinky_Y = Integer.valueOf(loadedVals[8]);
+	}
+	
+	public void restartGame() {
+		this.items = new ItemProcess("maze.txt");
+		pac_X = ConstantVariables.DISPLAY_INITIAL_X;
+		pac_Y = ConstantVariables.DISPLAY_INITIAL_Y;
+
+		blinky_X = ConstantVariables.DISPLAY_INITIAL_E; // x and y for blinky gui display
+		blinky_Y = ConstantVariables.DISPLAY_INITIAL_E;
+		
+		avatar = new Avatar(ConstantVariables.INITIAL_X, ConstantVariables.INITIAL_Y);
+		enemy = new AI(ConstantVariables.INITIAL_E_X, ConstantVariables.INITIAL_E_Y);
+
+		mvRefreshCount = 0; // counter to slow down movements
+		gameStarted = false; // true when we leave main menu and go to game
+		gamePaused = false;
+		System.out.println("RESTARTING GAME");
 	}
 }
