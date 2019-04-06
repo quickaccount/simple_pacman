@@ -124,9 +124,9 @@ public class GameDisplay extends Application {
 				gcPaused.fillText("GAME PAUSED", 50, 160); // draw message string
 				gcPaused.setFont(Font.font("Verdana", 20));
 				gcPaused.setFill(Color.WHITE);
-				gcPaused.fillText("Press [SHIFT] to resume your game.", 55, 250); // draw message strings
-				gcPaused.fillText("Press [N] to start a new game.", 70, 300);
-				gcPaused.fillText("Press [S] to save your current\n            game progress.", 70, 350);
+				gcPaused.fillText("Press [SHIFT] to resume your game", 55, 250); // draw message strings
+				gcPaused.fillText("Press [N] to return to main menu", 70, 300);
+				gcPaused.fillText("Press [S] to save your current\n            game progress", 70, 350);
 			}
 			
 		}.start();
