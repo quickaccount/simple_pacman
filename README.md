@@ -14,7 +14,7 @@
 6. Compile: javac GameDisplay.java <br/>
 7. Run: java GameDisplay <br/>
 8. Start the game with 'N', or load a previous save with 'L' <br/>
-9. Use 'WASD' keys to move and play the game. 'P' can be used to save all progress
+9. Use 'WASD' keys to move and play the game. 'SPACEBAR' can be used to pause the game
 
 ## JUnit Testing of Avatar Class
 1. Follow *Installation and Usage* steps 1 - 5 <br/>
