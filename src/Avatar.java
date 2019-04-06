@@ -43,7 +43,11 @@ public class Avatar extends MovableItem {
      * @param score the value that the score is to be set to.
      */
     public void setScore(int score) {
-    	this.score = score;
+    	if (score >= 0 && score <= 606) { //If score is not negative and not greater than total # of coins
+            this.score = score;
+        } else { //Default to 0
+            this.score = 0;
+        }
     }    
     
     /**
