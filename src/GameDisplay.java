@@ -23,13 +23,11 @@ import javafx.scene.media.AudioClip;
  */
 public class GameDisplay extends Application {
 
-	// the two scenes we switch on the stage
+	// the scenes we switch between
 	Scene mainMenu;
 	Scene gamePlay;
 	Scene pausedMenu;
 	Scene gameEnd;
-
-	AnimationTimer game;
 	
 	// image arrays for pacman movement
 	Image[] rightPacman = new Image[3];
@@ -37,9 +35,10 @@ public class GameDisplay extends Application {
 	Image[] upPacman = new Image[3];
 	Image[] downPacman = new Image[3];
 
-	// image arrays for blinky movement
+	// image array for blinky movement
 	Image[] rightBlinky = new Image[2];
 	
+	// audio games used in game
 	AudioClip introMusic = new AudioClip(this.getClass().getResource("sounds/pacman_beginning.wav").toString());
 	AudioClip endingSound = new AudioClip(this.getClass().getResource("sounds/pacman_death.wav").toString());
 	AudioClip munchSound = new AudioClip(this.getClass().getResource("sounds/pacman_chomp.wav").toString());
@@ -56,11 +55,11 @@ public class GameDisplay extends Application {
 
 	private int mvRefreshCount; // counter to slow down movements
 	private boolean gameStarted = false; // true when we leave main menu and go to game
-	private boolean gamePaused = false;
+	private boolean gamePaused = false;		// keeps track of whether the game is paused or not
 
-	ItemProcess items = new ItemProcess("maze.txt");
-	AnimatedImage pacman = new AnimatedImage();
-	AnimatedImage blinky = new AnimatedImage();
+	ItemProcess items = new ItemProcess("maze.txt");	// ItemProcess instance to serve as logic behind game display
+	AnimatedImage pacman = new AnimatedImage();		// generates pacman animation
+	AnimatedImage blinky = new AnimatedImage();		// generates blinky animation
 	Avatar avatar = new Avatar(ConstantVariables.INITIAL_X, ConstantVariables.INITIAL_Y); // pacman avatar we use to
 																							// process movements
 	AI enemy = new AI(ConstantVariables.INITIAL_E_X, ConstantVariables.INITIAL_E_Y); // an instance of a "ghost" used to
@@ -88,7 +87,7 @@ public class GameDisplay extends Application {
 		for (int i = 0; i < 3; i++) {
 			rightPacman[i] = new Image("images/pacRight" + i + ".png");
 		}
-		pacman.frames = rightPacman; // default to displaying images for pacman's rightwards movement
+		pacman.frames = rightPacman; // default to displaying images for pacman's rightward movement
 		pacman.duration = 0.150; // set duration of one entire movement animation
 
 		// initializing blinky movement image arrays
@@ -106,118 +105,126 @@ public class GameDisplay extends Application {
 
 	public void start(Stage stage) throws Exception {
 
-		// GAME END SCREEN
-		VBox layout3 = new VBox(20);
-		Canvas endCanvas = new Canvas(ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT);
-		layout3.getChildren().add(endCanvas);
-		
-		GraphicsContext gcEnd = endCanvas.getGraphicsContext2D();
-		
-		new AnimationTimer() {
-			//name animation timers and stop them when we switch scenes?
-			@Override
-			public void handle(long now) {
-				gcEnd.setFont(Font.font("Verdana", 40));
-				gcEnd.setFill(Color.BLACK);
-				gcEnd.fillRect(0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT); // black out the screen
-				if (items.getWin() == false) {
-					//endingSound.play();
-					gcEnd.setFill(Color.RED);
-					gcEnd.fillText("GAME OVER!!", ConstantVariables.WINDOW_WIDTH / 2 - 140,
-							ConstantVariables.WORLD_HEIGHT / 2 - 30); // display red "game over" string
-				} else {
-					gcEnd.setFill(Color.BLUE);
-					gcEnd.fillText("You Win, kudos!", ConstantVariables.WINDOW_WIDTH / 2 - 160,
-							ConstantVariables.WORLD_HEIGHT / 2 - 30); // display blue "You Win, kudos!" string
-				}
-				gcEnd.setFont(Font.font("Verdana", 20));
-				gcEnd.setFill(Color.WHITE);
-				gcEnd.fillText("Press [SPACE] to play again.", 90, 300);
-				
-			}
-			
-		}.start();
-		
-		gameEnd = new Scene(layout3, ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT);
-		
-		gameEnd.setOnKeyPressed(new EventHandler<KeyEvent>() {
+		// CREATION OF GAME PLAY SCENE !!!!!!!!
+		VBox root = new VBox();
 
-			@Override
-			public void handle(KeyEvent event) {
-				switch(event.getCode()) {
-				case SPACE:
-					stage.setScene(mainMenu);
-					introMusic.play();
-					game.start();
-					restartGame();
-					pacman.frames = rightPacman;
-					break;
-				}
-				
-			}
-			
-		});
-		
-		// PAUSED GAME MENU
-		VBox layout2 = new VBox(20);
-		Canvas pausedCanvas = new Canvas(ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT);
-		layout2.getChildren().add(pausedCanvas);
+		Canvas scoreboard = new Canvas(ConstantVariables.WORLD_WIDTH, ConstantVariables.SCOREBOARD_HEIGHT);
+		Canvas canvas = new Canvas(ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT);
+		root.getChildren().addAll(scoreboard, canvas);
 
-		GraphicsContext gcPaused = pausedCanvas.getGraphicsContext2D();
-		
-		new AnimationTimer() {
+		GraphicsContext score = scoreboard.getGraphicsContext2D();
+		GraphicsContext gc = canvas.getGraphicsContext2D();
 
-			@Override
+		Image maze = new Image("images/maze.png");
+		Image coin = new Image("images/coin.png");
+
+		final long startNanoTime = System.nanoTime(); // start time in nano seconds
+
+		// updates visual display approx 60 times/seconds
+		AnimationTimer game = new AnimationTimer() {
+			// handle is invoked every time a frame is rendered (by javafx default, 60times/second)
 			public void handle(long currentNanoTime) {
-				gcPaused.setFill(Color.BLACK);
-				gcPaused.fillRect(0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT); // clears canvas
-				gcPaused.setFont(Font.font("Verdana", 50));
-				gcPaused.setFill(Color.LIGHTBLUE);
-				gcPaused.fillText("GAME PAUSED", 50, 160); // draw message string
-				gcPaused.setFont(Font.font("Verdana", 20));
-				gcPaused.setFill(Color.ORANGE);
-				gcPaused.fillText("Press [SHIFT] to resume your game", 55, 250); // draw message strings
-				gcPaused.fillText("Press [N] to return to main menu", 70, 300);
-				gcPaused.fillText("Press [S] to save your current\n            game progress", 70, 350);
-			}
-			
-		}.start();
-		
-		pausedMenu = new Scene(layout2, ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT);
-		
-		pausedMenu.setOnKeyPressed(new EventHandler<KeyEvent>() {
+				double elapsedSeconds = (currentNanoTime - startNanoTime) / 1000000000.0; // convert the elapsed time in
+																							// nanoseconds to seconds
 
-			@Override
-			public void handle(KeyEvent event) {
-				if (items.getGameOn() == true) {
-					switch (event.getCode()) {
-					case SHIFT:
-						stage.setScene(gamePlay);
-						game.start();
-						munchSound.play();
-						gamePaused = false;
-						break;
-					case S:
-						try {
-							saveToTextFile("savedGame.txt");
-						} catch (Exception e) {
-							e.printStackTrace();
+				// background image essentially "clears" canvas
+				gc.drawImage(maze, 0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT);
+
+				// display coins
+				for (int y = 0; y < ConstantVariables.NUM_ROWS; y++) { // go through every row
+					for (int x = 0; x < ConstantVariables.NUM_COL; x++) { // and column
+						if (items.getItemList()[x][y] instanceof Coin) { // of the itemList and if the item is of type Coin
+							if (((Coin) items.getItemList()[x][y]).getCoinIsOn()) { // and it is "on" (hasn't been
+																					// collected yet)
+								// draw the coin
+								gc.drawImage(coin, x * ConstantVariables.WIDTH + ConstantVariables.COIN_OFFSET,
+										y * ConstantVariables.HEIGHT - ConstantVariables.COIN_OFFSET);
+							}
 						}
-						break;
-					case N:
-						stage.setScene(mainMenu);
-						introMusic.play();
-						game.start();
-						restartGame();
-						pacman.frames = rightPacman;
-						break;
 					}
 				}
-			
+
+				gc.drawImage(pacman.getFrame(elapsedSeconds), pac_X, pac_Y); // add pacman to display
+				gc.drawImage(blinky.getFrame(elapsedSeconds), blinky_X, blinky_Y); // add blinky to display
+
+				// display ScoreBoard
+				score.setFont(Font.font("Verdana", 20));
+				score.setFill(Color.BLACK);
+				score.fillRect(0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.SCOREBOARD_HEIGHT);
+				score.setFill(Color.WHITE);
+				String scoreString = "SCORE: " + avatar.getScore();
+				score.fillText(scoreString, 10, 30);
+
+				// display End Game and stop application
+				if (items.getGameOn() == false) { // avatar.intersects(enemy)if pacman and the ghost intersect
+					munchSound.stop();
+					//endingSound.play();
+					stage.setScene(gameEnd);
+				}
+
+				mvRefreshCount++; // adds one to the refresh count since last move
+				// Calls the timedMove method, which will be replaced by a separate main class
+				// with its own timer
+				if (mvRefreshCount > 18 && items.getGameOn() == true && gameStarted) { // change the number to slow the move timer
+					timedMove("continue in current direction");
+
+				}
+			}
+		};
+		game.start();
+
+		// instantiate game scene with the layout we just made
+		gamePlay = new Scene(root, ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT, Color.BLACK);
+		
+		gamePlay.setOnKeyPressed(new EventHandler<KeyEvent>() { // scene.setOnKeyReleased (?) holding key prob
+
+			@Override
+			public void handle(KeyEvent event) {
+				String input = "";
+				if (items.getGameOn() == true) {
+					switch (event.getCode()) {
+					case W:
+						if(!gamePaused) {
+							input = "w";
+							pacman.frames = upPacman;
+							timedMove(input);
+						}
+						break;
+					case A:
+						if(!gamePaused) {
+							input = "a";
+							pacman.frames = leftPacman;
+							timedMove(input);
+						}
+						break;
+					case S:
+						if(!gamePaused) {
+							input = "s";
+							pacman.frames = downPacman;
+							timedMove(input);
+						}
+						break;
+					case D:
+						if(!gamePaused) {
+							input = "d";
+							pacman.frames = rightPacman;
+							timedMove(input);
+						}
+						break;
+					case SPACE:
+						gamePaused = true;
+						stage.setScene(pausedMenu);
+						munchSound.stop();
+						game.stop();
+						break;
+						
+					}
+				}
 			}
 		});
-		
-		// MAIN MENU SCENE !!!!!!!!!!!!!!!!!!!!!
+		// END OF GAME PLAY SCENE
+
+		// CREATION OF MAIN MENU SCENE !!!!!!!!!!!!!!!!!!!!!
 		introMusic.play();
 		VBox layout1 = new VBox(20);
 		Canvas menuCanvas = new Canvas(ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT);
@@ -277,130 +284,126 @@ public class GameDisplay extends Application {
 				break;
 			}
 		});
+		// END OF MAIN MENU SCENE
+		
+		// CREATION OF PAUSED GAME MENU SCENE
+				VBox layout2 = new VBox(20);
+				Canvas pausedCanvas = new Canvas(ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT);
+				layout2.getChildren().add(pausedCanvas);
 
-		// GAME PLAY SCENE !!!!!!!!
-		VBox root = new VBox();
+				GraphicsContext gcPaused = pausedCanvas.getGraphicsContext2D();
+				
+				new AnimationTimer() {
 
-		Canvas scoreboard = new Canvas(ConstantVariables.WORLD_WIDTH, ConstantVariables.SCOREBOARD_HEIGHT);
-		Canvas canvas = new Canvas(ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT);
-		root.getChildren().addAll(scoreboard, canvas);
+					@Override
+					public void handle(long currentNanoTime) {
+						gcPaused.setFill(Color.BLACK);
+						gcPaused.fillRect(0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT); // clears canvas
+						gcPaused.setFont(Font.font("Verdana", 50));
+						gcPaused.setFill(Color.LIGHTBLUE);
+						gcPaused.fillText("GAME PAUSED", 50, 160); // draw message string
+						gcPaused.setFont(Font.font("Verdana", 20));
+						gcPaused.setFill(Color.ORANGE);
+						gcPaused.fillText("Press [SHIFT] to resume your game", 55, 250); // draw message strings
+						gcPaused.fillText("Press [N] to return to main menu", 70, 300);
+						gcPaused.fillText("Press [S] to save your current\n            game progress", 70, 350);
+					}
+					
+				}.start();
+				
+				pausedMenu = new Scene(layout2, ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT);
+				
+				pausedMenu.setOnKeyPressed(new EventHandler<KeyEvent>() {
 
-		GraphicsContext score = scoreboard.getGraphicsContext2D();
-		GraphicsContext gc = canvas.getGraphicsContext2D();
-
-		Image maze = new Image("images/maze.png");
-		Image coin = new Image("images/coin.png");
-
-		final long startNanoTime = System.nanoTime(); // start time in nano seconds
-
-		// updates visual display approx 60 times/seconds
-		game = new AnimationTimer() {
-			// handle is invoked every time a frame is rendered (by javafx default, 60times/second)
-			public void handle(long currentNanoTime) {
-				double elapsedSeconds = (currentNanoTime - startNanoTime) / 1000000000.0; // convert the elapsed time in
-																							// nanoseconds to seconds
-
-				// background image essentially "clears" canvas
-				gc.drawImage(maze, 0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT);
-
-				// display coins
-				for (int y = 0; y < ConstantVariables.NUM_ROWS; y++) { // go through every row
-					for (int x = 0; x < ConstantVariables.NUM_COL; x++) { // and column
-						if (items.getItemList()[x][y] instanceof Coin) { // of the itemList and if the item is of type Coin
-							if (((Coin) items.getItemList()[x][y]).getCoinIsOn()) { // and it is "on" (hasn't been
-																					// collected yet)
-								// draw the coin
-								gc.drawImage(coin, x * ConstantVariables.WIDTH + ConstantVariables.COIN_OFFSET,
-										y * ConstantVariables.HEIGHT - ConstantVariables.COIN_OFFSET);
+					@Override
+					public void handle(KeyEvent event) {
+						if (items.getGameOn() == true) {
+							switch (event.getCode()) {
+							case SHIFT:
+								stage.setScene(gamePlay);
+								game.start();
+								munchSound.play();
+								gamePaused = false;
+								break;
+							case S:
+								try {
+									saveToTextFile("savedGame.txt");
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+								break;
+							case N:
+								stage.setScene(mainMenu);
+								introMusic.play();
+								game.start();
+								restartGame();
+								pacman.frames = rightPacman;
+								break;
 							}
 						}
+					
 					}
-				}
+				});
+				// END OF PAUSED MENU SCENE
+				
+				// CREATION OF GAME END SCENE
+				VBox layout3 = new VBox(20);
+				Canvas endCanvas = new Canvas(ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT);
+				layout3.getChildren().add(endCanvas);
+				
+				GraphicsContext gcEnd = endCanvas.getGraphicsContext2D();
+				
+				new AnimationTimer() {
+					//name animation timers and stop them when we switch scenes?
+					@Override
+					public void handle(long now) {
+						gcEnd.setFont(Font.font("Verdana", 40));
+						gcEnd.setFill(Color.BLACK);
+						gcEnd.fillRect(0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT); // black out the screen
+						if (items.getWin() == false) {
+							//endingSound.play();
+							gcEnd.setFill(Color.RED);
+							gcEnd.fillText("GAME OVER!!", ConstantVariables.WINDOW_WIDTH / 2 - 140,
+									ConstantVariables.WORLD_HEIGHT / 2 - 30); // display red "game over" string
+						} else {
+							gcEnd.setFill(Color.BLUE);
+							gcEnd.fillText("You Win, kudos!", ConstantVariables.WINDOW_WIDTH / 2 - 160,
+									ConstantVariables.WORLD_HEIGHT / 2 - 30); // display blue "You Win, kudos!" string
+						}
+						gcEnd.setFont(Font.font("Verdana", 20));
+						gcEnd.setFill(Color.WHITE);
+						gcEnd.fillText("Press [SPACE] to play again.", 90, 300);
+						
+					}
+					
+				}.start();
+				
+				gameEnd = new Scene(layout3, ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT);
+				
+				gameEnd.setOnKeyPressed(new EventHandler<KeyEvent>() {
 
-				gc.drawImage(pacman.getFrame(elapsedSeconds), pac_X, pac_Y); // add pacman to display
-				gc.drawImage(blinky.getFrame(elapsedSeconds), blinky_X, blinky_Y); // add blinky to display
-
-				// display ScoreBoard
-				score.setFont(Font.font("Verdana", 20));
-				score.setFill(Color.BLACK);
-				score.fillRect(0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.SCOREBOARD_HEIGHT);
-				score.setFill(Color.WHITE);
-				String scoreString = "SCORE: " + avatar.getScore();
-				score.fillText(scoreString, 10, 30);
-
-				// display End Game and stop application
-				if (items.getGameOn() == false) { // avatar.intersects(enemy)if pacman and the ghost intersect
-					munchSound.stop();
-					//endingSound.play();
-					stage.setScene(gameEnd);
-				}
-
-				mvRefreshCount++; // adds one to the refresh count since last move
-				// Calls the timedMove method, which will be replaced by a separate main class
-				// with its own timer
-				if (mvRefreshCount > 18 && items.getGameOn() == true && gameStarted) { // change the number to slow the move timer
-					timedMove("continue in current direction");
-
-				}
-			}
-		};
-		game.start();
-
-		// instantiate game scene with the layout we just made
-		gamePlay = new Scene(root, ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT, Color.BLACK);
-
+					@Override
+					public void handle(KeyEvent event) {
+						switch(event.getCode()) {
+						case SPACE:
+							stage.setScene(mainMenu);
+							introMusic.play();
+							game.start();
+							restartGame();
+							pacman.frames = rightPacman;
+							break;
+						}
+						
+					}
+					
+				});
+				// END OF GAME END SCENE
+		
 		stage.setScene(mainMenu); // start application on main menu
 		stage.setTitle("Pac Man");
 		stage.setResizable(false); // sets it so that the game window is not resizable
 		stage.sizeToScene(); // gets rid of exra padding around maze image
 		stage.show();
-
-		gamePlay.setOnKeyPressed(new EventHandler<KeyEvent>() { // scene.setOnKeyReleased (?) holding key prob
-
-			@Override
-			public void handle(KeyEvent event) {
-				String input = "";
-				if (items.getGameOn() == true) {
-					switch (event.getCode()) {
-					case W:
-						if(!gamePaused) {
-							input = "w";
-							pacman.frames = upPacman;
-							timedMove(input);
-						}
-						break;
-					case A:
-						if(!gamePaused) {
-							input = "a";
-							pacman.frames = leftPacman;
-							timedMove(input);
-						}
-						break;
-					case S:
-						if(!gamePaused) {
-							input = "s";
-							pacman.frames = downPacman;
-							timedMove(input);
-						}
-						break;
-					case D:
-						if(!gamePaused) {
-							input = "d";
-							pacman.frames = rightPacman;
-							timedMove(input);
-						}
-						break;
-					case SPACE:
-						gamePaused = true;
-						stage.setScene(pausedMenu);
-						munchSound.stop();
-						game.stop();
-						break;
-						
-					}
-				}
-			}
-		});
 	}
 
 	/**
