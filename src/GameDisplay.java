@@ -39,9 +39,9 @@ public class GameDisplay extends Application {
 	// image arrays for blinky movement
 	Image[] rightBlinky = new Image[2];
 	
-	AudioClip introMusic = new AudioClip(this.getClass().getResource("pacman_beginning.wav").toString());
-	AudioClip endingSound = new AudioClip(this.getClass().getResource("pacman_death.wav").toString());
-	AudioClip munchSound = new AudioClip(this.getClass().getResource("pacman_chomp.wav").toString());
+	AudioClip introMusic = new AudioClip(this.getClass().getResource("sounds/pacman_beginning.wav").toString());
+	AudioClip endingSound = new AudioClip(this.getClass().getResource("sounds/pacman_death.wav").toString());
+	AudioClip munchSound = new AudioClip(this.getClass().getResource("sounds/pacman_chomp.wav").toString());
 	
 	// keeps track of x coord of main menu Pac-Man animation
 	private int menuAnimX = 0;
@@ -73,19 +73,19 @@ public class GameDisplay extends Application {
 
 		// initializing pacman movement image arrays
 		for (int i = 0; i < 3; i++) {
-			upPacman[i] = new Image("pacUp" + i + ".png");
+			upPacman[i] = new Image("images/pacUp" + i + ".png");
 		}
 
 		for (int i = 0; i < 3; i++) {
-			downPacman[i] = new Image("pacDown" + i + ".png");
+			downPacman[i] = new Image("images/pacDown" + i + ".png");
 		}
 
 		for (int i = 0; i < 3; i++) {
-			leftPacman[i] = new Image("pacLeft" + i + ".png");
+			leftPacman[i] = new Image("images/pacLeft" + i + ".png");
 		}
 
 		for (int i = 0; i < 3; i++) {
-			rightPacman[i] = new Image("pacRight" + i + ".png");
+			rightPacman[i] = new Image("images/pacRight" + i + ".png");
 		}
 		pacman.frames = rightPacman; // default to displaying images for pacman's rightwards movement
 		pacman.duration = 0.150; // set duration of one entire movement animation
@@ -93,7 +93,7 @@ public class GameDisplay extends Application {
 		// initializing blinky movement image arrays
 
 		for (int i = 0; i < 2; i++) {
-			rightBlinky[i] = new Image("blinkyRight" + i + ".png");
+			rightBlinky[i] = new Image("images/blinkyRight" + i + ".png");
 		}
 		blinky.frames = rightBlinky;
 		blinky.duration = 0.150;
@@ -149,7 +149,6 @@ public class GameDisplay extends Application {
 					case S:
 						try {
 							saveToTextFile("savedGame.txt");
-							//game.stop();
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -176,7 +175,7 @@ public class GameDisplay extends Application {
 
 		final long menuStartTime = System.nanoTime(); // start time in nano seconds
 		// updates visual display approx 60 times/seconds
-		Image title = new Image("title.png");
+		Image title = new Image("images/title.png");
 		new AnimationTimer() {
 			
 			public void handle(long currentNanoTime) {
@@ -237,8 +236,8 @@ public class GameDisplay extends Application {
 		GraphicsContext score = scoreboard.getGraphicsContext2D();
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 
-		Image maze = new Image("maze.png");
-		Image coin = new Image("coin.png");
+		Image maze = new Image("images/maze.png");
+		Image coin = new Image("images/coin.png");
 
 		final long startNanoTime = System.nanoTime(); // start time in nano seconds
 
@@ -280,11 +279,11 @@ public class GameDisplay extends Application {
 				// display End Game and stop application
 				if (items.getGameOn() == false) { // avatar.intersects(enemy)if pacman and the ghost intersect
 					munchSound.stop();
-					endingSound.play();
 					gc.setFont(Font.font("Verdana", 40));
 					gc.setFill(Color.BLACK);
 					gc.fillRect(0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT); // black out the screen
 					if (items.getWin() == false) {
+						//endingSound.play();
 						gc.setFill(Color.RED);
 						gc.fillText("GAME OVER!!", ConstantVariables.WINDOW_WIDTH / 2 - 140,
 								ConstantVariables.WORLD_HEIGHT / 2 - 30); // display red "game over" string
