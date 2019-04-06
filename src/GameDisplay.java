@@ -120,10 +120,10 @@ public class GameDisplay extends Application {
 				gcPaused.setFill(Color.BLACK);
 				gcPaused.fillRect(0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT); // clears canvas
 				gcPaused.setFont(Font.font("Verdana", 50));
-				gcPaused.setFill(Color.RED);
+				gcPaused.setFill(Color.LIGHTBLUE);
 				gcPaused.fillText("GAME PAUSED", 50, 160); // draw message string
 				gcPaused.setFont(Font.font("Verdana", 20));
-				gcPaused.setFill(Color.WHITE);
+				gcPaused.setFill(Color.ORANGE);
 				gcPaused.fillText("Press [SHIFT] to resume your game", 55, 250); // draw message strings
 				gcPaused.fillText("Press [N] to return to main menu", 70, 300);
 				gcPaused.fillText("Press [S] to save your current\n            game progress", 70, 350);
@@ -185,7 +185,7 @@ public class GameDisplay extends Application {
 				gcMenu.drawImage(title, 50, 100, 360, 84); // add the pacman logo to main menu
 
 				gcMenu.setFont(Font.font("Verdana", 20));
-				gcMenu.setFill(Color.WHITE);
+				gcMenu.setFill(Color.ORANGE);
 				gcMenu.fillText("Press [N] to start a new game.", 80, 400); // draw message strings
 				gcMenu.fillText("Press [L] to load an existing game.", 60, 450);
 
