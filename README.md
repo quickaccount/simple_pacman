@@ -12,6 +12,7 @@
 4. Locate the <br/>
 >simple_pacman-master/src/images <br/>
 >simple_pacman-master/src/sounds <br/>
+
 folders. Move all files in both of these folders to the src folder. <br/>
 All images and sound files should now be found in the src folder <br/>
 5. Open a command prompt, change to proper directory: cd Downloads/simple_pacman-master/src <br/>
