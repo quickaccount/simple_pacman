@@ -233,7 +233,7 @@ public class GameDisplay extends Application {
 			public void handle(long currentNanoTime) {
 
 				gcMenu.setFill(Color.BLACK);
-				gcMenu.fillRect(0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT); // black out the screen/
+				gcMenu.fillRect(0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT+10); // black out the screen/
 																										// clear canvas
 				gcMenu.drawImage(title, 50, 100, 360, 84); // add the pacman logo to main menu
 

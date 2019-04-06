@@ -1,4 +1,4 @@
-20 21 23 336 368 13 15 208 240
+41 9 30 144 480 18 18 288 288
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 X.............X.............X
 X.............X.............X
@@ -11,23 +11,23 @@ X.......X.....X.....X.......X
 X.......X.....X.....X.......X
 XXX..X..XXXX..X..XXXX..X..XXX
 X....X.................X....X
-X....X.........    ....X....X
-X..XXX..X..XX.  XX .X..XXX..X
-X.......X..X     X .X.......X
-X.......X..X     X .X.......X
-X..XXX..X..X     X .X..XXX..X
-X....X..X..XXXXXXX .X..X....X
-X....X..X......... .X..X....X
-XXX..X..X..XXXXXXX .X..X..XXX
-X................. .........X
-X.................    ......X
-X..XXX..XXXX..X..XXXX .XXX..X
-X....X........X...... .X....X
-X....X........X........X....X
-XXX..X..X..XXXXXXX..X..X..XXX
-X.......X.....X.....X.......X
-X.......X.....X.....X.......X
-X..XXX..XXXX..X..XXXX..XXX..X
-X...........................X
-X...........................X
+X....X........         X....X
+X..XXX..X..XX. .XX..X. XXX..X
+X.......X..X     X..X. .....X
+X.......X..X     X..X. .....X
+X..XXX..X..X     X..X. XXX..X
+X....X..X..XXXXXXX..X. X....X
+X....X..X...........X. X....X
+XXX..X..X..XXXXXXX..X. X..XXX
+X..................... .....X
+X..................... .....X
+X..XXX..XXXX..X..XXXX. XXX..X
+X....X........X....... X....X
+X....X........X....... X....X
+XXX..X..X..XXXXXXX..X. X..XXX
+X.......X.....X.....X. .....X
+X.......X.....X.....X. .....X
+X..XXX..XXXX..X..XXXX. XXX..X
+X..................... .....X
+X........              .....X
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXX
