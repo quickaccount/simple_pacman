@@ -176,7 +176,7 @@ public class GameDisplay extends Application {
 		final long startNanoTime = System.nanoTime(); // start time in nano seconds
 
 		// updates visual display approx 60 times/seconds
-		new AnimationTimer() {
+		AnimationTimer game = new AnimationTimer() {
 			// handle is invoked every time a frame is rendered (by javafx default, 60times/second)
 			public void handle(long currentNanoTime) {
 				double elapsedSeconds = (currentNanoTime - startNanoTime) / 1000000000.0; // convert the elapsed time in
@@ -237,7 +237,8 @@ public class GameDisplay extends Application {
 
 				}
 			}
-		}.start();
+		};
+		game.start();
 
 		// instantiate game scene with the layout we just made
 		gamePlay = new Scene(root, ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT, Color.BLACK);
@@ -278,10 +279,16 @@ public class GameDisplay extends Application {
 					case P:
 						try {
 							saveToTextFile("savedGame.txt");
-							stop();
+							game.stop();
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
+						break;
+					case SPACE:
+						game.stop();
+						break;
+					case SHIFT:
+						game.start();
 						break;
 					}
 				}
