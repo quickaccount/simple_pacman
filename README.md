@@ -9,7 +9,11 @@
 2. Download all files in the master-branch as a ZIP <br/>
 3. Extract all files in the zipped folder, ensuring that no new folder is created <br/>
 >Example) extract to C:\Users\YourUsername\Downloads\ **not** C:\Users\YourUsername\Downloads\simple_pacman-master
-4. Locate the <br/>>simple_pacman-master/src/images <br/>and <br/>>simple_pacman-master/src/sounds <br/>folders. Move all files in both of these folders to the src folder. All images and sound files should now be in the src folder <br/>
+4. Locate the <br/>
+>simple_pacman-master/src/images <br/>
+>simple_pacman-master/src/sounds <br/>
+folders. Move all files in both of these folders to the src folder. <br/>
+All images and sound files should now be found in the src folder <br/>
 5. Open a command prompt, change to proper directory: cd Downloads/simple_pacman-master/src <br/>
 6. Compile: javac GameDisplay.java <br/>
 7. Run: java GameDisplay <br/>
