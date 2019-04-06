@@ -26,7 +26,10 @@ public class GameDisplay extends Application {
 	// the two scenes we switch on the stage
 	Scene mainMenu;
 	Scene gamePlay;
+	Scene pausedMenu;
 
+	AnimationTimer game;
+	
 	// image arrays for pacman movement
 	Image[] rightPacman = new Image[3];
 	Image[] leftPacman = new Image[3];
@@ -102,6 +105,51 @@ public class GameDisplay extends Application {
 
 	public void start(Stage stage) throws Exception {
 
+		
+		// PAUSED GAME MENU
+		VBox layout2 = new VBox(20);
+		Canvas pausedCanvas = new Canvas(ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT);
+		layout2.getChildren().add(pausedCanvas);
+
+		GraphicsContext gcPaused = pausedCanvas.getGraphicsContext2D();
+		
+		new AnimationTimer() {
+
+			@Override
+			public void handle(long currentNanoTime) {
+				gcPaused.setFill(Color.BLACK);
+				gcPaused.fillRect(0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT); // clears canvas
+				gcPaused.setFont(Font.font("Verdana", 50));
+				gcPaused.setFill(Color.RED);
+				gcPaused.fillText("GAME PAUSED", 50, 160); // draw message string
+				gcPaused.setFont(Font.font("Verdana", 20));
+				gcPaused.setFill(Color.WHITE);
+				gcPaused.fillText("Press [SHIFT] to resume your game.", 60, 300); // draw message strings
+				gcPaused.fillText("Press [N] to start a new game.", 70, 350);
+			}
+			
+		}.start();
+		
+		pausedMenu = new Scene(layout2, ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT);
+		
+		pausedMenu.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
+			@Override
+			public void handle(KeyEvent event) {
+				if (items.getGameOn() == true) {
+					switch (event.getCode()) {
+					
+					case SHIFT:
+						stage.setScene(gamePlay);
+						game.start();
+						gamePaused = false;
+						break;
+					}
+				}
+			
+			}
+		});
+		
 		// MAIN MENU SCENE !!!!!!!!!!!!!!!!!!!!!
 		introMusic.play();
 		VBox layout1 = new VBox(20);
@@ -177,7 +225,7 @@ public class GameDisplay extends Application {
 		final long startNanoTime = System.nanoTime(); // start time in nano seconds
 
 		// updates visual display approx 60 times/seconds
-		AnimationTimer game = new AnimationTimer() {
+		game = new AnimationTimer() {
 			// handle is invoked every time a frame is rendered (by javafx default, 60times/second)
 			public void handle(long currentNanoTime) {
 				double elapsedSeconds = (currentNanoTime - startNanoTime) / 1000000000.0; // convert the elapsed time in
@@ -297,11 +345,8 @@ public class GameDisplay extends Application {
 						break;
 					case SPACE:
 						gamePaused = true;
+						stage.setScene(pausedMenu);
 						game.stop();
-						break;
-					case SHIFT:
-						game.start();
-						gamePaused = false;
 						break;
 					}
 				}
