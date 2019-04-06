@@ -27,6 +27,7 @@ public class GameDisplay extends Application {
 	Scene mainMenu;
 	Scene gamePlay;
 	Scene pausedMenu;
+	Scene gameEnd;
 
 	AnimationTimer game;
 	
@@ -105,6 +106,56 @@ public class GameDisplay extends Application {
 
 	public void start(Stage stage) throws Exception {
 
+		// END OF GAME SCREEN
+		VBox layout3 = new VBox(20);
+		Canvas endCanvas = new Canvas(ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT);
+		layout3.getChildren().add(endCanvas);
+		
+		GraphicsContext gcEnd = endCanvas.getGraphicsContext2D();
+		
+		new AnimationTimer() {
+			//name animation timers and stop them when we switch scenes?
+			@Override
+			public void handle(long now) {
+				gcEnd.setFont(Font.font("Verdana", 40));
+				gcEnd.setFill(Color.BLACK);
+				gcEnd.fillRect(0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT); // black out the screen
+				if (items.getWin() == false) {
+					//endingSound.play();
+					gcEnd.setFill(Color.RED);
+					gcEnd.fillText("GAME OVER!!", ConstantVariables.WINDOW_WIDTH / 2 - 140,
+							ConstantVariables.WORLD_HEIGHT / 2 - 30); // display red "game over" string
+				} else {
+					gcEnd.setFill(Color.BLUE);
+					gcEnd.fillText("You Win, kudos!", ConstantVariables.WINDOW_WIDTH / 2 - 160,
+							ConstantVariables.WORLD_HEIGHT / 2 - 30); // display blue "You Win, kudos!" string
+				}
+				gcEnd.setFont(Font.font("Verdana", 20));
+				gcEnd.setFill(Color.WHITE);
+				gcEnd.fillText("Press [SPACE] to play again.", 90, 300);
+				
+			}
+			
+		}.start();
+		
+		gameEnd = new Scene(layout3, ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT);
+		
+		gameEnd.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
+			@Override
+			public void handle(KeyEvent event) {
+				switch(event.getCode()) {
+				case SPACE:
+					stage.setScene(mainMenu);
+					introMusic.play();
+					game.start();
+					restartGame();
+					break;
+				}
+				
+			}
+			
+		});
 		
 		// PAUSED GAME MENU
 		VBox layout2 = new VBox(20);
@@ -139,7 +190,6 @@ public class GameDisplay extends Application {
 			public void handle(KeyEvent event) {
 				if (items.getGameOn() == true) {
 					switch (event.getCode()) {
-					
 					case SHIFT:
 						stage.setScene(gamePlay);
 						game.start();
@@ -279,23 +329,8 @@ public class GameDisplay extends Application {
 				// display End Game and stop application
 				if (items.getGameOn() == false) { // avatar.intersects(enemy)if pacman and the ghost intersect
 					munchSound.stop();
-					gc.setFont(Font.font("Verdana", 40));
-					gc.setFill(Color.BLACK);
-					gc.fillRect(0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT); // black out the screen
-					if (items.getWin() == false) {
-						//endingSound.play();
-						gc.setFill(Color.RED);
-						gc.fillText("GAME OVER!!", ConstantVariables.WINDOW_WIDTH / 2 - 140,
-								ConstantVariables.WORLD_HEIGHT / 2 - 30); // display red "game over" string
-					} else {
-						gc.setFill(Color.BLUE);
-						gc.fillText("You Win, kudos!", ConstantVariables.WINDOW_WIDTH / 2 - 160,
-								ConstantVariables.WORLD_HEIGHT / 2 - 30); // display blue "You Win, kudos!" string
-					}
-					gc.setFont(Font.font("Verdana", 20));
-					gc.setFill(Color.WHITE);
-					gc.fillText("Press [SPACE] to play again.", 90, 300);
-					//stop(); // stop the application
+					//endingSound.play();
+					stage.setScene(gameEnd);
 				}
 
 				mvRefreshCount++; // adds one to the refresh count since last move
@@ -356,7 +391,6 @@ public class GameDisplay extends Application {
 					case SPACE:
 						if (items.getGameOn() == false) {
 							items.setGameOn(true);
-							stage.setScene(pausedMenu);
 							System.out.print("not workingggg");
 							restartGame();
 						} else {
@@ -499,7 +533,10 @@ public class GameDisplay extends Application {
 		blinky_X = Integer.valueOf(loadedVals[7]);
 		blinky_Y = Integer.valueOf(loadedVals[8]);
 	}
-	
+
+	/**
+	 * Resets game values so you can play again.
+	 */
 	public void restartGame() {
 		this.items = new ItemProcess("maze.txt");
 		pac_X = ConstantVariables.DISPLAY_INITIAL_X;
