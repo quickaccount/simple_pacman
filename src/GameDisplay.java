@@ -143,6 +143,7 @@ public class GameDisplay extends Application {
 					case SHIFT:
 						stage.setScene(gamePlay);
 						game.start();
+						munchSound.play();
 						gamePaused = false;
 						break;
 					case S:
@@ -155,6 +156,7 @@ public class GameDisplay extends Application {
 						break;
 					case N:
 						stage.setScene(mainMenu);
+						introMusic.play();
 						game.start();
 						restartGame();
 						break;
@@ -209,6 +211,7 @@ public class GameDisplay extends Application {
 			case N: // if they press n key
 				gameStarted = true; // game has begun
 				stage.setScene(gamePlay); // change the scene to the game scene
+				introMusic.stop();
 				munchSound.setCycleCount(AudioClip.INDEFINITE);
 				munchSound.play();
 				break;
@@ -217,6 +220,7 @@ public class GameDisplay extends Application {
 				items = new ItemProcess("savedGame.txt", GameDisplay.this); // process the game with saved game text file
 				gameStarted = true;
 				stage.setScene(gamePlay);
+				introMusic.stop();
 				munchSound.setCycleCount(AudioClip.INDEFINITE);
 				munchSound.play();
 				break;
@@ -350,16 +354,6 @@ public class GameDisplay extends Application {
 							timedMove(input);
 						}
 						break;
-					case P:
-						try {
-							if(!gamePaused) {
-								saveToTextFile("savedGame.txt");
-								game.stop();
-							}
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-						break;
 					case SPACE:
 						if (items.getGameOn() == false) {
 							items.setGameOn(true);
@@ -369,6 +363,7 @@ public class GameDisplay extends Application {
 						} else {
 							gamePaused = true;
 							stage.setScene(pausedMenu);
+							munchSound.stop();
 							game.stop();
 							break;
 						}
