@@ -106,7 +106,7 @@ public class GameDisplay extends Application {
 
 	public void start(Stage stage) throws Exception {
 
-		// END OF GAME SCREEN
+		// GAME END SCREEN
 		VBox layout3 = new VBox(20);
 		Canvas endCanvas = new Canvas(ConstantVariables.WINDOW_WIDTH, ConstantVariables.WINDOW_HEIGHT);
 		layout3.getChildren().add(endCanvas);
@@ -150,6 +150,7 @@ public class GameDisplay extends Application {
 					introMusic.play();
 					game.start();
 					restartGame();
+					pacman.frames = rightPacman;
 					break;
 				}
 				
@@ -208,6 +209,7 @@ public class GameDisplay extends Application {
 						introMusic.play();
 						game.start();
 						restartGame();
+						pacman.frames = rightPacman;
 						break;
 					}
 				}
@@ -389,17 +391,12 @@ public class GameDisplay extends Application {
 						}
 						break;
 					case SPACE:
-						if (items.getGameOn() == false) {
-							items.setGameOn(true);
-							System.out.print("not workingggg");
-							restartGame();
-						} else {
-							gamePaused = true;
-							stage.setScene(pausedMenu);
-							munchSound.stop();
-							game.stop();
-							break;
-						}
+						gamePaused = true;
+						stage.setScene(pausedMenu);
+						munchSound.stop();
+						game.stop();
+						break;
+						
 					}
 				}
 			}
