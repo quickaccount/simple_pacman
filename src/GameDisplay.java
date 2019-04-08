@@ -428,8 +428,19 @@ public class GameDisplay extends Application {
 		pac_X = avatar.getXCoord() * ConstantVariables.MOVE_AMNT;
 	}
 
+
+         /**
+         * function to update AI location after genMv.
+         */
+	private void MoveAI() {
+
+		blinky_X = enemy.getXCoord() * ConstantVariables.MOVE_AMNT;
+		blinky_Y = enemy.getYCoord() * ConstantVariables.MOVE_AMNT;
+	}
+
+    
 	/**
-	 * Temporary auto-move function. Movement is based off of current player direction.
+	 * auto-move function. Movement is based off of current player direction.
 	 * @param key
 	 */
 	private void timedMove(String key) {
@@ -438,18 +449,11 @@ public class GameDisplay extends Application {
 		items.processMv(avatar);
 		movePac(key);
 		enemy.genMv(avatar, items);
-		tempMoveAI();
+		MoveAI();
+		items.avatarEnemyCollision(enemy);
 		printDisplay(avatar, enemy);
 	}
 
-	/**
-	 * Temporary function to update AI location after genMv.
-	 */
-	private void tempMoveAI() {
-
-		blinky_X = enemy.getXCoord() * ConstantVariables.MOVE_AMNT;
-		blinky_Y = enemy.getYCoord() * ConstantVariables.MOVE_AMNT;
-	}
 
 	/**
 	 * Moves the pacman avatar/processes the move.
@@ -501,6 +505,7 @@ public class GameDisplay extends Application {
 	 * @param enemy  the ghost AI (blinky) object.
 	 */
 	public void printDisplay(Avatar avatar, AI enemy) {
+	    System.out.println("Score: " + avatar.getScore());
 		String rowString = "";
 		if (items.getGameOn() == true) {
 			for (int y = 0; y < ConstantVariables.NUM_ROWS; y++) {

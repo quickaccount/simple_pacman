@@ -225,8 +225,6 @@ public class AI extends MovableItem {
             do {
 		simXCoord = simXCoord + simDirection[0];
                 simYCoord = simYCoord + simDirection[1];
-		System.out.println("simXY"+simXCoord+simYCoord);
-		System.out.println("simDirection"+simDirection[0]+simDirection[1]);
                 if (items.getItemList()[simXCoord][simYCoord] instanceof Wall) { // check SimEnemyected enemy for wall collision
                     results.add(0, 'f');
                     dirAttempts.add(0, Arrays.copyOf(simDirection, 2)); // movement direction attempts
@@ -313,9 +311,6 @@ public class AI extends MovableItem {
                 this.mvDirQue.clear();
                 this.mvDirQue.addAll(dirAttempts);
             }
-	    for (int i=mvDirQue.size() -1; i >=0; i--) {
-		System.out.println("i: " + i + " item: " + mvDirQue.get(i)[0] + mvDirQue.get(i)[1]);
-	    }
             dirAttempts.clear();
             results.clear();
             //}
@@ -339,15 +334,12 @@ public class AI extends MovableItem {
         this.setGoalDistance(avatar);
         // check if the enemy is stuck from a previous turn
         if (this.mvDirQue.size() > 0) {
-            System.out.println("dir[0] "+this.mvDirQue.get(this.mvDirQue.size()-1)[0]);
-            System.out.println(" dir[1] "+this.mvDirQue.get(this.mvDirQue.size()-1)[1]);
             this.setNewCoord(this.getXCoord() + this.mvDirQue.get(this.mvDirQue.size()-1)[0], this.getYCoord() + this.mvDirQue.get(this.mvDirQue.size()-1)[1]);
 
             this.mvDirQue.remove(this.mvDirQue.size() -1); // removes the first entry of the move list
             // process move: check wall collision if no wall then move
             items.processMv(this);
             // check for collision with avatar
-            items.avatarEnemyCollision(this);
             return;
         }
 
@@ -357,7 +349,6 @@ public class AI extends MovableItem {
                 this.setNewCoord(this.getXCoord() + this.getXDirection(i), this.getYCoord() + this.getYDirection(i));
                 if (items.wallCheck(this) == false) {
                     items.processMv(this);
-                    items.avatarEnemyCollision(this);
                     return;
                 }
                 if (this.getGoalDistanceX() == 0) {
@@ -373,7 +364,6 @@ public class AI extends MovableItem {
         this.wallEscape(items);
         System.out.println("wall escaped");
         items.processMv(this);
-        items.avatarEnemyCollision(this);
 
         return;
     }
