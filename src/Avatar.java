@@ -66,21 +66,43 @@ public class Avatar extends MovableItem {
     * @param key the user's input, as a String
     * @param itemList the list of all items on the screen
     */
-    public void mvAttempt(String key, ItemProcess items) {
+    public boolean changeDirection(String key, ItemProcess items) {
 
         char takeFirst = key.charAt(0); //Takes the first character from the user's input
-
+	int[] newDir = {0, 0};
+	
         if (takeFirst == 'w') {
-            this.setDir(0, -1); //Move up
+	    newDir[1] = -1;
+            // this.setDir(0, -1); //Move up
         } else if (takeFirst == 's') {
-            this.setDir(0, 1); //Move down
+	    newDir[1] = 1;
+            // this.setDir(0, 1); //Move down
         } else if (takeFirst == 'a') {
-            this.setDir(-1, 0); //Move left
+	    newDir[0] = -1;
+            // this.setDir(-1, 0); //Move left
         } else if (takeFirst == 'd') {
-            this.setDir(1, 0); //Move right
+	    newDir[0] = 1;
+            // this.setDir(1, 0); //Move right
         } else {
         }
+	// test for a change in direction
+	if (this.getDir(0) == newDir[0] && this.getDir(1) == newDir[1] ) {
+	    return false;
+	}
+	else {
+	    if (newDir[0]==newDir[1]) { // zero case
+		return false;
+	    }
+	    else { // new direction not previous direction
+		this.setDir(newDir[0], newDir[1]);
+		this.mvAttempt(items);
+		return true;
+	    }
+	}
 
+    }
+
+    public void mvAttempt(ItemProcess items) {
         items.allCollected(this); //Check for all coins collected
         this.setNewCoord(this.getDir(0) + this.getXCoord(), this.getDir(1) + this.getYCoord()); //Apply movement
     }

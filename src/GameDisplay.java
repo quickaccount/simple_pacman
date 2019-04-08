@@ -55,8 +55,7 @@ public class GameDisplay extends Application {
 
 	private int mvRefreshCount; // counter to slow down movements
 	private boolean gameStarted = false; // true when we leave main menu and go to game
-	private boolean gamePaused = false;		// keeps track of whether the game is paused or not
-
+    private boolean gamePaused = false;		// keeps track of whether the game is paused or not
 	ItemProcess items = new ItemProcess("maze.txt");	// ItemProcess instance to serve as logic behind game display
 	AnimatedImage pacman = new AnimatedImage();		// generates pacman animation
 	AnimatedImage blinky = new AnimatedImage();		// generates blinky animation
@@ -166,8 +165,7 @@ public class GameDisplay extends Application {
 				// Calls the timedMove method, which will be replaced by a separate main class
 				// with its own timer
 				if (mvRefreshCount > 18 && items.getGameOn() == true && gameStarted) { // change the number to slow the move timer
-					timedMove("continue in current direction");
-
+				    timedMove("continue in current direction");
 				}
 			}
 		};
@@ -187,28 +185,39 @@ public class GameDisplay extends Application {
 						if(!gamePaused) {
 							input = "w";
 							pacman.frames = upPacman;
-							timedMove(input);
+							if (avatar.changeDirection(input, items) == true) {
+							    timedMove(input);
+							}
+
 						}
 						break;
 					case A:
 						if(!gamePaused) {
 							input = "a";
 							pacman.frames = leftPacman;
-							timedMove(input);
+							if (avatar.changeDirection(input, items) == true) {
+							    timedMove(input);
+							}
+
 						}
 						break;
 					case S:
 						if(!gamePaused) {
 							input = "s";
 							pacman.frames = downPacman;
-							timedMove(input);
+							if (avatar.changeDirection(input, items) == true) {
+							    timedMove(input);
+							}
+
 						}
 						break;
 					case D:
 						if(!gamePaused) {
 							input = "d";
 							pacman.frames = rightPacman;
-							timedMove(input);
+							if (avatar.changeDirection(input, items) == true) {
+							    timedMove(input);
+							}
 						}
 						break;
 					case SPACE:
@@ -424,9 +433,8 @@ public class GameDisplay extends Application {
 	 * @param key
 	 */
 	private void timedMove(String key) {
-
 		mvRefreshCount = 0;
-		avatar.mvAttempt(key, items);
+		avatar.mvAttempt(items);
 		items.processMv(avatar);
 		movePac(key);
 		enemy.genMv(avatar, items);
@@ -450,7 +458,7 @@ public class GameDisplay extends Application {
 	 */
 	private void handleInput(String input) {
 		// System.out.println(input + " was pressed.");
-		avatar.mvAttempt(input, items);
+		avatar.changeDirection(input, items);
 
 	}
 
