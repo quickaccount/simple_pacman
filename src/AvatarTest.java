@@ -148,7 +148,7 @@ public class AvatarTest {
 	//Other Methods
 
 	@Test
-	public void test_mvAttempt_invalidButton() {
+	public void test_changeDirection_invalidButton() {
 		Avatar testAv = new Avatar(1, 1);
 		ItemProcess items = new ItemProcess("maze.txt");
 		ArrayList<String> goThrough = new ArrayList<String>(); //List of elements to try
@@ -156,9 +156,10 @@ public class AvatarTest {
 		goThrough.add("Bop");
 		goThrough.add("A");
 		goThrough.add("ow");
+		goThrough.add("rasdw");
 
 		for (int x = 0; x < goThrough.size() - 1; x++) {
-			testAv.mvAttempt(goThrough.get(x), items);
+			testAv.changeDirection(goThrough.get(x), items);
 
 			assertEquals("Tried moving using valid keys", "00", "" + testAv.getDir(0) + testAv.getDir(1)); //Test for each element in list
 		}
@@ -166,7 +167,7 @@ public class AvatarTest {
 
 
 	@Test
-	public void test_mvAttempt_validButton() {
+	public void test_changeDirection_validButton() {
 		Avatar testAv = new Avatar(1, 1);
 		ItemProcess items = new ItemProcess("maze.txt");
 		ArrayList<String> goThrough = new ArrayList<String>(); //List of elements to try
@@ -178,7 +179,7 @@ public class AvatarTest {
 		goThrough.add("s");
 
 		for (int x = 0; x < goThrough.size() - 1; x++) {
-			testAv.mvAttempt(goThrough.get(x), items);
+			testAv.changeDirection(goThrough.get(x), items);
 			
 			if (x == 0 || x ==1) {
 				dir = "10"; //Moving right
