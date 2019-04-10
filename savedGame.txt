@@ -1,33 +1,33 @@
-41 9 30 144 480 18 18 288 288
+572 21 20 336 320 12 11 192 176
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-X.............X.............X
-X.............X.............X
-X..XXX..XXXX.....XXXX..XXX..X
-X..XXX..XXXX.....XXXX..XXX..X
-X.............X.............X
-X.............X.............X
-X..XXX..X..XXXXXXX..X..XXX..X
-X.......X.....X.....X.......X
-X.......X.....X.....X.......X
-XXX..X..XXXX..X..XXXX..X..XXX
-X....X.................X....X
-X....X........         X....X
-X..XXX..X..XX. .XX..X. XXX..X
-X.......X..X     X..X. .....X
-X.......X..X     X..X. .....X
-X..XXX..X..X     X..X. XXX..X
-X....X..X..XXXXXXX..X. X....X
-X....X..X...........X. X....X
-XXX..X..X..XXXXXXX..X. X..XXX
-X..................... .....X
-X..................... .....X
-X..XXX..XXXX..X..XXXX. XXX..X
-X....X........X....... X....X
-X....X........X....... X....X
-XXX..X..X..XXXXXXX..X. X..XXX
-X.......X.....X.....X. .....X
-X.......X.....X.....X. .....X
-X..XXX..XXXX..X..XXXX. XXX..X
-X..................... .....X
-X........              .....X
+X.            X.            X
+X. ...        X             X
+X. XXX .XXXX     XXXX  XXX  X
+X. XXX .XXXX     XXXX. XXX  X
+X. ... .....  X             X
+X. ...        X             X
+X. XXX  X  XXXXXXX  X  XXX  X
+X. ...  X     X     X       X
+X.      X     X     X      .X
+XXX  X  XXXX  X  XXXX  X  XXX
+X    X                 X   .X
+X    X                 X    X
+X  XXX  X  XX   XX  X  XXX  X
+X       X  X     X  X       X
+X       X  X     X  X       X
+X  XXX  X  X     X  X  XXX  X
+X    X  X  XXXXXXX  X  X    X
+X    X  X           X  X    X
+XXX  X  X  XXXXXXX  X  X  XXX
+X                           X
+X                           X
+X  XXX  XXXX  X  XXXX  XXX  X
+X    X        X        X    X
+X    X        X        X    X
+XXX  X  X  XXXXXXX  X  X  XXX
+X       X     X     X       X
+X       X     X     X  ..   X
+X  XXX  XXXX  X  XXXX  XXX  X
+X                           X
+X                           X
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXX

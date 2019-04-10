@@ -432,7 +432,7 @@ public class GameDisplay extends Application {
          /**
          * function to update AI location after genMv.
          */
-	private void MoveAI() {
+	private void moveAI() {
 
 		blinky_X = enemy.getXCoord() * ConstantVariables.MOVE_AMNT;
 		blinky_Y = enemy.getYCoord() * ConstantVariables.MOVE_AMNT;
@@ -449,7 +449,7 @@ public class GameDisplay extends Application {
 		items.processMv(avatar);
 		movePac(key);
 		enemy.genMv(avatar, items);
-		MoveAI();
+		moveAI();
 		items.avatarEnemyCollision(enemy);
 		printDisplay(avatar, enemy);
 	}
