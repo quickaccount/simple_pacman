@@ -95,15 +95,10 @@ public class Avatar extends MovableItem {
 	    }
 	    else { // new direction not previous direction
 		this.setDir(newDir[0], newDir[1]);
-		this.mvAttempt(items);
+		this.setNewCoord(this.getDir(0) + this.getXCoord(), this.getDir(1) + this.getYCoord()); //Apply movement
 		return true;
 	    }
 	}
 
-    }
-
-    public void mvAttempt(ItemProcess items) {
-        items.allCollected(this); //Check for all coins collected
-        this.setNewCoord(this.getDir(0) + this.getXCoord(), this.getDir(1) + this.getYCoord()); //Apply movement
     }
 }

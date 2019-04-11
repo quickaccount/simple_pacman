@@ -414,26 +414,17 @@ public class GameDisplay extends Application {
 	}
 
 	/**
-	 * Processes move for GUI pacman.
+	 * update gui location for the avatar and enemy
 	 * 
-	 * @param input The WASD user input for movement.
 	 */
-	private void movePac(String input) {
-
-		handleInput(input);
+	private void moveMovableItem() {
 
 		pac_Y = avatar.getYCoord() * ConstantVariables.MOVE_AMNT;
 		pac_X = avatar.getXCoord() * ConstantVariables.MOVE_AMNT;
-	}
-
-	/**
-	 * function to update AI location after genMv.
-	 */
-	private void moveAI() {
-
 		blinky_X = enemy.getXCoord() * ConstantVariables.MOVE_AMNT;
 		blinky_Y = enemy.getYCoord() * ConstantVariables.MOVE_AMNT;
 	}
+
 
 	/**
 	 * auto-move function. Movement is based off of current player direction.
@@ -441,15 +432,17 @@ public class GameDisplay extends Application {
 	 * @param key
 	 */
 	private void timedMove(String key) {
-		mvRefreshCount = 0;
-		avatar.mvAttempt(items);
-		items.processMv(avatar);
-		movePac(key);
-		enemy.genMv(avatar, items);
-		moveAI();
-		items.avatarEnemyCollision(enemy);
-		printDisplay(avatar, enemy);
-	}
+	    mvRefreshCount = 0; // 
+	    avatar.setNewCoord(avatar.getDir(0) + avatar.getXCoord(), avatar.getDir(1) + avatar.getYCoord());
+	    items.processMv(avatar); // attempt avatar move to newCoord()
+	    enemy.genMv(avatar, items); // generate enemy move
+	    items.avatarEnemyCollision(enemy); // check for Loss
+	    items.allCollected(avatar); // check for Win
+	    
+	    // update display
+	    moveMovableItem(); // gui
+	    printDisplay(avatar, enemy); //text-based
+}
 
 	/**
 	 * Moves the pacman avatar/processes the move.
