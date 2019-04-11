@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.ArrayList;
 import constants.ConstantVariables;
+
 import java.lang.Math;
 
 /**
@@ -51,13 +52,15 @@ public class ItemProcess {
 
 					char c = line.charAt(x);
 
-					if (c == ConstantVariables.COIN_CHAR) { // for now.. treat empty space as a deactivated coin
+					if (c == ConstantVariables.COIN_CHAR || c == ConstantVariables.EMPTY_CHAR) { // for now.. treat empty space as a deactivated coin
 
-						this.objList[x][y] = '.'; // text-based only
 						Coin cCoin = new Coin(x, y);
 						if (c == ConstantVariables.EMPTY_CHAR) {
 							Avatar temp = new Avatar(0, 0);
 							cCoin.setCoinOff(temp);
+							this.objList[x][y] = ' '; // empty-coin
+						} else {
+							this.objList[x][y] = '.'; // text-based only
 						}
 						this.coinList.add(cCoin);
 						this.itemList[x][y] = cCoin;
@@ -174,7 +177,6 @@ public class ItemProcess {
 	public void processMv(MovableItem thing) {
 		
 		if (this.wallCheck(thing) == true) {	// check for wall collision
-			// System.out.println("hit wall");
 			return;
 		}
 
@@ -199,11 +201,6 @@ public class ItemProcess {
 
 		// update thing Coordinates
 		thing.setXYCoord(thing.getNewXCoord(), thing.getNewYCoord());
-		// set new avatar location in printable object list
-		if (thing instanceof Avatar) {
-			System.out.println("xCoord" + thing.getXCoord() + " y " + thing.getYCoord());
-		} else
-			System.out.println("xCoord" + thing.getXCoord() + " y " + thing.getYCoord());
 	}
 
 	/**
@@ -234,7 +231,7 @@ public class ItemProcess {
 	 * 
 	 * @param onOff the boolean value of whether the game is on or not.
 	 */
-	private void setGameOn(boolean onOff) {
+	public void setGameOn(boolean onOff) {
 		this.gameOn = onOff;
 	}
 
@@ -271,10 +268,6 @@ public class ItemProcess {
 		// Enemy-Avatar collision check
 		if (((Math.abs(enemy.getGoalDistanceX()) <= 1 && enemy.getGoalDistanceY() == 0)
 				|| (Math.abs(enemy.getGoalDistanceY()) <= 1 && enemy.getGoalDistanceX() == 0))) {
-			System.out.println("game over");
-			System.out.println("game over");
-			System.out.println("game over");
-			System.out.println("game over");
 			this.setGameOn(false);
 			return;
 		} else {
@@ -288,8 +281,7 @@ public class ItemProcess {
 	 * @param player the Pac-Man avatar player that collects coins.
 	 */
 	public void allCollected(Avatar player) {
-		System.out.println(this.coinList.size());
-		if (player.getScore() >= this.coinList.size()) {
+		if (player.getScore() >= this.coinList.size()-ConstantVariables.SPACES_IN_MID) {
 			this.winCondition();
 		}
 	}

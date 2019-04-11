@@ -166,37 +166,6 @@ public class AI extends MovableItem {
     }
 
 
-    private int[] getSimDir() {
-        return this.simDirection;
-    }
-
-
-    private void setSimDirection(int[] dir) {
-        this.simDirection = dir;
-    }
-    private void setSimXDirection(int x) {
-        this.simDirection[0] = x;
-    }
-    private void setSimYDirection(int y) {
-        this.simDirection[1] = y;
-    }
-
-
-    private int getSimEnemyXCoord() {
-        return this.simEnemyXCoord;
-    }
-    private void setSimEnemyXCoord(int x) {
-        this.simEnemyXCoord = x;
-    }
-
-
-    private int getSimEnemyYCoord() {
-        return this.simEnemyYCoord;
-    }
-    private void setSimEnemyYCoord(int y) {
-        this.simEnemyYCoord = y;
-    }
-
     private int[] perpDir(int[] direction) { // alt changes left right/ up down (can be 1, -1, 0)
         int[] outputDir = {0, 0};
 
@@ -222,47 +191,48 @@ public class AI extends MovableItem {
 
     private void wallEscape(ItemProcess items) {
         this.mvDirQue.clear(); // -----------------??????????????????????????
-
         ArrayList<int[]> dirAttempts = new ArrayList<int[]>();
         ArrayList<int[]> xyAttempts = new ArrayList<int[]>();
         ArrayList<Character> results = new ArrayList<Character>();
         int dirAlt = 0;
-        if (this.getDirection(0)[0] == 0 && this.getDirection(0)[1] == 0) {
+        if (this.getDirection(0)[0] == this.getDirection(0)[1]) {
             dirAlt = 1;
         }
         int alt = 1;
+
+	
         //for (int alt = -1; alt<2; alt++) { // alternates the starting direction
-            // simplyify all to end
-            int [] wallIndexDir = Arrays.copyOf(this.getDirection(dirAlt), 2);
-
-            // set the first item in the results and dirAttempts arrayLists as the last failed move that the AI would normally take
-            // this is required for the case when the Simulated Enemy intersects a wall
-            results.add(0, 'f');
-            dirAttempts.add(0, Arrays.copyOf(this.getDirection(dirAlt), 2)); //this.getSimDir());
-            this.setSimEnemyXCoord(this.getXCoord());
-            this.setSimEnemyYCoord(this.getYCoord());
 
 
-            // sets initial direction either positive or negative
-            this.setSimDirection(perpDir(this.getDirection(dirAlt)));
-            this.setSimXDirection(alt * this.getSimDir()[0]); // alt
-            this.setSimYDirection(alt * this.getSimDir()[1]); // alt
+	// The wall index direction is used to check if the simuated enemy is adjacent to a wall 
+	int [] wallIndexDir = Arrays.copyOf(this.getDirection(dirAlt), 2);
+
+
+	// set the first item in the results and dirAttempts arrayLists as the last failed move that the AI would normally take
+	results.add(0, 'f');
+	dirAttempts.add(0, Arrays.copyOf(this.getDirection(dirAlt), 2)); //this.getSimDir());
+	
+	// set initial simulated Coordinates as the current Enemy coordinates
+	int simXCoord = this.getXCoord();
+	int simYCoord = this.getYCoord();
+	
+	// set initial simulated direction as perpendicular to the last failed direction
+	int[] simDirection = perpDir(this.getDirection(dirAlt));
+            simDirection[0] = alt * simDirection[0]; // alternate initial x direction
+            simDirection[1] = alt * simDirection[1]; // alt initial y direction
 
 
             do {
-                this.setSimEnemyXCoord(this.getSimEnemyXCoord() + this.getSimDir()[0]);
-                this.setSimEnemyYCoord(this.getSimEnemyYCoord() + this.getSimDir()[1]);
-
-                if (items.getItemList()[this.getSimEnemyXCoord()][this.getSimEnemyYCoord()] instanceof Wall) { // check SimEnemyected enemy for wall collision
-
-                    System.out.println("f ");
+		simXCoord = simXCoord + simDirection[0];
+                simYCoord = simYCoord + simDirection[1];
+                if (items.getItemList()[simXCoord][simYCoord] instanceof Wall) { // check SimEnemyected enemy for wall collision
                     results.add(0, 'f');
-                    dirAttempts.add(0, Arrays.copyOf(this.getSimDir(), 2)); // movement direction attempts
-                    wallIndexDir = Arrays.copyOf(this.getSimDir(), 2);
+                    dirAttempts.add(0, Arrays.copyOf(simDirection, 2)); // movement direction attempts
+                    wallIndexDir = Arrays.copyOf(simDirection, 2);
 
 
-                    this.setSimEnemyXCoord(this.getSimEnemyXCoord() - this.getSimDir()[0]); // steps AI back a space
-                    this.setSimEnemyYCoord(this.getSimEnemyYCoord() - this.getSimDir()[1]); // steps AI back to non-collision space
+                    simXCoord = simXCoord - simDirection[0]; // steps AI back a space
+                    simYCoord = simYCoord - simDirection[1]; // steps AI back to non-collision space
 
                     // set new simulated direction given whether the last special condition was 'f' or 'S'
                     for (int i=1; i <= dirAttempts.size() -1;  i++) {
@@ -270,16 +240,16 @@ public class AI extends MovableItem {
 
                             if (results.get(i) == 'f') { // last move that was different from current ended in 'f'
 
-                                this.setSimXDirection(-dirAttempts.get(i)[0]);
-                                this.setSimYDirection(-dirAttempts.get(i)[1]);
+                                simDirection[0] = -dirAttempts.get(i)[0];
+                                simDirection[1] = -dirAttempts.get(i)[1];
                                 break;
                             }
                             else { // last move that was different from current ended in 'S'
 
                                 // set wall index offset to previous direction
-                                wallIndexDir = Arrays.copyOf(this.getSimDir(), 2);
-                                this.setSimXDirection(dirAttempts.get(i)[0]);
-                                this.setSimYDirection(dirAttempts.get(i)[1]);
+                                wallIndexDir = Arrays.copyOf(simDirection, 2);
+                                simDirection[0] = dirAttempts.get(i)[0];
+                                simDirection[1] = dirAttempts.get(i)[1];
                                 break;
                             }
                         }
@@ -288,35 +258,35 @@ public class AI extends MovableItem {
 
                 //has this been set? set SimEnemyXCoord?
                 //else if (items.getItemList()[ (xyAttempts.get(0)[0]) ][ (xyAttempts.get(0)[1]) ] instanceof Wall) { // continue case   this.getSimEnemyXCoord() + wallIndexDir[0]
-                else if (items.getItemList()[ (this.getSimEnemyXCoord() + wallIndexDir[0]) ] [ (this.getSimEnemyYCoord() + wallIndexDir[1]) ] instanceof Wall) {
-                    System.out.println("s ");
-                    results.add(0, 's');
-                    dirAttempts.add(0, Arrays.copyOf(this.getSimDir(), 2)); // movement direction attempts
-
-                    if (this.getSimDir() == this.getDirection(dirAlt)) {
-                        dirAttempts.add(0, Arrays.copyOf(this.getSimDir(), 2)); // movement direction attempts
+                else if (items.getItemList()[ (simXCoord + wallIndexDir[0]) ] [ (simYCoord + wallIndexDir[1]) ] instanceof Wall) {
+			results.add(0, 's');
+		    if (Arrays.equals(simDirection, this.getDirection(dirAlt))) {
+                        dirAttempts.add(0, Arrays.copyOf(simDirection, 2)); // movement direction attempts
                         break;
                         // end loop condition
                     }
+		    else {
+			dirAttempts.add(0, Arrays.copyOf(simDirection, 2)); // movement direction attempts
+		    }
                 }
 
 
                 else { // empty case
-
-                    System.out.println("S");
                     results.add(0, 'S');
-                    dirAttempts.add(0, Arrays.copyOf(this.getSimDir(), 2)); // movement direction attempts
-
-                    if (this.getSimDir() == this.getDirection(dirAlt)) {
-                        dirAttempts.add(0, Arrays.copyOf(this.getSimDir(), 2)); // movement direction attempts
+		    
+		    if (Arrays.equals(simDirection, this.getDirection(dirAlt))) {
+                        dirAttempts.add(0, Arrays.copyOf(simDirection, 2)); // movement direction attempts
                         break;
                         // end loop condition
                     }
+		    else {
+                    dirAttempts.add(0, Arrays.copyOf(simDirection, 2)); // movement direction attempts
+		    }
 
                     // add the move into adjacent space with no wall
 
-                    this.setSimXDirection(wallIndexDir[0]);
-                    this.setSimYDirection(wallIndexDir[1]);
+                    simDirection[0] = wallIndexDir[0];
+                    simDirection[1] = wallIndexDir[1];
 
                     // set new move direction and new wall check direction
                     wallIndexDir[0] = new Integer(-dirAttempts.get(0)[0]);
@@ -332,7 +302,6 @@ public class AI extends MovableItem {
                 dirAttempts.remove(results.indexOf('f'));
                 results.remove(results.indexOf('f'));
             }
-
 
             if (this.mvDirQue.size() > 0 && this.mvDirQue.size() <= dirAttempts.size()) {
                 System.out.println("run one shorter");
@@ -365,15 +334,12 @@ public class AI extends MovableItem {
         this.setGoalDistance(avatar);
         // check if the enemy is stuck from a previous turn
         if (this.mvDirQue.size() > 0) {
-            System.out.println("dir[0] "+this.mvDirQue.get(this.mvDirQue.size()-1)[0]);
-            System.out.println(" dir[1] "+this.mvDirQue.get(this.mvDirQue.size()-1)[1]);
             this.setNewCoord(this.getXCoord() + this.mvDirQue.get(this.mvDirQue.size()-1)[0], this.getYCoord() + this.mvDirQue.get(this.mvDirQue.size()-1)[1]);
 
             this.mvDirQue.remove(this.mvDirQue.size() -1); // removes the first entry of the move list
             // process move: check wall collision if no wall then move
             items.processMv(this);
             // check for collision with avatar
-            items.avatarEnemyCollision(this);
             return;
         }
 
@@ -383,7 +349,6 @@ public class AI extends MovableItem {
                 this.setNewCoord(this.getXCoord() + this.getXDirection(i), this.getYCoord() + this.getYDirection(i));
                 if (items.wallCheck(this) == false) {
                     items.processMv(this);
-                    items.avatarEnemyCollision(this);
                     return;
                 }
                 if (this.getGoalDistanceX() == 0) {
@@ -399,7 +364,6 @@ public class AI extends MovableItem {
         this.wallEscape(items);
         System.out.println("wall escaped");
         items.processMv(this);
-        items.avatarEnemyCollision(this);
 
         return;
     }

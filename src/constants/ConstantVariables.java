@@ -33,6 +33,7 @@ public final class ConstantVariables {	// by declaring final, class is made non-
     public static final char AV_CHAR = 'A';
     public static final char AI_CHAR = 'E';
     public static final int MOVE_AMNT = 16; // was 24
+    public static final int SPACES_IN_MID = 15;
 
     // Coin constants
     public static final int C_DIM = 4;

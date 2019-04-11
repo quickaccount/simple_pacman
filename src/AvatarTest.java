@@ -1,8 +1,8 @@
 /**
 * Test for AI class in Simple_Pacman
 javac Avatar.java
-javac -cp .:junit-4.12.jar:hamcrest-core-1.3.jar *.java
-java -cp .:junit-4.12.jar:hamcrest-core-1.3.jar org.junit.runner.JUnitCore AvatarTest
+javac -cp .;junit-4.12.jar;hamcrest-core-1.3.jar *.java
+java -cp .;junit-4.12.jar;hamcrest-core-1.3.jar org.junit.runner.JUnitCore AvatarTest
 * @author T10-G02
 */
 
@@ -88,20 +88,67 @@ public class AvatarTest {
 	//Getters and Setters
 	
 	@Test
-	public void test_getScore_addScore() {
+	public void test_getScore() {
+		Avatar testAv = new Avatar(1, 1);
+		for (int i = 0; i < 12; i++) {
+			testAv.addScore();
+		}
+
+		assertEquals("Testing getScore, created with a score of 12", 12, testAv.getScore());
+	}
+
+
+	@Test
+	public void test_addScore() {
 		Avatar testAv = new Avatar(1, 1);
 		for (int i = 0; i < 5; i++) {
 			testAv.addScore();
 		}
 
-		assertEquals("Added 5 points", 5, testAv.getScore());
+		assertEquals("Testing addScore, added 5 points", 5, testAv.getScore());
+	}
+
+
+	@Test
+	public void test_setScore_validUpper() {
+		Avatar testAv = new Avatar(1, 1);
+		testAv.setScore(606);
+
+		assertEquals("Created Avatar and set score to 606", 606, testAv.getScore());
+	}
+
+
+	@Test
+	public void test_setScore_invalidUpper() {
+		Avatar testAv = new Avatar(1, 1);
+		testAv.setScore(607);
+
+		assertEquals("Created Avatar and set score to 607", 0, testAv.getScore());
+	}
+
+
+	@Test
+	public void test_setScore_validLower() {
+		Avatar testAv = new Avatar(1, 1);
+		testAv.setScore(0);
+
+		assertEquals("Created Avatar and set score to 0", 0, testAv.getScore());
+	}
+
+
+	@Test
+	public void test_setScore_invalidLower() {
+		Avatar testAv = new Avatar(1, 1);
+		testAv.setScore(-5);
+
+		assertEquals("Created Avatar and set score to an invalid -5", 0, testAv.getScore());
 	}
 
 
 	//Other Methods
 
 	@Test
-	public void test_mvAttempt_invalidButton() {
+	public void test_changeDirection_invalidButton() {
 		Avatar testAv = new Avatar(1, 1);
 		ItemProcess items = new ItemProcess("maze.txt");
 		ArrayList<String> goThrough = new ArrayList<String>(); //List of elements to try
@@ -109,9 +156,10 @@ public class AvatarTest {
 		goThrough.add("Bop");
 		goThrough.add("A");
 		goThrough.add("ow");
+		goThrough.add("rasdw");
 
 		for (int x = 0; x < goThrough.size() - 1; x++) {
-			testAv.mvAttempt(goThrough.get(x), items);
+			testAv.changeDirection(goThrough.get(x), items);
 
 			assertEquals("Tried moving using valid keys", "00", "" + testAv.getDir(0) + testAv.getDir(1)); //Test for each element in list
 		}
@@ -119,7 +167,7 @@ public class AvatarTest {
 
 
 	@Test
-	public void test_mvAttempt_validButton() {
+	public void test_changeDirection_validButton() {
 		Avatar testAv = new Avatar(1, 1);
 		ItemProcess items = new ItemProcess("maze.txt");
 		ArrayList<String> goThrough = new ArrayList<String>(); //List of elements to try
@@ -131,7 +179,7 @@ public class AvatarTest {
 		goThrough.add("s");
 
 		for (int x = 0; x < goThrough.size() - 1; x++) {
-			testAv.mvAttempt(goThrough.get(x), items);
+			testAv.changeDirection(goThrough.get(x), items);
 			
 			if (x == 0 || x ==1) {
 				dir = "10"; //Moving right
