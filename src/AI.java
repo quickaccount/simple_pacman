@@ -66,68 +66,65 @@ public class AI extends MovableItem {
     }
 
     private void setDirections() { //added i-1 and 2->3
-        for (int i=0; i < 2; i++) {
-            if (i==0) {
-                // fill the first array position with the enemies best move
-                if (Math.abs( (double)(this.getDistX()) ) >= Math.abs( (double)(this.getDistY()) )) {
-                    // store the direction that would bring the enemy closest to avatar, into the first position of the directions array
-                    if (this.getDistX() < 0) {
-                        this.directions[0][i] = 1;
-                        this.directions[1][i] = 0;
-                    }
-                    else {
-                        this.directions[0][i] = -1;
-                        this.directions[1][i] = 0;
-                    }
-                }
+	// fill the first array position with the enemies best move
+	if (Math.abs( (double)(this.getDistX()) ) >= Math.abs( (double)(this.getDistY()) )) {
+	    // store the direction that would bring the enemy closest to avatar, into the first position of the directions array
+	    if (this.getDistX() < 0) {
+		this.directions[0][0] = 1;
+		this.directions[1][0] = 0;
+	    }
+	    else {
+		this.directions[0][0] = -1;
+		this.directions[1][0] = 0;
+	    }
+	}
+	
 
+	else { // same as above, but y direction is preferred
+	    if (this.getDistY() < 0) {
+		this.directions[0][0] = 0;
+		this.directions[1][0] = 1;
+	    }
+	    else {
+		this.directions[0][0] = 0;
+		this.directions[1][0] = -1;
+	    }
+	}
+	
+	    
 
-                else { // same as above, but y direction is preferred
-                    if (this.getDistY() < 0) {
-                        this.directions[1][i] = 1;
-                        this.directions[0][i] = 0;
-                    }
-                    else {
-                        this.directions[1][i] = -1;
-                        this.directions[0][i] = 0;
-                    }
-                }
-            }
-
-            else if (i==1) {
-                // fill second array position with the second best direction
-
-                // if a move in any direction other than the best direction results in a move away from the avatar
-                if (this.getDistX() == 0 || this.getDistY() == 0) {
-                    this.directions[0][i] = 0;
-                    this.directions[1][i] = 0;
-                }
-
-                // there exists a second best direction
-                else {
-                    if (this.directions[0][0] == 0) { // if y-axis move is best,  add the shortest direction in the x-axis to the second array location
-                        if (this.getDistX() < 0) {
-                            this.directions[0][i] = 1;
-                            this.directions[1][i] = 0;
-                        }
-                        else {
-                            this.directions[0][i] = -1;
-                            this.directions[1][i] = 0;
-                        }
-                    }
-                    else { // same as above but y move is second best
-                        if (this.getDistY() < 0) {
-                            this.directions[1][i] = 1; // changed to -1
-                            this.directions[0][i] = 0;
-                        }
-                        else {
-                            this.directions[1][i] = -1;
-                            this.directions[0][i] = 0;
-                        }
-                    }
-                }
-            }
-        }
+    
+	// fill second array position with the second best direction
+	    
+	// if a move in any direction other than the best direction results in a move away from the avatar
+	if (this.getDistX() == 0 || this.getDistY() == 0) {
+	    this.directions[0][1] = 0;
+	    this.directions[1][1] = 0;
+	}
+	    
+	// there exists a second best direction
+	else {
+	    if (this.directions[0][0] == 0) { // if y-axis move is best,  add the shortest direction in the x-axis to the second array location
+		if (this.getDistX() < 0) {
+		    this.directions[0][1] = 1;
+		    this.directions[1][1] = 0;
+		}
+		else {
+		    this.directions[0][1] = -1;
+		    this.directions[1][1] = 0;
+		}
+	    }
+	    else { // same as above but y move is second best
+		if (this.getDistY() < 0) {
+		    this.directions[1][1] = 1; // changed to -1
+		    this.directions[0][1] = 0;
+		}
+		else {
+		    this.directions[1][1] = -1;
+		    this.directions[0][1] = 0;
+		}
+	    }
+	}
     }
 
 
@@ -259,12 +256,15 @@ public class AI extends MovableItem {
                 //has this been set? set SimEnemyXCoord?
                 //else if (items.getItemList()[ (xyAttempts.get(0)[0]) ][ (xyAttempts.get(0)[1]) ] instanceof Wall) { // continue case   this.getSimEnemyXCoord() + wallIndexDir[0]
                 else if (items.getItemList()[ (simXCoord + wallIndexDir[0]) ] [ (simYCoord + wallIndexDir[1]) ] instanceof Wall) {
-			results.add(0, 's');
-		    if (Arrays.equals(simDirection, this.getDirection(dirAlt))) {
-                        dirAttempts.add(0, Arrays.copyOf(simDirection, 2)); // movement direction attempts
-                        break;
-                        // end loop condition
-                    }
+		    results.add(0, 's');
+		    System.out.println("simdir " + simDirection[0]+simDirection[1]);
+		    if (simDirection[0] == this.getXDirection(0) && simDirection[1] == this.getYDirection(0)) {
+			dirAttempts.add(0, Arrays.copyOf(simDirection, 2)); // movement direction attempts
+			System.out.println("direction(dirAlt)" + this.getDirection(dirAlt)[0] + this.getDirection(dirAlt)[1]);
+			System.out.println("s break");
+			break;
+			// end loop condition
+		    }
 		    else {
 			dirAttempts.add(0, Arrays.copyOf(simDirection, 2)); // movement direction attempts
 		    }
@@ -273,11 +273,11 @@ public class AI extends MovableItem {
 
                 else { // empty case
                     results.add(0, 'S');
-		    
-		    if (Arrays.equals(simDirection, this.getDirection(dirAlt))) {
+
+		    if (simDirection[0] == this.getXDirection(0) && simDirection[1] == this.getYDirection(0)) {
                         dirAttempts.add(0, Arrays.copyOf(simDirection, 2)); // movement direction attempts
-                        break;
-                        // end loop condition
+			System.out.println("S break");
+                        break;  // end loop condition
                     }
 		    else {
                     dirAttempts.add(0, Arrays.copyOf(simDirection, 2)); // movement direction attempts
@@ -362,7 +362,6 @@ public class AI extends MovableItem {
 
         // if all else fails
         this.wallEscape(items);
-        System.out.println("wall escaped");
         items.processMv(this);
 
         return;
