@@ -147,7 +147,9 @@ public class GameDisplay extends Application {
 				score.fillRect(0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.SCOREBOARD_HEIGHT);
 				score.setFill(Color.WHITE);
 				String scoreString = "SCORE: " + avatar.getScore();
+				String pressL = "[SPACE]: Pause-Game";
 				score.fillText(scoreString, 10, 30);
+				score.fillText(pressL, 226, 30);
 
 				// display End Game and stop application
 				if (items.getGameOn() == false) { // if pacman and the ghost intersect

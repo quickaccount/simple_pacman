@@ -9,14 +9,10 @@ import java.util.Arrays;
  */
 public class AI extends MovableItem {
 
-
     private int [] dist = new int [2];
     private int [][] directions = new int [2][2]; // 2 sets of x, y coordinates ordered from longest to shortest
     private int [] currentDir = new int [2]; // sets the current direction for the enemy
     public ArrayList<int[]> mvDirQue = new ArrayList<int[]>();
-    private int [] simDirection = new int[2];
-    private int simEnemyXCoord;
-    private int simEnemyYCoord;
 
     /**
     * Constructor that creates an AI ghost.
@@ -29,24 +25,6 @@ public class AI extends MovableItem {
     public AI (int x, int y) {
         super(x, y);
     }
-
-
-    /**
-     * Checks for AI collision with Avatar.
-     * 
-     * @param items the ItemProcess object used for processing.
-     */
-    private void avatarCollision(ItemProcess items) {
-        // Enemy-Avatar collision check
-        if (((Math.abs(this.getDistX()) <= 1 && this.getDistY() == 0) || (Math.abs(this.getDistY()) <= 1 && this.getDistX() == 0)))  {
-            //items.setGameOnOff(false);
-            return;
-        }
-        else {
-            return;
-        }
-    }
-
 
     /**
     * Sets the distance between the current object and the player.
