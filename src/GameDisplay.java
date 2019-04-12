@@ -90,7 +90,6 @@ public class GameDisplay extends Application {
 		pacman.duration = 0.150; // set duration of one entire movement animation
 
 		// initializing blinky movement image arrays
-
 		for (int i = 0; i < 2; i++) {
 			rightBlinky[i] = new Image("images/blinkyRight" + i + ".png");
 		}
@@ -107,13 +106,8 @@ public class GameDisplay extends Application {
 		// CREATION OF GAME PLAY SCENE !!!!!!!!
 		VBox root = new VBox();
 
-		Canvas scoreboard = new Canvas(ConstantVariables.WORLD_WIDTH, ConstantVariables.SCOREBOARD_HEIGHT); // canvas
-																											// for
-																											// displaying
-																											// score
-		Canvas canvas = new Canvas(ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT); // canvas for
-																									// displaying game
-																									// play
+		Canvas scoreboard = new Canvas(ConstantVariables.WORLD_WIDTH, ConstantVariables.SCOREBOARD_HEIGHT); // canvas for displaying score
+		Canvas canvas = new Canvas(ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT); // canvas for displaying game play
 		GraphicsContext score = scoreboard.getGraphicsContext2D();
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 
@@ -131,15 +125,13 @@ public class GameDisplay extends Application {
 			public void handle(long currentNanoTime) {
 				double elapsedSeconds = (currentNanoTime - startNanoTime) / 1000000000.0; // convert the elapsed time in
 																							// nanoseconds to seconds
-
 				// background image essentially "clears" canvas
 				gc.drawImage(maze, 0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT);
 
 				// display coins
 				for (int y = 0; y < ConstantVariables.NUM_ROWS; y++) { // go through every row
 					for (int x = 0; x < ConstantVariables.NUM_COL; x++) { // and column
-						if (items.getItemList()[x][y] instanceof Coin) { // of the itemList and if the item is of type
-																			// Coin
+						if (items.getItemList()[x][y] instanceof Coin) { // of the itemList and if the item is of type Coin
 							if (((Coin) items.getItemList()[x][y]).getCoinIsOn()) { // and it is "on" (hasn't been collected yet)
 								gc.drawImage(coin, x * ConstantVariables.WIDTH + ConstantVariables.COIN_OFFSET, y * ConstantVariables.HEIGHT - ConstantVariables.COIN_OFFSET);
 							}
@@ -250,11 +242,8 @@ public class GameDisplay extends Application {
 			public void handle(long currentNanoTime) {
 
 				gcMenu.setFill(Color.BLACK);
-				gcMenu.fillRect(0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT + 10); // black out
-																											// the
-																											// screen/
-																											// clear
-																											// canvas
+				gcMenu.fillRect(0, 0, ConstantVariables.WORLD_WIDTH, ConstantVariables.WORLD_HEIGHT + 10); // black out the
+																											// screen/clear canvas
 				gcMenu.drawImage(title, 50, 100, 360, 84); // add the pacman logo to main menu
 
 				gcMenu.setFont(Font.font("Verdana", 20));
@@ -407,7 +396,7 @@ public class GameDisplay extends Application {
 		// END OF GAME END SCENE
 
 		stage.setScene(mainMenu); // start application on main menu
-		stage.setTitle("Pac Man");
+		stage.setTitle("Simple PacMan");
 		stage.setResizable(false); // sets it so that the game window is not resizable
 		stage.sizeToScene(); // gets rid of exra padding around maze image
 		stage.show();
