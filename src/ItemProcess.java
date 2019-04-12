@@ -122,7 +122,38 @@ public class ItemProcess {
 		gd.loadSavedValues(loadedVals);
 	}
 	
+        /**
+	 * Creates a text file to save game progress of score, collected coins and
+	 * MovableItem coordinates.
+	 * 
+	 * @param gameName the name that you would like to save the game textfile as
+	 * @param avatar to get XY Coordinates
+	 * @param enemy to get XY Coordinates 
+	 * @throws IOException
+	 */
+        public void saveToTextFile(String gameName, Avatar avatar, AI enemy) throws IOException {
+	    PrintWriter writer = new PrintWriter(gameName);
+	    String line = null;
 	
+	    writer.println(avatar.getScore() + " " + avatar.getXCoord() + " " + avatar.getYCoord() + " " + enemy.getXCoord() + " " + enemy.getYCoord());
+	
+	    for (int y = 0; y < ConstantVariables.NUM_ROWS; y++) {
+	        for (int x = 0; x < ConstantVariables.NUM_COL; x++) {
+	    	    if (itemList[x][y] instanceof Coin) {
+		        if (((Coin) this.getItemList()[x][y]).getCoinIsOn()) {
+			    writer.print(".");
+		        } else {
+		    	    writer.print(" ");
+		        }
+		    } else if (itemList[x][y] instanceof Wall) {
+		        writer.print("X");
+		    }
+	        }
+	        writer.println();
+	    }
+	    writer.close();
+        }
+
 	/**
 	 * Return the full list of coins in the maze.
 	 * 

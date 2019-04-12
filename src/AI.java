@@ -195,10 +195,6 @@ public class AI extends MovableItem {
         if (this.getDirection(0)[0] == this.getDirection(0)[1]) {
             dirAlt = 1;
         }
-        int alt = 1;
-
-	
-        //for (int alt = -1; alt<2; alt++) { // alternates the starting direction
 
 
 	// The wall index direction is used to check if the simuated enemy is adjacent to a wall 
@@ -215,10 +211,8 @@ public class AI extends MovableItem {
 	
 	// set initial simulated direction as perpendicular to the last failed direction
 	int[] simDirection = perpDir(this.getDirection(dirAlt));
-            simDirection[0] = alt * simDirection[0]; // alternate initial x direction
-            simDirection[1] = alt * simDirection[1]; // alt initial y direction
 
-
+	
             do {
 		simXCoord = simXCoord + simDirection[0];
                 simYCoord = simYCoord + simDirection[1];
@@ -313,17 +307,9 @@ public class AI extends MovableItem {
             }
             dirAttempts.clear();
             results.clear();
-            //}
         return;
     }
 
-
-    /**
-     * The object's next move - check collisions step
-     * @param x the current x-position
-     * @param y the current y-position
-     * @param items a list of all tiles and the items that are on these tiles
-     */
 
     /**
      * Generates the enemy's move by checking which direction is furthest from the avatar
@@ -331,15 +317,16 @@ public class AI extends MovableItem {
      * @param items a list of all tiles and the items that inhabit each tile
      */
     public void genMv(Avatar avatar, ItemProcess items) {
-        this.setGoalDistance(avatar);
+	this.setGoalDistance(avatar);
+	
         // check if the enemy is stuck from a previous turn
         if (this.mvDirQue.size() > 0) {
             this.setNewCoord(this.getXCoord() + this.mvDirQue.get(this.mvDirQue.size()-1)[0], this.getYCoord() + this.mvDirQue.get(this.mvDirQue.size()-1)[1]);
 
             this.mvDirQue.remove(this.mvDirQue.size() -1); // removes the first entry of the move list
-            // process move: check wall collision if no wall then move
+
+	    // process move: check wall collision if no wall then move
             items.processMv(this);
-            // check for collision with avatar
             return;
         }
 

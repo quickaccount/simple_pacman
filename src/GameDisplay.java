@@ -1,5 +1,4 @@
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import constants.ConstantVariables;
 import javafx.animation.AnimationTimer;
@@ -329,7 +328,7 @@ public class GameDisplay extends Application {
 					break;
 				case S:
 					try {
-						saveToTextFile("savedGame.txt");
+					    items.saveToTextFile("savedGame.txt", avatar, enemy);
 					} catch (Exception ex) {
 						ex.printStackTrace();
 					}
@@ -421,60 +420,26 @@ public class GameDisplay extends Application {
 	 * @param key
 	 */
 	private void timedMove(String key) {
-	    mvRefreshCount = 0; // 
+	    mvRefreshCount = 0; // reset timed move counter
 	    avatar.setNewCoord(avatar.getDir(0) + avatar.getXCoord(), avatar.getDir(1) + avatar.getYCoord());
 	    items.processMv(avatar); // attempt avatar move to newCoord()
 	    enemy.genMv(avatar, items); // generate enemy move
+
+	    // update gui display
+	    moveMovableItem(); // gui
+
+	    // end game checks
 	    items.avatarEnemyCollision(enemy); // check for Loss
 	    items.allCollected(avatar); // check for Win
 	    
 	    // update display
-	    moveMovableItem(); // gui
 	    printDisplay(avatar, enemy); //text-based
 }
 
 	/**
-	 * Moves the pacman avatar/processes the move.
-	 * 
-	 * @param input The user input for movement.
+	 * keeps gui stay in sync with avatar
 	 */
-	private void handleInput(String input) {
-		// System.out.println(input + " was pressed.");
-		avatar.changeDirection(input, items);
-
-	}
-
-	/**
-	 * Creates a text file to save game progress of score, collected coins and
-	 * MovableItem coordinates.
-	 * 
-	 * @param gameName the name that you would like to save the game textfile as
-	 * @throws IOException
-	 */
-	public void saveToTextFile(String gameName) throws IOException {
-		PrintWriter writer = new PrintWriter(gameName);
-		String line = null;
-		Item[][] itemList = items.getItemList();
-
-		writer.println(avatar.getScore() + " " + avatar.getXCoord() + " " + avatar.getYCoord() + " " + pac_X + " "
-				+ pac_Y + " " + enemy.getXCoord() + " " + enemy.getYCoord() + " " + blinky_X + " " + blinky_Y);
-
-		for (int y = 0; y < ConstantVariables.NUM_ROWS; y++) {
-			for (int x = 0; x < ConstantVariables.NUM_COL; x++) {
-				if (itemList[x][y] instanceof Coin) {
-					if (((Coin) items.getItemList()[x][y]).getCoinIsOn()) {
-						writer.print(".");
-					} else {
-						writer.print(" ");
-					}
-				} else if (itemList[x][y] instanceof Wall) {
-					writer.print("X");
-				}
-			}
-			writer.println();
-		}
-		writer.close();
-	}
+	private void handleInput() {}
 
 	/**
 	 * Prints the text-based display in the console.
@@ -518,11 +483,12 @@ public class GameDisplay extends Application {
 	public void loadSavedValues(String[] loadedVals) { // loads in and applies the saved score and movable item coords
 		avatar.setScore(Integer.valueOf(loadedVals[0]));
 		avatar.setXYCoord(Integer.valueOf(loadedVals[1]), Integer.valueOf(loadedVals[2]));
-		pac_X = Integer.valueOf(loadedVals[3]);
-		pac_Y = Integer.valueOf(loadedVals[4]); // enemy blinky
-		enemy.setXYCoord(Integer.valueOf(loadedVals[5]), Integer.valueOf(loadedVals[6]));
-		blinky_X = Integer.valueOf(loadedVals[7]);
-		blinky_Y = Integer.valueOf(loadedVals[8]);
+		pac_X = Integer.valueOf(Integer.valueOf(loadedVals[1])*16);
+		pac_Y = Integer.valueOf((Integer.valueOf(loadedVals[2])*16));
+		
+		enemy.setXYCoord(Integer.valueOf(loadedVals[3]), Integer.valueOf(loadedVals[4]));
+		blinky_X = Integer.valueOf(Integer.valueOf(loadedVals[3])*16);
+		blinky_Y = Integer.valueOf((Integer.valueOf(loadedVals[4])*16));
 	}
 
 	/**

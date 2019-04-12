@@ -68,29 +68,30 @@ public class Avatar extends MovableItem {
     */
     public boolean changeDirection(String key, ItemProcess items) {
 
-    char takeFirst = key.charAt(0); //Takes the first character from the user's input
+	char takeFirst = key.charAt(0); //Takes the first character from the user's input
 	int[] newDir = {0, 0};
 	
-    if (takeFirst == 'w') {
-    	newDir[1] = -1;
-        // this.setDir(0, -1); //Move up
-    } else if (takeFirst == 's') {
-    	newDir[1] = 1;
-        // this.setDir(0, 1); //Move down
-    } else if (takeFirst == 'a') {
+	if (takeFirst == 'w') {
+	    newDir[1] = -1;
+	    // this.setDir(0, -1); //Move up
+	} else if (takeFirst == 's') {
+	    newDir[1] = 1;
+	    // this.setDir(0, 1); //Move down
+	} else if (takeFirst == 'a') {
 	    newDir[0] = -1;
-        // this.setDir(-1, 0); //Move left
-    } else if (takeFirst == 'd') {
+	    // this.setDir(-1, 0); //Move left
+	} else if (takeFirst == 'd') {
 	    newDir[0] = 1;
-       // this.setDir(1, 0); //Move right
-    } else {
-        }
+	    // this.setDir(1, 0); //Move right
+	} else {}
+	
+    
 	// test for a change in direction
-	if (this.getDir(0) == newDir[0] && this.getDir(1) == newDir[1] ) {
+	if (this.getDir(0) == newDir[0] && this.getDir(1) == newDir[1] ) { // "x = 0" y = 0
 	    return false;
 	}
 	else {
-		if (newDir[0]==newDir[1]) { // zero case
+	    if (newDir[0] == newDir[1]) { // zero case {0, 0}
 		return false;
 	    }
 	    else { // new direction not previous direction
@@ -99,6 +100,5 @@ public class Avatar extends MovableItem {
 		return true;
 	    }
 	}
-
     }
 }
