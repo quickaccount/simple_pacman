@@ -86,12 +86,6 @@ public class ItemProcess {
 		} catch (IOException ex) {
 			System.out.println("Error reading file '" + fileName + "'");
 		}
-
-		// set default Avatar location
-		// this.objList[INITIAL_X][INITIAL_Y] = 'A';
-		// set default Enemy location
-		// this.objList[INITIAL_E_X][INITIAL_E_Y] = 'E';
-
 	}
 
 	/**
@@ -206,7 +200,6 @@ public class ItemProcess {
 	 * @param thing the MovableItem to process movement for.
 	 */
 	public void processMv(MovableItem thing) {
-		
 		if (this.wallCheck(thing) == true) {	// check for wall collision
 			return;
 		}

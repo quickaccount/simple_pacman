@@ -157,10 +157,9 @@ public class GameDisplay extends Application {
 				}
 
 				mvRefreshCount++; // adds one to the refresh count since last move
-				// Calls the timedMove method, which will be replaced by a separate main class
-				// with its own timer
-				if (mvRefreshCount > 18 && items.getGameOn() == true && gameStarted) { // change the number to slow the
-																						// move timer
+
+				// Calls the timedMove method
+				if (mvRefreshCount > 18 && items.getGameOn() == true && gameStarted) { // increasing this number will slow the game
 					timedMove("continue in current direction");
 				}
 			}
@@ -392,8 +391,8 @@ public class GameDisplay extends Application {
 			}
 
 		});
+		
 		// END OF GAME END SCENE
-
 		stage.setScene(mainMenu); // start application on main menu
 		stage.setTitle("Simple PacMan");
 		stage.setResizable(false); // sets it so that the game window is not resizable
@@ -403,10 +402,8 @@ public class GameDisplay extends Application {
 
 	/**
 	 * update gui location for the avatar and enemy
-	 * 
 	 */
 	private void moveMovableItem() {
-
 		pac_Y = avatar.getYCoord() * ConstantVariables.MOVE_AMNT;
 		pac_X = avatar.getXCoord() * ConstantVariables.MOVE_AMNT;
 		blinky_X = enemy.getXCoord() * ConstantVariables.MOVE_AMNT;
@@ -447,7 +444,7 @@ public class GameDisplay extends Application {
 	 * @param avatar the pacman Avatar object.
 	 * @param enemy  the ghost AI (blinky) object.
 	 */
-	public void printDisplay(Avatar avatar, AI enemy) {
+	private void printDisplay(Avatar avatar, AI enemy) {
 		System.out.println("Score: " + avatar.getScore());
 		String rowString = "";
 		if (items.getGameOn() == true) {
