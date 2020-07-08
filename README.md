@@ -1,6 +1,8 @@
 # Simple Pacman
-First year cs group project using javafx. 
-Main issue: Memory leak caused by implimentation of javafx menus.
+First year cs group project using javafx.
+
+Main issue:
+Memory leak caused by implimentation of javafx menus.
 
 ## System Requirements
 >A working *Java environment*, [which can be set up here](https://www.oracle.com/technetwork/java/javase/downloads/index.html) <br/>
