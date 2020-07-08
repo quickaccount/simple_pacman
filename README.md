@@ -1,8 +1,13 @@
 # Simple Pacman
 First year cs group project using javafx.
 
-Main issue:
-Memory leak caused by implimentation of javafx menus.
+- Basics of using git
+- Basic project management and object oriented software
+- Basic algorithms
+
+Issues:
+- Memory leak caused by implimentation of javafx menus.
+- Ghost movement algorithm could be optimized
 
 ## System Requirements
 >A working *Java environment*, [which can be set up here](https://www.oracle.com/technetwork/java/javase/downloads/index.html) <br/>
